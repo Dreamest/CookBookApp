@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">CookBook</string>
+    <string name="continue_">Continue</string>
+    <string name="phone_number">Phone number</string>
+    <string name="code">Enter code</string>
+    <string name="cancel">Cancel</string>
+</resources>

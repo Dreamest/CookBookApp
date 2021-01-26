@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CookBook</string>
+    <string name="continue_">המשך</string>
+    <string name="phone_number">מספר טלפון</string>
+    <string name="cancel">ביטול</string>
+    <string name="code">הזן קוד</string>
+</resources>
