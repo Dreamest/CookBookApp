@@ -4,4 +4,7 @@
     <string name="phone_number">Phone number</string>
     <string name="code">Enter code</string>
     <string name="cancel">Cancel</string>
+    <string name="welcome" translatable="false">Welcome</string>
+    <string name="to_your_very_own" translatable="false">to your very own</string>
+    <string name="cookbook" translatable="false">Cookbook</string>
 </resources>
