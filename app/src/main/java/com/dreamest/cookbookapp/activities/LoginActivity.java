@@ -61,21 +61,18 @@ public class LoginActivity extends BaseActivity {
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-//        if (firebaseUser != null) {
-//            userSignedIn();
-//            return;
-//        }
-        Log.d("dddd", "user: " + firebaseUser);
+
+        if (firebaseUser != null) {
+            userSignedIn();
+            return;
+        }
     }
 
     private void codeEntered() {
         String smsVerificationCode = login_EDT_input.getText().toString();
-        Log.d("dddd", "smsVerificationCode:" + smsVerificationCode);
-
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseAuthSettings firebaseAuthSettings = firebaseAuth.getFirebaseAuthSettings();
         firebaseAuthSettings.setAutoRetrievedSmsCodeForPhoneNumber(phoneInput, smsVerificationCode);
-
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(firebaseAuth)
                 .setPhoneNumber(phoneInput)
                 .setTimeout(60L, TimeUnit.SECONDS)
@@ -87,12 +84,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void startLoginProcess() {
-        phoneInput = login_EDT_input.getText().toString();
-        if(phoneInput.charAt(0) == '0' && phoneInput.length() == 10)
-            phoneInput = phoneInput.substring(1);
-        phoneInput = login_CCP_code.getSelectedCountryCodeWithPlus() + phoneInput;
-        Log.d("dddd", "phoneInput:" + phoneInput);
-
+        getPhoneNumber();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(firebaseAuth)
                 .setPhoneNumber(phoneInput)
@@ -104,33 +96,41 @@ public class LoginActivity extends BaseActivity {
         changeState(LOGIN_STATE.LOADING);
     }
 
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks onVerificationStateChangedCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+    /**
+     * Attaches country code to phone number, and drops leading zero if there is one
+     */
+    private void getPhoneNumber() {
+
+        phoneInput = login_EDT_input.getText().toString();
+        if(phoneInput.charAt(0) == '0' && phoneInput.length() == 10)
+            phoneInput = phoneInput.substring(1);
+        phoneInput = login_CCP_code.getSelectedCountryCodeWithPlus() + phoneInput;
+    }
+
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks onVerificationStateChangedCallbacks
+            = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override
         public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-            Log.d("dddd", "onCodeSent: " + verificationId);
             changeState(LOGIN_STATE.ENTERING_CODE);
         }
 
         @Override
         public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-            Log.d("dddd", "onVerificationCompleted");
             signInWithPhoneAuthCredential(phoneAuthCredential);
             changeState(LOGIN_STATE.ENTERING_NUMBER);
         }
 
         @Override
         public void onCodeAutoRetrievalTimeOut(@NonNull String s) {
-            Log.d("dddd", "onCodeAutoRetrievalTimeOut " + s);
             super.onCodeAutoRetrievalTimeOut(s);
             changeState(LOGIN_STATE.ENTERING_NUMBER);
-
+            Toast.makeText(LoginActivity.this, "Timed out.Try again", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onVerificationFailed(FirebaseException e) {
-            Log.d("dddd", "onVerificationFailed: " + e.getMessage());
             e.printStackTrace();
-            Toast.makeText(LoginActivity.this, "VerificationFailed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "Verification Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             changeState(LOGIN_STATE.ENTERING_NUMBER);
 
         }
@@ -143,18 +143,14 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("dddd", "signInWithCredential:success");
                             FirebaseUser user = task.getResult().getUser();
+                            Toast.makeText(LoginActivity.this, "Signed in successfully.", Toast.LENGTH_SHORT).show();
+
                             userSignedIn();
-
-
                         } else {
-                            // Sign in failed, display a message and update the UI
-                            Log.w("dddd", "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                Toast.makeText(LoginActivity.this, "Wrong Code", Toast.LENGTH_SHORT).show();
-                                updateUI();
+                                Toast.makeText(LoginActivity.this, "Invalid Code", Toast.LENGTH_SHORT).show();
+                                changeState(LOGIN_STATE.ENTERING_CODE);
                             }
                         }
                     }
@@ -201,12 +197,18 @@ public class LoginActivity extends BaseActivity {
         login_IMG_background = findViewById(R.id.login_IMG_background);
     }
 
+    /**
+     * Changes the activity state and updates the UI
+     * @param state state to change to
+     */
     private void changeState(LOGIN_STATE state) {
         login_state = state;
         updateUI();
-
     }
 
+    /**
+     * updates the UI based on active state
+     */
     private void updateUI() {
         login_EDT_input.setText("");
         if(login_state == LOGIN_STATE.ENTERING_NUMBER) {
@@ -234,7 +236,6 @@ public class LoginActivity extends BaseActivity {
             login_BTN_continue.setVisibility(View.GONE);
             login_CCP_code.setVisibility(View.GONE);
             login_PROGBAR_spinner.setVisibility(View.VISIBLE);
-
         }
     }
 }

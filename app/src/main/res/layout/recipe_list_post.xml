@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="40dp"
+    android:elevation="20dp"
+    app:cardElevation="20dp"
+    android:layout_marginStart="12dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginBottom="12dp"
+    >
+
+    <RelativeLayout
+        android:id="@+id/listRecipe_LAY_window"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:alpha="0.7"
+        android:background="@color/purple_300"
+        android:padding="10dp">
+
+
+
+        <TextView
+            android:id="@+id/listRecipe_TXT_title"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+
+            android:text="RECIPE TITLE"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/listRecipe_TXT_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/listRecipe_TXT_title"
+
+            android:text="12/12/12"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/listRecipe_TXT_owner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/listRecipe_TXT_date"
+
+            android:text="Owner McOwnerson"
+            android:textSize="20sp" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/listRecipe_IMG_image"
+            android:layout_width="350dp"
+            android:layout_height="300dp"
+            android:layout_below="@id/listRecipe_TXT_owner"
+            android:layout_alignStart="@id/listRecipe_TXT_date"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/roundedImageView"
+            android:background="@color/black_fade"
+            />
+
+        <TextView
+            android:id="@+id/listRecipe_TXT_prepTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/listRecipe_IMG_image"
+            android:layout_alignStart="@id/listRecipe_TXT_date"
+            android:layout_marginTop="10dp"
+
+            android:text="Prep time: 200 minutes"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/listRecipe_TXT_difficulty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/listRecipe_TXT_prepTime"
+            android:layout_alignStart="@id/listRecipe_TXT_date"
+            android:layout_marginTop="10dp"
+
+            android:text="Difficulty: "
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/listRecipe_TXT_prepTime"
+            android:layout_toEndOf="@id/listRecipe_TXT_difficulty"
+
+            >
+
+            <ImageView
+                android:id="@+id/listRecipe_IMG_star1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:src="@drawable/ic_full_star" />
+
+            <ImageView
+                android:id="@+id/listRecipe_IMG_star2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:src="@drawable/ic_full_star"
+
+                />
+
+            <ImageView
+                android:id="@+id/listRecipe_IMG_star3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:src="@drawable/ic_full_star"
+
+                />
+
+            <ImageView
+                android:id="@+id/listRecipe_IMG_star4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:src="@drawable/ic_empty_star"
+
+                />
+
+            <ImageView
+                android:id="@+id/listRecipe_IMG_star5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:src="@drawable/ic_empty_star"
+
+                />
+        </LinearLayout>
+    </RelativeLayout>
+</com.google.android.material.card.MaterialCardView>
