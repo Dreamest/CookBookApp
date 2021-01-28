@@ -12,12 +12,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
+        android:background="@color/purple_300"
         />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/main_LST_recipes"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         tools:listitem="@layout/recipe_list_post"
         />
 

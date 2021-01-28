@@ -5,4 +5,16 @@
     <string name="phone_number">מספר טלפון</string>
     <string name="cancel">ביטול</string>
     <string name="code">הזן קוד</string>
+    <string name="recipe_title">כותרת מתכון</string>
+    <string name="added_on">נוסף בתאריך </string>
+    <string name="by">ע"י </string>
+    <string name="owner_name">ישראל ישראלי</string>
+    <string name="prep_time">זמן הכנה: </string>
+    <string name="minutes">דקות</string>
+    <string name="difficulty">דרגת קושי: </string>
+    <string name="lorem_ipsum">לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית קולהע צופעט למרקוח איבן איף, ברומץ כלרשט מיחוצים. קלאצי נולום ארווס סאפיאן - פוסיליס קוויס, אקווזמן קוואזי במר מודוף. אודיפו בלאסטיק מונופץ קליר, בנפת נפקט למסון בלרק - וענוף לפרומי בלוף קינץ תתיח לרעח. לת צשחמי ליבם סולגק. בראיט ולחת צורק מונחף, בגורמי מגמש. תרבנך וסתעד לכנו סתשם השמה - לתכי מורגם בורק? לתיג ישבעס.</string>
+    <string name="ingredient_units_gr">גרם</string>
+    <string name="ingredient_item">קמח רק תכליתי</string>
+    <string name="ingredients">מרכיבים</string>
+    <string name="method">אופן הכנה</string>
 </resources>

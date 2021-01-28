@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.logic.RecipeAdapter;
+import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.TestUnit;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -82,6 +83,8 @@ public class MainActivity extends BaseActivity {
 
     private void openPostActivity(int position) {
         Log.d("dddd", String.format("Post %d pressed.", position));
-        // TODO: 1/27/21 implement: open post in position position
+        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, myRecipes.get(position));
+        Intent myIntent = new Intent(this, RecipeActivity.class);
+        startActivity(myIntent);
     }
 }

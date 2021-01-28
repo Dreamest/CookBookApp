@@ -1,38 +1,42 @@
 package com.dreamest.cookbookapp.logic;
 
 public class Ingredient {
-    private Float units;
-    private String measurement;
-    private String description;
-    public Ingredient(){}
-
-    public Ingredient(Float units, String measurement, String description) {
-        this.units = units;
-        this.measurement = measurement;
-        this.description = description;
+    private String units;
+    private Float amount;
+    private String item;
+    public Ingredient(){
     }
 
-    public Float getUnits() {
+    public Ingredient(String units, Float amount, String item) {
+        this.units = units;
+        this.amount = amount;
+        this.item = item;
+    }
+
+    public String getUnits() {
         return units;
     }
 
-    public void setUnits(Float units) {
+    public Ingredient setUnits(String units) {
         this.units = units;
+        return this;
     }
 
-    public String getMeasurement() {
-        return measurement;
+    public Float getAmount() {
+        return amount;
     }
 
-    public void setMeasurement(String measurement) {
-        this.measurement = measurement;
+    public Ingredient setAmount(Float amount) {
+        this.amount = amount;
+        return this;
     }
 
-    public String getDescription() {
-        return description;
+    public String getItem() {
+        return item;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public Ingredient setItem(String item) {
+        this.item = item;
+        return this;
     }
 }

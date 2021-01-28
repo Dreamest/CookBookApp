@@ -19,7 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:alpha="0.7"
-        android:background="@color/purple_300"
         android:padding="10dp">
 
 
@@ -31,16 +30,38 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
 
-            android:text="RECIPE TITLE"
+            android:text="@string/recipe_title"
             android:textSize="40sp" />
+
+
+        <TextView
+            android:id="@+id/listRecipe_TXT_added_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/listRecipe_TXT_title"
+            android:layout_marginEnd="5dp"
+
+            android:text="@string/added_on"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/listRecipe_TXT_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/listRecipe_TXT_title"
+            android:layout_toEndOf="@id/listRecipe_TXT_added_on"
 
-            android:text="12/12/12"
+            android:text="@string/recipe_date"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/listRecipe_TXT_owned_by"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/listRecipe_TXT_date"
+            android:layout_marginEnd="5dp"
+
+            android:text="@string/by"
             android:textSize="20sp" />
 
         <TextView
@@ -48,8 +69,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/listRecipe_TXT_date"
+            android:layout_toEndOf="@id/listRecipe_TXT_owned_by"
 
-            android:text="Owner McOwnerson"
+            android:text="@string/owner_name"
             android:textSize="20sp" />
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -57,7 +79,7 @@
             android:layout_width="350dp"
             android:layout_height="300dp"
             android:layout_below="@id/listRecipe_TXT_owner"
-            android:layout_alignStart="@id/listRecipe_TXT_date"
+            android:layout_alignStart="@id/listRecipe_TXT_added_on"
             android:layout_centerHorizontal="true"
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/roundedImageView"
@@ -69,10 +91,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/listRecipe_IMG_image"
-            android:layout_alignStart="@id/listRecipe_TXT_date"
+            android:layout_alignStart="@id/listRecipe_IMG_image"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+
+            android:text="@string/prep_time"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/listRecipe_TXT_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/listRecipe_IMG_image"
+            android:layout_toEndOf="@id/listRecipe_TXT_prepTime"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+
+            android:text="200 "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/listRecipe_TXT_minutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/listRecipe_IMG_image"
+            android:layout_toEndOf="@id/listRecipe_TXT_time"
             android:layout_marginTop="10dp"
 
-            android:text="Prep time: 200 minutes"
+            android:text="@string/minutes"
             android:textSize="20sp" />
 
         <TextView
@@ -80,10 +126,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/listRecipe_TXT_prepTime"
-            android:layout_alignStart="@id/listRecipe_TXT_date"
+            android:layout_alignStart="@id/listRecipe_TXT_prepTime"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
 
-            android:text="Difficulty: "
+            android:text="@string/difficulty"
             android:textSize="20sp" />
 
         <LinearLayout
@@ -91,7 +138,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/listRecipe_TXT_prepTime"
             android:layout_toEndOf="@id/listRecipe_TXT_difficulty"
-
+            android:layoutDirection="ltr"
             >
 
             <ImageView

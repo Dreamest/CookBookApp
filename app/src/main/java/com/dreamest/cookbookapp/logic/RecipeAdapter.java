@@ -22,11 +22,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     private ArrayList<Recipe> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
-    private final static String PREP_TIME = "Prep time: ";
-    private final static String MINUTES = " minutes";
-    private final static String ADDED_ON = "Added on ";
-
-
 
     // data is passed into the constructor
     public RecipeAdapter(Context context, ArrayList<Recipe> data) {
@@ -46,14 +41,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         Recipe recipe = mData.get(position);
         holder.listRecipe_TXT_title.setText(recipe.getTitle());
         holder.listRecipe_TXT_owner.setText(recipe.getOwner());
-        holder.listRecipe_TXT_date.setText(ADDED_ON + recipe.getDate());
+        holder.listRecipe_TXT_date.setText(recipe.getDate());
         Glide
                 .with(mInflater.getContext())
                 .load(recipe.getImage())
                 .centerCrop()
                 .into(holder.listRecipe_IMG_image)
                 .onLoadFailed(ContextCompat.getDrawable(holder.listRecipe_IMG_image.getContext(), R.drawable.ic_no_image));
-        holder.listRecipe_TXT_prepTime.setText(PREP_TIME + recipe.getPrepTime() + MINUTES);
+        holder.listRecipe_TXT_time.setText(recipe.getPrepTime() + "");
 
         for (int i = 0; i < recipe.getDifficulty(); i++) {
             holder.stars[i].setImageResource(R.drawable.ic_full_star);
@@ -91,7 +86,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         TextView listRecipe_TXT_date;
         TextView listRecipe_TXT_owner;
         ImageView listRecipe_IMG_image;
-        TextView listRecipe_TXT_prepTime;
+        TextView listRecipe_TXT_time;
         ImageView[] stars;
 
 
@@ -103,7 +98,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     if (mClickListener != null) {
-                        Log.d("dddd", "onClickInAdapter");
                         mClickListener.onItemClick(v, getAdapterPosition());
                     }
                 }
@@ -116,7 +110,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             listRecipe_TXT_date = itemView.findViewById(R.id.listRecipe_TXT_date);
             listRecipe_TXT_owner = itemView.findViewById(R.id.listRecipe_TXT_owner);
             listRecipe_IMG_image = itemView.findViewById(R.id.listRecipe_IMG_image);
-            listRecipe_TXT_prepTime = itemView.findViewById(R.id.listRecipe_TXT_prepTime);
+            listRecipe_TXT_time = itemView.findViewById(R.id.listRecipe_TXT_time);
             stars[0] = itemView.findViewById(R.id.listRecipe_IMG_star1);
             stars[1] = itemView.findViewById(R.id.listRecipe_IMG_star2);
             stars[2] = itemView.findViewById(R.id.listRecipe_IMG_star3);

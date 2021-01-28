@@ -12,6 +12,7 @@ public class Recipe {
     private String title;
     private String recipeID;
     private String owner;
+    private String ownerID;
     private String date;
     private StorageReference image; // TODO: 1/27/21 change format? [Storage Referensce?]
     private ArrayList<Ingredient> ingredients;
@@ -20,6 +21,15 @@ public class Recipe {
     private int difficulty;
 
     public Recipe() {
+    }
+
+    public String getOwnerID() {
+        return ownerID;
+    }
+
+    public Recipe setOwnerID(String ownerID) {
+        this.ownerID = ownerID;
+        return this;
     }
 
     public String getTitle() {
