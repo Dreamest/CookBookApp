@@ -2,6 +2,8 @@ package com.dreamest.cookbookapp;
 
 import android.app.Application;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 
 public class App extends Application {
@@ -10,6 +12,10 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         MySharedPreferences.init(this);
+
+        //Disables dark mode
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
 
 
     }
