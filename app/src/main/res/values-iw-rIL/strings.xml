@@ -17,4 +17,9 @@
     <string name="ingredient_item">קמח רק תכליתי</string>
     <string name="ingredients">מרכיבים</string>
     <string name="method">אופן הכנה</string>
+    <string name="add_a_recipe">הוסף מתכון!</string>
+    <string name="title">שם מתכון</string>
+    <string name="add_another_ingredient">הוסף מרכיב נוסף</string>
+    <string name="preview">תצוגה מקדימה</string>
+    <string name="submit">אישור</string>
 </resources>

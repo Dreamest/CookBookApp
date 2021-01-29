@@ -21,4 +21,9 @@
     <string name="ingredient_item">All Purpose Flour</string>
     <string name="ingredients">Ingredients:</string>
     <string name="method">Method:</string>
+    <string name="title">Title</string>
+    <string name="add_a_recipe">Add a recipe!</string>
+    <string name="add_another_ingredient">Add another ingredient</string>
+    <string name="preview">Preview</string>
+    <string name="submit">Submit</string>
 </resources>

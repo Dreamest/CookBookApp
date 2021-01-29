@@ -21,6 +21,8 @@ public class Recipe {
     private int difficulty;
 
     public Recipe() {
+        ingredients = new ArrayList<>();
+        difficulty = 1;
     }
 
     public String getOwnerID() {

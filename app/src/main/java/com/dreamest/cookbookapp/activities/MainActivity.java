@@ -1,6 +1,5 @@
 package com.dreamest.cookbookapp.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,19 +9,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.logic.RecipeAdapter;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
+import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
 import com.dreamest.cookbookapp.utility.TestUnit;
 import com.dreamest.cookbookapp.utility.UtilityPack;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -59,7 +54,7 @@ public class MainActivity extends BaseActivity {
         main_BTN_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addNewPost();
+                addNewRecipe();
             }
         });
 
@@ -68,10 +63,34 @@ public class MainActivity extends BaseActivity {
                 .centerCrop()
                 .into(main_IMG_background);
 
+        main_LST_recipes.setOnTouchListener(new OnSwipeTouchListener(this) {
+            public void onSwipeRight() {
+                toFriendsList();
+            }
+
+            public void onSwipeLeft() {
+                toProfile();
+            }
+
+        });
+
     }
 
-    private void addNewPost() {
-        Log.d("dddd", "New post button clicked");
+    private void toProfile() {
+        Log.d("dddd", "going to profile");
+        // TODO: 1/29/21 implement
+    }
+
+    private void toFriendsList() {
+        Log.d("dddd", "going to friendslist");
+        // TODO: 1/29/21 implement
+
+    }
+
+    private void addNewRecipe() {
+        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, new Recipe());
+        Intent myIntent = new Intent(this, EditRecipeActivity.class);
+        startActivity(myIntent);
         // TODO: 1/27/21 implement: Send to create post activity.
     }
 

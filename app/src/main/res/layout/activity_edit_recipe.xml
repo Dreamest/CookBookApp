@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".activities.EditRecipeActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+
+        <TextView
+            android:id="@+id/edit_TXT_title"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+
+            android:textSize="40sp"
+            android:text="@string/add_a_recipe"
+            />
+        <TextView
+            android:id="@+id/edit_TXT_title_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edit_TXT_title"
+            android:layout_marginStart="20dp"
+
+
+            android:text="@string/title"
+            android:textSize="20sp"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edit_LAY_title_input"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_TXT_title_field"
+            android:layout_alignStart="@+id/edit_TXT_title_field"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="5dp"
+
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_EDT_title"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/edit_TXT_ingredients"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_LAY_title_input"
+            android:layout_alignStart="@+id/edit_LAY_title_input"
+
+            android:text="@string/ingredients"
+            android:textSize="20sp"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/edit_LST_ingredients"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edit_TXT_ingredients"
+            android:layout_alignStart="@id/edit_TXT_ingredients"
+            tools:itemCount="3"
+
+
+            tools:listitem="@layout/ingredient_list_item"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/edit_BTN_add_ingredient"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_LST_ingredients"
+            android:layout_alignStart="@+id/edit_LST_ingredients"
+
+            app:strokeColor="@color/black"
+            app:strokeWidth="2dp"
+
+            android:backgroundTint="@color/teal_200"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:text="@string/add_another_ingredient"
+            />
+
+        <TextView
+            android:id="@+id/edit_TXT_method"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_BTN_add_ingredient"
+            android:layout_alignStart="@+id/edit_BTN_add_ingredient"
+            android:layout_marginBottom="5dp"
+
+            android:text="@string/method"
+            android:textSize="20sp"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edit_LAY_method_input"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_TXT_method"
+            android:layout_alignStart="@+id/edit_TXT_method"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="5dp"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_EDT_method"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/edit_IMG_image"
+
+            android:layout_width="350dp"
+            android:layout_height="300dp"
+            android:clickable="true"
+            android:layout_below="@+id/edit_LAY_method_input"
+            android:layout_centerHorizontal="true"
+            android:background="@color/black_fade"
+            />
+        <LinearLayout
+            android:id="@+id/edit_LAY_stars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_IMG_image"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:layoutDirection="ltr"
+            >
+            <ImageView
+                android:id="@+id/edit_IMG_star1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:padding="3dp"
+                android:src="@drawable/ic_full_star" />
+
+            <ImageView
+                android:id="@+id/edit_IMG_star2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+
+                android:padding="3dp"
+                android:src="@drawable/ic_empty_star"
+
+                />
+
+            <ImageView
+                android:id="@+id/edit_IMG_star3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+
+                android:padding="3dp"
+                android:src="@drawable/ic_empty_star"
+
+                />
+
+            <ImageView
+                android:id="@+id/edit_IMG_star4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+
+                android:padding="3dp"
+                android:src="@drawable/ic_empty_star"
+
+                />
+
+            <ImageView
+                android:id="@+id/edit_IMG_star5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+
+                android:padding="3dp"
+                android:src="@drawable/ic_empty_star"
+
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/edit_TXT_prepTime"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edit_LAY_stars"
+
+            android:textColor="@color/black"
+            android:text="@string/prep_time"
+            android:textSize="30sp"
+
+            />
+
+        <com.gildaswise.horizontalcounter.HorizontalCounter
+            android:id="@+id/edit_CTR_prepTime"
+
+            android:layout_below="@id/edit_LAY_stars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_toEndOf="@id/edit_TXT_prepTime"
+            android:layoutDirection="ltr"
+
+
+            app:stepValue="5"
+            app:textColor="@color/black"
+            app:textSize="15sp"
+            app:displayAsInteger="true"
+            app:initialValue="5"
+            app:maxValue="2000"
+            app:minValue="5"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_CTR_prepTime"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            >
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/edit_BTN_preview"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+
+                app:strokeColor="@color/black"
+                app:strokeWidth="2dp"
+                android:layout_marginEnd="10dp"
+
+                android:backgroundTint="@color/teal_200"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:text="@string/preview"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/edit_BTN_submit"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                app:strokeColor="@color/black"
+                app:strokeWidth="2dp"
+
+                android:backgroundTint="@color/teal_200"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:text="@string/submit"
+                />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

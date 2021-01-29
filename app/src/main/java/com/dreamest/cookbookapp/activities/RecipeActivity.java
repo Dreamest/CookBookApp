@@ -41,12 +41,12 @@ public class RecipeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+        loadRecipe();
         findViews();
         initViews();
     }
 
     private void initViews() {
-        loadRecipe();
         recipe_LST_ingredients.setLayoutManager(new LinearLayoutManager(this));
         IngredientAdapter ingredientAdapter = new IngredientAdapter(this, recipe.getIngredients());
 
