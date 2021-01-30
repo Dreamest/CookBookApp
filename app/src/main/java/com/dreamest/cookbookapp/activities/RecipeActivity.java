@@ -1,40 +1,32 @@
 package com.dreamest.cookbookapp.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
-import com.dreamest.cookbookapp.logic.Ingredient;
-import com.dreamest.cookbookapp.logic.IngredientAdapter;
+import com.dreamest.cookbookapp.logic.IngredientAdapterCheckbox;
 import com.dreamest.cookbookapp.logic.Recipe;
-import com.dreamest.cookbookapp.logic.RecipeAdapter;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
-import com.dreamest.cookbookapp.utility.TestUnit;
 import com.google.android.material.imageview.ShapeableImageView;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.ArrayList;
 
 public class RecipeActivity extends BaseActivity {
-    ImageButton recipe_BTN_share;
-    ImageButton recipe_BTN_edit;
-    TextView recipe_TXT_title;
-    TextView recipe_TXT_owner;
-    TextView recipe_TXT_date;
-    TextView recipe_TXT_method;
-    ShapeableImageView recipe_IMG_image;
-    RecyclerView recipe_LST_ingredients;
+    private ImageButton recipe_BTN_share;
+    private ImageButton recipe_BTN_edit;
+    private TextView recipe_TXT_title;
+    private TextView recipe_TXT_owner;
+    private TextView recipe_TXT_date;
+    private TextView recipe_TXT_method;
+    private ShapeableImageView recipe_IMG_image;
+    private RecyclerView recipe_LST_ingredients;
     private Recipe recipe;
 
     @Override
@@ -48,9 +40,9 @@ public class RecipeActivity extends BaseActivity {
 
     private void initViews() {
         recipe_LST_ingredients.setLayoutManager(new LinearLayoutManager(this));
-        IngredientAdapter ingredientAdapter = new IngredientAdapter(this, recipe.getIngredients());
+        IngredientAdapterCheckbox ingredientAdapter = new IngredientAdapterCheckbox(this, recipe.getIngredients());
 
-        ingredientAdapter.setClickListener(new IngredientAdapter.ItemClickListener() {
+        ingredientAdapter.setClickListener(new IngredientAdapterCheckbox.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
@@ -88,6 +80,9 @@ public class RecipeActivity extends BaseActivity {
     }
 
     private void editRecipe() {
+        Intent myIntent = new Intent(this, EditRecipeActivity.class);
+        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe);
+        startActivity(myIntent);
         Log.d("dddd", "edit clicked");
         // TODO: 1/28/21 Implement later
     }

@@ -22,6 +22,12 @@ public class Recipe {
 
     public Recipe() {
         ingredients = new ArrayList<>();
+//        title = "";
+//        recipeID = "";
+//        owner = "";
+//        ownerID = "";
+//        date = "";
+//        method = "";
         difficulty = 1;
     }
 

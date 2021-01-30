@@ -11,16 +11,17 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dreamest.cookbookapp.R;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
-public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.MyViewHolder>  {
+public class IngredientAdapterCheckbox extends RecyclerView.Adapter<IngredientAdapterCheckbox.MyViewHolder>  {
     private ArrayList<Ingredient> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    public IngredientAdapter(Context context, ArrayList<Ingredient> data) {
+    public IngredientAdapterCheckbox(Context context, ArrayList<Ingredient> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
@@ -76,10 +77,12 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
 
     // stores and recycles views as they are scrolled off screen
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView ingredient_TXT_item;
-        TextView ingredient_TXT_units;
-        TextView ingredient_TXT_amount;
-        ImageView ingredient_IMG_check;
+        private TextView ingredient_TXT_item;
+        private TextView ingredient_TXT_units;
+        private TextView ingredient_TXT_amount;
+        private ImageView ingredient_IMG_check;
+        private MaterialButton ingredient_BTN_remove;
+
 
         MyViewHolder(View itemView) {
             super(itemView);
@@ -108,6 +111,8 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
             ingredient_TXT_units = itemView.findViewById(R.id.ingredient_TXT_units);
             ingredient_TXT_amount = itemView.findViewById(R.id.ingredient_TXT_amount);
             ingredient_IMG_check = itemView.findViewById(R.id.ingredient_IMG_check);
+            ingredient_BTN_remove = itemView.findViewById(R.id.ingredient_BTN_remove);
+            ingredient_BTN_remove.setVisibility(View.GONE);
         }
 
         private void changeBoxStatus(View v) {
@@ -115,15 +120,13 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
             Log.d("dddd", (Integer)R.drawable.checkbox_active + "");
             Log.d("dddd", (Integer)R.drawable.checkbox_inactive + "");
 
-            if(ingredient_IMG_check.getTag().equals((Integer)R.drawable.checkbox_active)) {
+            if(ingredient_IMG_check.getTag().equals(R.drawable.checkbox_active)) {
                 setImage(ingredient_IMG_check, R.drawable.checkbox_inactive);
-            } else if(ingredient_IMG_check.getTag().equals((Integer)R.drawable.checkbox_inactive)) {
+            } else if(ingredient_IMG_check.getTag().equals(R.drawable.checkbox_inactive)) {
                 setImage(ingredient_IMG_check, R.drawable.checkbox_active);
             }
         }
     }
-
-
 }
 
 

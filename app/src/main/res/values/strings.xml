@@ -23,7 +23,9 @@
     <string name="method">Method:</string>
     <string name="title">Title</string>
     <string name="add_a_recipe">Add a recipe!</string>
+    <string name="add_first_ingredient">Add ingredient</string>
     <string name="add_another_ingredient">Add another ingredient</string>
     <string name="preview">Preview</string>
     <string name="submit">Submit</string>
+    <string name="remove">remove</string>
 </resources>

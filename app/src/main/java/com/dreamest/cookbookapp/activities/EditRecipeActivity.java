@@ -6,14 +6,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Ingredient;
-import com.dreamest.cookbookapp.logic.IngredientAdapter;
+import com.dreamest.cookbookapp.logic.IngredientAdapterCheckbox;
+import com.dreamest.cookbookapp.logic.IngredientAdapterRemoveBTN;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.gildaswise.horizontalcounter.HorizontalCounter;
@@ -34,33 +33,46 @@ public class EditRecipeActivity extends AppCompatActivity {
     private MaterialButton edit_BTN_submit;
     private MaterialButton edit_BTN_preview;
     private RecyclerView edit_LST_ingredients;
-    private Recipe recipe;
-    private ArrayList<Ingredient> ingredients;
     private ImageView[] stars;
     private HorizontalCounter edit_CTR_prepTime;
+    private Recipe recipe;
+    private ArrayList<Ingredient> ingredients;
     private int difficulty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_recipe);
-        loadRecipe();
         findViews();
+        loadRecipe();
         initViews();
     }
 
     private void loadRecipe() {
         recipe = (Recipe) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.RECIPE, new Recipe());
         ingredients = recipe.getIngredients();
+        difficulty = recipe.getDifficulty();
+        edit_EDT_title.setText(recipe.getTitle());
+        edit_EDT_method.setText(recipe.getMethod());
+        changeDifficulty(recipe.getDifficulty());
+        edit_CTR_prepTime.setCurrentValue((double)recipe.getPrepTime());
+
+        /*
+        Code for this library is slightly faulty. setCurrentValue updates the stored value but not the view.
+        Calling setDisplayInteger activates a private function that updates the view.
+         */
+        edit_CTR_prepTime.setDisplayingInteger(true);
+
+
     }
 
     private void initViews() {
         edit_IMG_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 1/29/21 Test 
                 ImagePicker.Companion.with(EditRecipeActivity.this)
                         .saveDir(new File(Environment.getExternalStorageDirectory(), "ImagePicker"))
+                        //Currently stores in basic "camera" folder
                         .start();
             }
         });
@@ -87,44 +99,54 @@ public class EditRecipeActivity extends AppCompatActivity {
             }
         });
 
-        for(ImageView star: stars) {
+        for (ImageView star : stars) {
             star.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    changeDifficulty((int)star.getTag());
+                    changeDifficulty((int) star.getTag());
                 }
             });
         }
-        loadRecyclerView();
-
-
+        loadIngredients();
     }
 
     private void changeDifficulty(int rank) {
         // TODO: 1/29/21 requires testing
-        for(ImageView star: stars) {
-            if((int)star.getTag() <= rank) {
+        for (ImageView star : stars) {
+            if ((int) star.getTag() <= rank) {
                 star.setImageResource(R.drawable.ic_full_star);
             } else {
                 star.setImageResource(R.drawable.ic_empty_star);
             }
         }
         difficulty = rank;
-        Log.d("dddd", difficulty + "");
-
     }
 
-    private void loadRecyclerView() {
+    private void loadIngredients() {
         edit_LST_ingredients.setLayoutManager(new LinearLayoutManager(this));
-        IngredientAdapter ingredientAdapter = new IngredientAdapter(this, recipe.getIngredients());
+        IngredientAdapterRemoveBTN ingredientAdapter = new IngredientAdapterRemoveBTN(this, ingredients);
 
-        ingredientAdapter.setClickListener(new IngredientAdapter.ItemClickListener() {
+        ingredientAdapter.setClickListener(new IngredientAdapterRemoveBTN.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+            }
 
+            @Override
+            public void onRemoveClick(int position) {
+                ingredients.remove(position);
+                initAdapter(ingredientAdapter); //Needs to be reapplied to update the view
             }
         });
+        initAdapter(ingredientAdapter);
+    }
+
+    private void initAdapter(IngredientAdapterRemoveBTN ingredientAdapter) {
         edit_LST_ingredients.setAdapter(ingredientAdapter);
+        if (recipe.getIngredients().size() == 0) {
+            edit_BTN_add_ingredient.setText(R.string.add_first_ingredient);
+        } else {
+            edit_BTN_add_ingredient.setText(R.string.add_another_ingredient);
+        }
     }
 
     @Override
@@ -132,7 +154,7 @@ public class EditRecipeActivity extends AppCompatActivity {
         super.onResume();
         // TODO: 1/29/21 assumption: need to call loadRecyclerView in order to update with new ingredient.
         // TODO: 1/29/21 but first, add new ingredient to ingredients list
-        loadRecyclerView();
+        loadIngredients();
     }
 
     private void previewRecipe() {
@@ -153,8 +175,6 @@ public class EditRecipeActivity extends AppCompatActivity {
         recipe.setDifficulty(difficulty);
         recipe.setTitle(edit_EDT_title.getText().toString());
 //        recipe.setRecipeID() //todo: implement with firebase
-
-        // TODO: 1/29/21 implement
     }
 
     private void addNewIngredient() {
@@ -181,8 +201,5 @@ public class EditRecipeActivity extends AppCompatActivity {
         stars[4] = findViewById(R.id.edit_IMG_star5);
         stars[4].setTag(5);
         edit_CTR_prepTime = findViewById(R.id.edit_CTR_prepTime);
-
-
-
     }
 }

@@ -22,4 +22,6 @@
     <string name="add_another_ingredient">הוסף מרכיב נוסף</string>
     <string name="preview">תצוגה מקדימה</string>
     <string name="submit">אישור</string>
+    <string name="add_first_ingredient">הוסף מרכיב</string>
+    <string name="remove">הסר</string>
 </resources>
