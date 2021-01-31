@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.ProfileActivity"
+    android:layout_margin="20dp"
+    >
+
+    <TextView
+        android:id="@+id/profile_TXT_profile_title"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+
+
+        android:textStyle="bold"
+        android:textSize="40sp"
+        android:text="@string/profile_page"
+        />
+
+        <TextView
+            android:id="@+id/profile_TXT_username"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/profile_TXT_profile_title"
+            android:layout_marginTop="5dp"
+
+            android:textSize="32sp"
+            android:text="@string/owner_name"
+            />
+
+    <ImageView
+        android:id="@+id/profile_IMG_image"
+
+        android:layout_width="350dp"
+        android:layout_height="300dp"
+        android:layout_below="@id/profile_TXT_username"
+        android:layout_marginTop="5dp"
+
+        android:clickable="true"
+        android:background="@color/black_fade"
+        />
+
+    <EditText
+        android:id="@+id/profile_EDT_change_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+
+        android:layout_below="@id/profile_IMG_image"
+        android:layout_alignStart="@id/profile_IMG_image"
+        android:ems="12"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/profile_BTN_confirm_name"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profile_IMG_image"
+        android:layout_alignEnd="@id/profile_IMG_image"
+        android:layout_marginTop="5dp"
+
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:cornerRadius="10dp"
+        app:strokeColor="@color/black"
+        app:strokeWidth="2dp"
+        android:textColor="@color/black"
+        android:textAllCaps="false"
+        android:backgroundTint="@color/teal_200"
+
+        android:text="@string/submit"
+        />
+
+    <TextView
+        android:id="@+id/profile_TXT_recipes"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@id/profile_EDT_change_name"
+        android:layout_alignStart="@id/profile_EDT_change_name"
+        android:layout_marginTop="5dp"
+
+        android:text="@string/num_recipes"
+        android:textSize="25sp"
+        />
+
+    <TextView
+        android:id="@+id/profile_TXT_count_recipes"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_BTN_confirm_name"
+        android:layout_alignEnd="@id/profile_BTN_confirm_name"
+        android:layout_marginTop="5dp"
+
+        android:text="@string/number_30"
+        android:textSize="25sp"
+        />
+
+    <TextView
+        android:id="@+id/profile_TXT_friends"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@id/profile_TXT_recipes"
+        android:layout_alignStart="@id/profile_TXT_recipes"
+        android:layout_marginTop="5dp"
+
+        android:text="@string/num_friends"
+        android:textSize="25sp"
+        />
+
+    <TextView
+        android:id="@+id/profile_TXT_count_friends"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_TXT_count_recipes"
+        android:layout_alignEnd="@id/profile_BTN_confirm_name"
+        android:layout_marginTop="5dp"
+
+        android:text="@string/number_30"
+        android:textSize="25sp"
+        />
+
+
+
+
+</RelativeLayout>

@@ -113,6 +113,8 @@
                 android:textColor="@color/teal_100"
                 android:textAllCaps="false"
                 android:backgroundTint="@color/black_fade"
+                app:strokeWidth="2dp"
+
                 android:text="@string/cancel"
 
                 />
@@ -125,6 +127,7 @@
                 app:strokeColor="@color/teal_100"
                 android:textColor="@color/teal_100"
                 android:textAllCaps="false"
+                app:strokeWidth="2dp"
                 android:backgroundTint="@color/black_fade"
                 android:text="@string/continue_"
                 />

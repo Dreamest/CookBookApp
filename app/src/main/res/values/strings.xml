@@ -28,4 +28,8 @@
     <string name="preview">Preview</string>
     <string name="submit">Submit</string>
     <string name="remove">remove</string>
+    <string name="profile_page">Profile Page</string>
+    <string name="num_recipes"># of recipes:</string>
+    <string name="num_friends"># of friends:</string>
+    <string name="number_30" translatable="false">30</string>
 </resources>
