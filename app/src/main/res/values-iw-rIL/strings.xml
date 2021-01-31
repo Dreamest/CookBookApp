@@ -24,4 +24,7 @@
     <string name="submit">אישור</string>
     <string name="add_first_ingredient">הוסף מרכיב</string>
     <string name="remove">הסר</string>
+    <string name="profile_page">עמוד פרופיל</string>
+    <string name="num_recipes">מספר מתכונים:</string>
+    <string name="num_friends">מספר חברים:</string>
 </resources>
