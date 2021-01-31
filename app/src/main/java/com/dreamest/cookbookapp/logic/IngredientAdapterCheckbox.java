@@ -15,6 +15,9 @@ import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter for ingredient list that shows the checkbox element
+ */
 public class IngredientAdapterCheckbox extends RecyclerView.Adapter<IngredientAdapterCheckbox.MyViewHolder>  {
     private ArrayList<Ingredient> mData;
     private LayoutInflater mInflater;

@@ -15,6 +15,9 @@ import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter for ingredient list that shows the remove button element
+ */
 public class IngredientAdapterRemoveBTN extends RecyclerView.Adapter<IngredientAdapterRemoveBTN.MyViewHolder>  {
     private ArrayList<Ingredient> mData;
     private LayoutInflater mInflater;
