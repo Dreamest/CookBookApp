@@ -32,4 +32,7 @@
     <string name="num_recipes"># of recipes:</string>
     <string name="num_friends"># of friends:</string>
     <string name="number_30" translatable="false">30</string>
+    <string name="what_your_name">What\'s your name?</string>
+    <string name="welcome_subtitle">Tell us about yourself</string>
+    <string name="no_recipes_yet">No recipes yet</string>
 </resources>

@@ -22,13 +22,9 @@ public class Recipe {
 
     public Recipe() {
         ingredients = new ArrayList<>();
-//        title = "";
-//        recipeID = "";
-//        owner = "";
-//        ownerID = "";
-//        date = "";
-//        method = "";
+        recipeID = "";
         difficulty = 1;
+        prepTime = 5;
     }
 
     public String getOwnerID() {

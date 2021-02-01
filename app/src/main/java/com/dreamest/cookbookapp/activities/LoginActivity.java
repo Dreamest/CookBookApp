@@ -1,20 +1,18 @@
 package com.dreamest.cookbookapp.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
+import com.dreamest.cookbookapp.utility.KeyMaker;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,6 +27,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.rilixtech.CountryCodePicker;
 
 import java.util.concurrent.TimeUnit;
@@ -63,8 +66,7 @@ public class LoginActivity extends BaseActivity {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
         if (firebaseUser != null) {
-            userSignedIn();
-            return;
+            userSignedIn(firebaseUser);
         }
     }
 
@@ -146,7 +148,7 @@ public class LoginActivity extends BaseActivity {
                             FirebaseUser user = task.getResult().getUser();
                             Toast.makeText(LoginActivity.this, "Signed in successfully.", Toast.LENGTH_SHORT).show();
 
-                            userSignedIn();
+                            userSignedIn(user);
                         } else {
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 Toast.makeText(LoginActivity.this, "Invalid Code", Toast.LENGTH_SHORT).show();
@@ -157,12 +159,28 @@ public class LoginActivity extends BaseActivity {
                 });
     }
 
-    private void userSignedIn() {
-        Intent myIntent = new Intent(this, MainActivity.class);
-        startActivity(myIntent);
-        finish();
-    }
+    private void userSignedIn(FirebaseUser user) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference(UtilityPack.USERS).child(user.getUid());
 
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Intent myIntent;
+                if(snapshot.getValue() != null) {
+                    myIntent = new Intent(LoginActivity.this, MainActivity.class);
+                } else {
+                    myIntent = new Intent(LoginActivity.this, WelcomeActivity.class);
+                }
+                startActivity(myIntent);
+                finish();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("dddd", "Failed to read value.", error.toException());
+            }
+        });
+    }
 
     private void initViews() {
         login_BTN_cancel.setOnClickListener(new View.OnClickListener() {

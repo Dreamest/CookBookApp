@@ -1,11 +1,13 @@
 package com.dreamest.cookbookapp.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -14,11 +16,21 @@ import com.dreamest.cookbookapp.logic.Ingredient;
 import com.dreamest.cookbookapp.logic.IngredientAdapterCheckbox;
 import com.dreamest.cookbookapp.logic.IngredientAdapterRemoveBTN;
 import com.dreamest.cookbookapp.logic.Recipe;
+import com.dreamest.cookbookapp.logic.User;
+import com.dreamest.cookbookapp.utility.KeyMaker;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
+import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.gildaswise.horizontalcounter.HorizontalCounter;
 import com.github.drjacky.imagepicker.ImagePicker;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -56,7 +68,6 @@ public class EditRecipeActivity extends AppCompatActivity {
         edit_EDT_method.setText(recipe.getMethod());
         changeDifficulty(recipe.getDifficulty());
         edit_CTR_prepTime.setCurrentValue((double)recipe.getPrepTime());
-
         /*
         Code for this library is slightly faulty. setCurrentValue updates the stored value but not the view.
         Calling setDisplayInteger activates a private function that updates the view.
@@ -162,6 +173,9 @@ public class EditRecipeActivity extends AppCompatActivity {
     }
 
     private void submitRecipe() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
         String pattern = "dd.MM.yyyy";
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         recipe.setDate(format.format(new Date()));
@@ -169,12 +183,36 @@ public class EditRecipeActivity extends AppCompatActivity {
 //        recipe.setImage() //todo: Figure how to set the image
         recipe.setIngredients(ingredients);
         recipe.setMethod(edit_EDT_method.getText().toString());
-//        recipe.setOwner() //todo: current user name
-//        recipe.setOwnerID() //todo: current user
+        recipe.setOwner(firebaseUser.getDisplayName()); //todo: test
+        recipe.setOwnerID(firebaseUser.getUid()); //todo: test
         recipe.setPrepTime(edit_CTR_prepTime.getCurrentValue().intValue());
         recipe.setDifficulty(difficulty);
         recipe.setTitle(edit_EDT_title.getText().toString());
-//        recipe.setRecipeID() //todo: implement with firebase
+        if(recipe.getRecipeID().equals("")) {
+            recipe.setRecipeID(KeyMaker.getNewRecipeKey()); //todo: test
+            Log.d("dddd", recipe.getRecipeID());
+        }
+
+        addRecipeToDatabase(recipe);
+        addRecipeToUser(recipe.getRecipeID());
+
+        finish();
+    }
+
+    private void addRecipeToUser(String recipeID) {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference(UtilityPack.USERS)
+                .child(firebaseUser.getUid())
+                .child(UtilityPack.MY_RECIPES)
+                .child(recipeID);
+        ref.setValue(recipeID);
+    }
+
+    private void addRecipeToDatabase(Recipe recipe) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference(UtilityPack.RECIPES).child(recipe.getRecipeID());
+        ref.setValue(recipe);
     }
 
     private void addNewIngredient() {

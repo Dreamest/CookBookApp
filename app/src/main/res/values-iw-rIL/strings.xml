@@ -27,4 +27,7 @@
     <string name="profile_page">עמוד פרופיל</string>
     <string name="num_recipes">מספר מתכונים:</string>
     <string name="num_friends">מספר חברים:</string>
+    <string name="what_your_name">איך קוראים לך?</string>
+    <string name="welcome_subtitle">ספר/י לנו על עצמך</string>
+    <string name="no_recipes_yet">אין עדיין מתכונים</string>
 </resources>
