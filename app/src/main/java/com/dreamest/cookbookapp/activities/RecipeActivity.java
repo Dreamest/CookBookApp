@@ -17,6 +17,7 @@ import com.dreamest.cookbookapp.logic.IngredientAdapterCheckbox;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class RecipeActivity extends BaseActivity {
     private ImageButton recipe_BTN_share;
@@ -63,10 +64,11 @@ public class RecipeActivity extends BaseActivity {
                 editRecipe();
             }
         });
-        // TODO: 1/28/21 return those lines after firebase is established more 
-//        if(!recipe.getOwnerID().equals(/*firebase current user id*/)) {
-//            recipe_BTN_edit.setVisibility(View.GONE);
-//        }
+
+        //todo: untested.
+        if(!recipe.getOwnerID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+            recipe_BTN_edit.setVisibility(View.GONE);
+        }
         recipe_TXT_title.setText(recipe.getTitle());
         recipe_TXT_owner.setText(recipe.getOwner());
         recipe_TXT_date.setText(recipe.getDate());
@@ -76,15 +78,13 @@ public class RecipeActivity extends BaseActivity {
                 .load(recipe.getImage())
                 .centerCrop()
                 .into(recipe_IMG_image)
-                .onLoadFailed(ContextCompat.getDrawable(this, R.drawable.ic_no_image));
+                .onLoadFailed(getDrawable(R.drawable.ic_no_image));
     }
 
     private void editRecipe() {
         Intent myIntent = new Intent(this, EditRecipeActivity.class);
-        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe);
+        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe); //Might be redundant
         startActivity(myIntent);
-        Log.d("dddd", "edit clicked");
-        // TODO: 1/28/21 Implement later
     }
 
     private void shareRecipe() {
@@ -94,10 +94,6 @@ public class RecipeActivity extends BaseActivity {
 
     private void loadRecipe() {
         recipe = (Recipe) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.RECIPE, new Recipe());
-    }
-
-    private void changeBoxStatus(View v, int position) {
-
     }
 
     private void findViews() {

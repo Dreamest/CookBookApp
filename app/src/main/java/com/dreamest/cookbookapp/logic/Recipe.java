@@ -1,6 +1,9 @@
 package com.dreamest.cookbookapp.logic;
 
+import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 
 import java.lang.reflect.Array;
@@ -115,5 +118,11 @@ public class Recipe {
     public Recipe setDifficulty(int difficulty) {
         this.difficulty = difficulty;
         return this;
+    }
+
+    public void storeInFirebase() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference(UtilityPack.KEYS.RECIPES).child(this.getRecipeID());
+        ref.setValue(this);
     }
 }

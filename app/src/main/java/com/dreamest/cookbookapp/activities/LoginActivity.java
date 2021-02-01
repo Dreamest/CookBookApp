@@ -5,9 +5,12 @@ import androidx.annotation.NonNull;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -102,7 +105,6 @@ public class LoginActivity extends BaseActivity {
      * Attaches country code to phone number, and drops leading zero if there is one
      */
     private void getPhoneNumber() {
-
         phoneInput = login_EDT_input.getText().toString();
         if(phoneInput.charAt(0) == '0' && phoneInput.length() == 10)
             phoneInput = phoneInput.substring(1);
@@ -161,7 +163,7 @@ public class LoginActivity extends BaseActivity {
 
     private void userSignedIn(FirebaseUser user) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.USERS).child(user.getUid());
+        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(user.getUid());
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -197,6 +199,16 @@ public class LoginActivity extends BaseActivity {
                     startLoginProcess();
                 else if (login_state == LOGIN_STATE.ENTERING_CODE)
                     codeEntered();
+            }
+        });
+
+        login_EDT_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    login_EDT_input.clearFocus();
+                }
+                return false;
             }
         });
     }

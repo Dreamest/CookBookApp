@@ -98,6 +98,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     if (mClickListener != null) {
+                        Log.d("dddd", "inside recipeAdapter " + getAdapterPosition());
                         mClickListener.onItemClick(v, getAdapterPosition());
                     }
                 }

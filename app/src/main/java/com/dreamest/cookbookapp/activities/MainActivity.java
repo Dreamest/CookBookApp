@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.logic.RecipeAdapter;
+import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
 import com.dreamest.cookbookapp.utility.UtilityPack;
@@ -36,7 +37,7 @@ public class MainActivity extends BaseActivity {
     private ImageButton main_BTN_add;
     private ImageView main_IMG_background;
     private HashMap<String, Recipe> myRecipesMap;// = TestUnit.getPosts();
-    private ArrayList<Recipe> myRecipesList;
+    private ArrayList<Recipe> myRecipesList;// = TestUnit.getPosts();
     private RecipeAdapter recipeAdapter;
     private TextView main_TXT_no_recipes;
 
@@ -64,19 +65,18 @@ public class MainActivity extends BaseActivity {
      */
     private void loadFromDatabase() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.USERS)
+        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
                 .child(firebaseUser.getUid())
-                .child(UtilityPack.MY_RECIPES);
+                .child(UtilityPack.KEYS.MY_RECIPES);
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Iterable<DataSnapshot> recipeIds = snapshot.getChildren();
-                Log.d("dddd", "children count = " + snapshot.getChildrenCount());
-                if (recipeIds != null) {
+                if (snapshot.exists()) {
                     main_TXT_no_recipes.setVisibility(View.GONE);
+
+                    Iterable<DataSnapshot> recipeIds = snapshot.getChildren();
                     for(DataSnapshot id: recipeIds) {
                         loadRecipe(id, database);
                     }
@@ -97,22 +97,16 @@ public class MainActivity extends BaseActivity {
      * @param id Recipe ID
      * @param database firebase database
      */
+    //This functions needs to be here and not in Recipe to be able to handle the adapter synchronically.
     private void loadRecipe(DataSnapshot id, FirebaseDatabase database) {
-        DatabaseReference recipeRef = database.getReference(UtilityPack.RECIPES)
+        DatabaseReference recipeRef = database.getReference(UtilityPack.KEYS.RECIPES)
                 .child(id.getValue(String.class));
         recipeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("dddd", "" + snapshot.getValue(Recipe.class));
                 myRecipesMap.put(id.getValue(String.class), snapshot.getValue(Recipe.class));
-                Log.d("dddd", myRecipesMap.size() + "");
-                if (recipeAdapter != null) {
-                    reAttachAdapater();
-                } else {
-                    initAdapter();
-                }
+                initAdapter();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.w("dddd", "Failed to read value.", error.toException());
@@ -120,13 +114,8 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void reAttachAdapater() {
-        myRecipesList = new ArrayList<>(myRecipesMap.values());
-        recipeAdapter = new RecipeAdapter(MainActivity.this, myRecipesList);
-        main_LST_recipes.setAdapter(recipeAdapter);
-    }
-
     private void initAdapter() {
+        myRecipesList = new ArrayList<>(myRecipesMap.values());
         main_LST_recipes.setLayoutManager(new LinearLayoutManager(this));
         recipeAdapter = new RecipeAdapter(this, myRecipesList);
 
@@ -136,8 +125,6 @@ public class MainActivity extends BaseActivity {
                 openRecipeActivity(position);
             }
         });
-        Log.d("dddd", "In adapater " + myRecipesMap.size());
-
         main_LST_recipes.setAdapter(recipeAdapter);
     }
 
@@ -166,10 +153,29 @@ public class MainActivity extends BaseActivity {
             }
 
         });
-
     }
 
     private void toProfile() {
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(uid);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.USER, user);
+                Intent myIntent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(myIntent);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("dddd", "Failed to read value.", error.toException());
+            }
+        });
+
+
+
+
         Log.d("dddd", "going to profile");
         // TODO: 1/29/21 implement
     }

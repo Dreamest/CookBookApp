@@ -35,4 +35,5 @@
     <string name="what_your_name">What\'s your name?</string>
     <string name="welcome_subtitle">Tell us about yourself</string>
     <string name="no_recipes_yet">No recipes yet</string>
+    <string name="change_your_username">Change your username?</string>
 </resources>

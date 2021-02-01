@@ -55,6 +55,10 @@
 
         android:layout_below="@id/profile_IMG_image"
         android:layout_alignStart="@id/profile_IMG_image"
+
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:hint="@string/change_your_username"
         android:ems="12"
         />
 

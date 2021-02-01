@@ -52,6 +52,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_EDT_title"
 
+                android:imeOptions="actionDone"
+                android:inputType="text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 

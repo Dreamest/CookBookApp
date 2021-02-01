@@ -75,7 +75,6 @@ public class IngredientAdapterRemoveBTN extends RecyclerView.Adapter<IngredientA
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onItemClick(View view, int position);
         void onRemoveClick(int position);
     }
 
@@ -93,14 +92,14 @@ public class IngredientAdapterRemoveBTN extends RecyclerView.Adapter<IngredientA
             findViews(itemView);
 
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mClickListener != null) {
-                        mClickListener.onItemClick(v, getAdapterPosition());
-                    }
-                }
-            });
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (mClickListener != null) {
+//                        mClickListener.onItemClick(v, getAdapterPosition());
+//                    }
+//                }
+//            });
 
             ingredient_BTN_remove.setOnClickListener(new View.OnClickListener() {
                 @Override

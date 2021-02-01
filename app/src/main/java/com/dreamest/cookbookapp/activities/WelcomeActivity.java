@@ -2,9 +2,13 @@ package com.dreamest.cookbookapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
@@ -13,17 +17,11 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
-public class WelcomeActivity extends AppCompatActivity {
+public class WelcomeActivity extends BaseActivity {
     private ImageView welcome_IMG_user_image;
     private TextInputEditText welcome_EDT_name;
     private MaterialButton welcome_BTN_submit;
-    private final String USERS = "users";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +45,17 @@ public class WelcomeActivity extends AppCompatActivity {
                 submitData();
             }
         });
+
+        welcome_EDT_name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    welcome_EDT_name.clearFocus();
+                }
+                return false;
+            }
+        });
+
     }
 
     private void submitData() {
@@ -61,7 +70,6 @@ public class WelcomeActivity extends AppCompatActivity {
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest
                 .Builder()
                 .setDisplayName(userName)
-//                .setPhotoUri() // TODO: 2/1/21 Implement after adding firebase storage and taking pictures
                 .build();
         firebaseUser.updateProfile(profileUpdates);
         firebaseAuth.updateCurrentUser(firebaseUser);
@@ -70,14 +78,20 @@ public class WelcomeActivity extends AppCompatActivity {
                 .setUserID(firebaseUser.getUid())
                 .setDisplayName(userName)
                 .setPhoneNumber(firebaseUser.getPhoneNumber());
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(USERS).child(user.getUserID());
-        ref.setValue(user);
+        user.updateFirebase();
 
+        moveToMainActivity();
+    }
 
+    private void moveToMainActivity() {
+        Intent myIntent = new Intent(this, MainActivity.class);
+        startActivity(myIntent);
+        finish();
     }
 
     private void takePhoto() {
+        // TODO: 2/1/21 implement
+        //If no picture taken, use a default one that will be stored in firebase storage
     }
 
     private void findViews() {

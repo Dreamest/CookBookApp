@@ -119,10 +119,6 @@ public class IngredientAdapterCheckbox extends RecyclerView.Adapter<IngredientAd
         }
 
         private void changeBoxStatus(View v) {
-            Log.d("dddd", ingredient_IMG_check.getTag() + "");
-            Log.d("dddd", (Integer)R.drawable.checkbox_active + "");
-            Log.d("dddd", (Integer)R.drawable.checkbox_inactive + "");
-
             if(ingredient_IMG_check.getTag().equals(R.drawable.checkbox_active)) {
                 setImage(ingredient_IMG_check, R.drawable.checkbox_inactive);
             } else if(ingredient_IMG_check.getTag().equals(R.drawable.checkbox_inactive)) {

@@ -93,6 +93,7 @@ public class MySharedPreferences {
         String MY_SP = "MY_SP";
         String NO_OBJECT = "NO_OBJECT";
         String RECIPE = "RECIPE";
+        String USER = "USER";
     }
 
 

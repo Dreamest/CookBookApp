@@ -1,5 +1,12 @@
 package com.dreamest.cookbookapp.logic;
 
+import com.dreamest.cookbookapp.utility.UtilityPack;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.ArrayList;
 
 public class User {
@@ -9,12 +16,31 @@ public class User {
     private ArrayList<String> myChats;
     private String displayName;
     private String phoneNumber;
-//    private UNKNOWN userPhoto; todo: Figure out how to save user image
+    private StorageReference profileImage;
 
     public User(){
         myRecipes = new ArrayList<>();
         myFriends = new ArrayList<>();
         myChats = new ArrayList<>();
+    }
+
+    public StorageReference getProfileImage() {
+        return profileImage;
+    }
+
+    public User setProfileImage(StorageReference profileImage) {
+        this.profileImage = profileImage;
+        return this;
+    }
+
+    public static void addRecipeToCurrentUser(String recipeID) {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
+                .child(firebaseUser.getUid())
+                .child(UtilityPack.KEYS.MY_RECIPES)
+                .child(recipeID);
+        ref.setValue(recipeID);
     }
 
     public String getUserID() {
@@ -69,5 +95,11 @@ public class User {
     public User setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         return this;
+    }
+
+    public void updateFirebase() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(this.getUserID());
+        ref.setValue(this);
     }
 }

@@ -1,19 +1,22 @@
 package com.dreamest.cookbookapp.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Ingredient;
-import com.dreamest.cookbookapp.logic.IngredientAdapterCheckbox;
 import com.dreamest.cookbookapp.logic.IngredientAdapterRemoveBTN;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.logic.User;
@@ -26,18 +29,15 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class EditRecipeActivity extends AppCompatActivity {
+public class EditRecipeActivity extends BaseActivity {
     private TextInputEditText edit_EDT_title;
     private MaterialButton edit_BTN_add_ingredient;
     private TextInputEditText edit_EDT_method;
@@ -67,12 +67,21 @@ public class EditRecipeActivity extends AppCompatActivity {
         edit_EDT_title.setText(recipe.getTitle());
         edit_EDT_method.setText(recipe.getMethod());
         changeDifficulty(recipe.getDifficulty());
+        Glide        //Not working currently
+
+                .with(this)
+                .load(recipe.getImage())
+                .centerCrop()
+                .into(edit_IMG_image)
+                .onLoadFailed(getDrawable(R.drawable.ic_no_image));
+
         edit_CTR_prepTime.setCurrentValue((double)recipe.getPrepTime());
+        edit_CTR_prepTime.setDisplayingInteger(true);
         /*
         Code for this library is slightly faulty. setCurrentValue updates the stored value but not the view.
         Calling setDisplayInteger activates a private function that updates the view.
-         */
-        edit_CTR_prepTime.setDisplayingInteger(true);
+        */
+
 
 
     }
@@ -85,6 +94,26 @@ public class EditRecipeActivity extends AppCompatActivity {
                         .saveDir(new File(Environment.getExternalStorageDirectory(), "ImagePicker"))
                         //Currently stores in basic "camera" folder
                         .start();
+            }
+        });
+
+        edit_EDT_method.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    edit_EDT_method.clearFocus();
+                }
+                return false;
+            }
+        });
+
+        edit_EDT_title.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    edit_EDT_title.clearFocus();
+                }
+                return false;
             }
         });
 
@@ -139,20 +168,20 @@ public class EditRecipeActivity extends AppCompatActivity {
 
         ingredientAdapter.setClickListener(new IngredientAdapterRemoveBTN.ItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
-            }
-
-            @Override
             public void onRemoveClick(int position) {
                 ingredients.remove(position);
-                initAdapter(ingredientAdapter); //Needs to be reapplied to update the view
+                updateAdapter(ingredientAdapter); //Needs to be reapplied to update the view
             }
         });
-        initAdapter(ingredientAdapter);
+        updateAdapter(ingredientAdapter);
     }
 
-    private void initAdapter(IngredientAdapterRemoveBTN ingredientAdapter) {
+    private void updateAdapter(IngredientAdapterRemoveBTN ingredientAdapter) {
         edit_LST_ingredients.setAdapter(ingredientAdapter);
+        updateAddButton();
+    }
+
+    private void updateAddButton() {
         if (recipe.getIngredients().size() == 0) {
             edit_BTN_add_ingredient.setText(R.string.add_first_ingredient);
         } else {
@@ -193,26 +222,10 @@ public class EditRecipeActivity extends AppCompatActivity {
             Log.d("dddd", recipe.getRecipeID());
         }
 
-        addRecipeToDatabase(recipe);
-        addRecipeToUser(recipe.getRecipeID());
+        recipe.storeInFirebase();
+        User.addRecipeToCurrentUser(recipe.getRecipeID());
 
         finish();
-    }
-
-    private void addRecipeToUser(String recipeID) {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.USERS)
-                .child(firebaseUser.getUid())
-                .child(UtilityPack.MY_RECIPES)
-                .child(recipeID);
-        ref.setValue(recipeID);
-    }
-
-    private void addRecipeToDatabase(Recipe recipe) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.RECIPES).child(recipe.getRecipeID());
-        ref.setValue(recipe);
     }
 
     private void addNewIngredient() {
