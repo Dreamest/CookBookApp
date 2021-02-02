@@ -207,29 +207,6 @@ public class MainActivity extends BaseActivity {
 
     private void toProfile() {
         loadUserToActivity(ProfileActivity.class);
-//        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(uid);
-//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                User user = new User()
-//                        .setPhoneNumber(snapshot.child(UtilityPack.KEYS.PHONE_NUMBER).getValue(String.class))
-//                        .setDisplayName(snapshot.child(UtilityPack.KEYS.DISPLAY_NAME).getValue(String.class))
-//                        .setUserID(snapshot.child(UtilityPack.KEYS.USER_ID).getValue(String.class))
-//                        .setMyRecipes(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_RECIPES)))
-//                        .setMyFriends(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_FRIENDS)))
-//                        .setMyChats(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_CHATS)))
-//                        .setProfileImage(snapshot.child(UtilityPack.KEYS.PROFILE_IMAGE).getValue(StorageReference.class));
-//                MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.USER, user);
-//                Intent myIntent = new Intent(MainActivity.this, ProfileActivity.class);
-//                startActivity(myIntent);
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Log.w("dddd", "Failed to read value.", error.toException());
-//            }
-//        });
     }
 
     private <T> ArrayList<T> getListFromDatabase(DataSnapshot dataSnapshot) {
