@@ -1,62 +1,33 @@
 {
   "project_info": {
-    "project_number": "573992713787",
-    "project_id": "cookbookapp-4176e",
-    "storage_bucket": "cookbookapp-4176e.appspot.com"
+    "project_number": "1069157298003",
+    "project_id": "cookbook-ad101",
+    "storage_bucket": "cookbook-ad101.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:573992713787:android:8f756cd7872e17357ee61e",
+        "mobilesdk_app_id": "1:1069157298003:android:49c332f36bfec4a257fba6",
         "android_client_info": {
           "package_name": "com.dreamest.cookbookapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "573992713787-06f7qjp0clfdub787dpggc29tb91nb85.apps.googleusercontent.com",
+          "client_id": "1069157298003-cqlroj7acpm9p6ni9np3jqt7o8122b4b.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA-DntgtQ3erlTzXfq-SIoiVM6D_MgdYek"
+          "current_key": "AIzaSyCWoAXzIRiDK2wSXu_y1ztSDN_5eMqLZ70"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "573992713787-06f7qjp0clfdub787dpggc29tb91nb85.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:573992713787:android:0cb74fa52a5b08707ee61e",
-        "android_client_info": {
-          "package_name": "com.dreamest.firebase"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "573992713787-06f7qjp0clfdub787dpggc29tb91nb85.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyA-DntgtQ3erlTzXfq-SIoiVM6D_MgdYek"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "573992713787-06f7qjp0clfdub787dpggc29tb91nb85.apps.googleusercontent.com",
+              "client_id": "1069157298003-cqlroj7acpm9p6ni9np3jqt7o8122b4b.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
