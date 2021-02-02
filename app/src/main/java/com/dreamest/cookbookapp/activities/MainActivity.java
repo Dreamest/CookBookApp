@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -163,7 +164,14 @@ public class MainActivity extends BaseActivity {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user = snapshot.getValue(User.class);
+                User user = new User()
+                        .setPhoneNumber(snapshot.child(UtilityPack.KEYS.PHONE_NUMBER).getValue(String.class))
+                        .setDisplayName(snapshot.child(UtilityPack.KEYS.DISPLAY_NAME).getValue(String.class))
+                        .setUserID(snapshot.child(UtilityPack.KEYS.USER_ID).getValue(String.class))
+                        .setMyRecipes(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_RECIPES)))
+                        .setMyFriends(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_FRIENDS)))
+                        .setMyChats(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_CHATS)))
+                        .setProfileImage(snapshot.child(UtilityPack.KEYS.PROFILE_IMAGE).getValue(StorageReference.class));
                 MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.USER, user);
                 Intent myIntent = new Intent(MainActivity.this, ProfileActivity.class);
                 startActivity(myIntent);
@@ -173,6 +181,14 @@ public class MainActivity extends BaseActivity {
                 Log.w("dddd", "Failed to read value.", error.toException());
             }
         });
+    }
+
+    private ArrayList<String> getListFromDatabase(DataSnapshot dataSnapshot) {
+        ArrayList<String> list = new ArrayList<String>();
+        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+            list.add(postSnapshot.getValue(String.class));
+        }
+        return list;
     }
 
     private void toFriendsList() {

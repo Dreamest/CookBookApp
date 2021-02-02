@@ -1,5 +1,7 @@
 package com.dreamest.cookbookapp.logic;
 
+import android.util.Log;
+
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -53,6 +55,9 @@ public class User {
     }
 
     public ArrayList<String> getMyRecipes() {
+        for (String x : myRecipes) {
+            Log.d("dddd", "User has " + x);
+        }
         return myRecipes;
     }
 

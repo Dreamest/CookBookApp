@@ -16,5 +16,11 @@ public class UtilityPack {
         String USERS = "users";
         String RECIPES = "recipes";
         String MY_RECIPES = "myRecipes";
+        String MY_FRIENDS = "myFriends";
+        String MY_CHATS = "myChats";
+        String PHONE_NUMBER = "phoneNumber";
+        String DISPLAY_NAME = "displayName";
+        String USER_ID = "userID";
+        String PROFILE_IMAGE = "profileImage";
     }
 }

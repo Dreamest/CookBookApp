@@ -44,8 +44,8 @@ public class ProfileActivity extends BaseActivity {
                 .centerCrop()
                 .into(profile_IMG_image)
                 .onLoadFailed(getDrawable(R.drawable.ic_no_image));
-        profile_TXT_count_recipes.setText(user.getMyFriends().size() + "");
-        profile_TXT_count_friends.setText(user.getMyRecipes().size() + "");
+        profile_TXT_count_recipes.setText(user.getMyRecipes().size() + "");
+        profile_TXT_count_friends.setText(user.getMyFriends().size() + "");
     }
 
     private void initViews() {
