@@ -14,6 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
+import com.dreamest.cookbookapp.utility.UtilityPack;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -40,7 +46,19 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Recipe recipe = mData.get(position);
         holder.listRecipe_TXT_title.setText(recipe.getTitle());
-        holder.listRecipe_TXT_owner.setText(recipe.getOwner());
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(recipe.getOwnerID()).child(UtilityPack.KEYS.DISPLAY_NAME);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                holder.listRecipe_TXT_owner.setText(snapshot.getValue(String.class));
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("dddd", "Failed to read value.", error.toException());
+            }
+        });
         holder.listRecipe_TXT_date.setText(recipe.getDate());
         Glide
                 .with(mInflater.getContext())

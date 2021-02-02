@@ -5,6 +5,7 @@ import android.util.Log;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
@@ -103,8 +104,17 @@ public class User {
     }
 
     public void updateFirebase() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(this.getUserID());
         ref.setValue(this);
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest
+                .Builder()
+                .setDisplayName(this.displayName)
+                .build();
+        firebaseUser.updateProfile(profileUpdates);
+        firebaseAuth.updateCurrentUser(firebaseUser);
     }
 }

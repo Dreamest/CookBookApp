@@ -14,7 +14,7 @@ import java.util.Date;
 public class Recipe {
     private String title;
     private String recipeID;
-    private String owner;
+//    private String owner;
     private String ownerID;
     private String date;
     private StorageReference image; // TODO: 1/27/21 change format? [Storage Referensce?]
@@ -57,14 +57,14 @@ public class Recipe {
         return this;
     }
 
-    public String getOwner() {
-        return owner;
-    }
-
-    public Recipe setOwner(String owner) {
-        this.owner = owner;
-        return this;
-    }
+//    public String getOwner() {
+//        return owner;
+//    }
+//
+//    public Recipe setOwner(String owner) {
+//        this.owner = owner;
+//        return this;
+//    }
 
     public String getDate() {
         return date;

@@ -223,7 +223,7 @@ public class EditRecipeActivity extends BaseActivity {
 //        recipe.setImage() //todo: Figure how to set the image
         recipe.setIngredients(ingredients);
         recipe.setMethod(edit_EDT_method.getText().toString());
-        recipe.setOwner(firebaseUser.getDisplayName());
+//        recipe.setOwner(firebaseUser.getDisplayName());
         recipe.setOwnerID(firebaseUser.getUid());
         recipe.setPrepTime(edit_CTR_prepTime.getCurrentValue().intValue());
         recipe.setDifficulty(difficulty);

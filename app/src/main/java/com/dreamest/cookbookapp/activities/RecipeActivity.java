@@ -1,5 +1,6 @@
 package com.dreamest.cookbookapp.activities;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,8 +17,14 @@ import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.IngredientAdapterCheckbox;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
+import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class RecipeActivity extends BaseActivity {
     private ImageButton recipe_BTN_share;
@@ -73,7 +80,18 @@ public class RecipeActivity extends BaseActivity {
             recipe_BTN_edit.setVisibility(View.GONE);
         }
         recipe_TXT_title.setText(recipe.getTitle());
-        recipe_TXT_owner.setText(recipe.getOwner());
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(recipe.getOwnerID()).child(UtilityPack.KEYS.DISPLAY_NAME);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                recipe_TXT_owner.setText(snapshot.getValue(String.class));
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("dddd", "Failed to read value.", error.toException());
+            }
+        });
         recipe_TXT_date.setText(recipe.getDate());
         recipe_TXT_method.setText(recipe.getMethod());
         Glide
