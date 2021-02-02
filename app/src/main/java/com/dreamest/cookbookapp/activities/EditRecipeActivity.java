@@ -1,17 +1,16 @@
 package com.dreamest.cookbookapp.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,15 +23,12 @@ import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.KeyMaker;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
-import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.gildaswise.horizontalcounter.HorizontalCounter;
 import com.github.drjacky.imagepicker.ImagePicker;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -75,7 +71,7 @@ public class EditRecipeActivity extends BaseActivity {
                 .load(recipe.getImage())
                 .centerCrop()
                 .into(edit_IMG_image)
-                .onLoadStarted(getDrawable(R.drawable.ic_no_image));
+                .onLoadStarted(ContextCompat.getDrawable(edit_IMG_image.getContext(), R.drawable.ic_no_image));
 
         edit_CTR_prepTime.setCurrentValue((double) recipe.getPrepTime());
         edit_CTR_prepTime.setDisplayingInteger(true);
@@ -83,6 +79,9 @@ public class EditRecipeActivity extends BaseActivity {
         Code for this library is slightly faulty. setCurrentValue updates the stored value but not the view.
         Calling setDisplayInteger activates a private function that updates the view.
         */
+
+        loadIngredients();
+
     }
 
     private void initViews() {
@@ -193,9 +192,12 @@ public class EditRecipeActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // TODO: 1/29/21 assumption: need to call loadRecyclerView in order to update with new ingredient.
-        // TODO: 1/29/21 but first, add new ingredient to ingredients list
-        loadIngredients();
+        if(MySharedPreferences.getMsp().getBoolean(MySharedPreferences.KEYS.UPDATED_INGREDIENT, false)) {
+            MySharedPreferences.getMsp().putBoolean(MySharedPreferences.KEYS.UPDATED_INGREDIENT, false);
+            ingredients.add((Ingredient) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.INGREDIENT, new Ingredient()));
+            loadIngredients();
+
+        }
     }
 
     private void previewRecipe() {
@@ -206,8 +208,7 @@ public class EditRecipeActivity extends BaseActivity {
         updateRecipe();
         MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe);
         recipe.storeInFirebase();
-        User.addRecipeToCurrentUser(recipe.getRecipeID());
-
+        User.addRecipeToCurrentUserDatabase(recipe.getRecipeID());
         finish();
     }
 
@@ -234,7 +235,9 @@ public class EditRecipeActivity extends BaseActivity {
     }
 
     private void addNewIngredient() {
-        // TODO: 1/29/21 Implement move to a new activity
+        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.INGREDIENT, new Ingredient()); //Reset the held ingredient
+        Intent myIntent = new Intent(this, AddIngredientActivity.class);
+        startActivity(myIntent);
     }
 
     private void findViews() {

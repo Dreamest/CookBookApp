@@ -21,8 +21,6 @@
         android:alpha="0.7"
         android:padding="10dp">
 
-
-
         <TextView
             android:id="@+id/listRecipe_TXT_title"
 

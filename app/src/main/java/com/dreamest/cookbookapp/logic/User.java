@@ -35,7 +35,7 @@ public class User {
         return this;
     }
 
-    public static void addRecipeToCurrentUser(String recipeID) {
+    public static void addRecipeToCurrentUserDatabase(String recipeID) {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)

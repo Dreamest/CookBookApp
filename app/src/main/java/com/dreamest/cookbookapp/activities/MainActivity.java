@@ -71,7 +71,7 @@ public class MainActivity extends BaseActivity {
                 .child(firebaseUser.getUid())
                 .child(UtilityPack.KEYS.MY_RECIPES);
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -101,7 +101,7 @@ public class MainActivity extends BaseActivity {
     private void loadRecipe(DataSnapshot id, FirebaseDatabase database) {
         DatabaseReference recipeRef = database.getReference(UtilityPack.KEYS.RECIPES)
                 .child(id.getValue(String.class));
-        recipeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        recipeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -210,7 +210,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private <T> ArrayList<T> getListFromDatabase(DataSnapshot dataSnapshot) {
-        ArrayList<T> list = new ArrayList<T>();
+        ArrayList<T> list = new ArrayList<>();
         for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
             list.add((T)postSnapshot.getValue());
         }

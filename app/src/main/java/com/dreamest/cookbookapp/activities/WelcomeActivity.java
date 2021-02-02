@@ -81,6 +81,8 @@ public class WelcomeActivity extends BaseActivity {
                 .setUserID(firebaseUser.getUid())
                 .setDisplayName(userName)
                 .setPhoneNumber(firebaseUser.getPhoneNumber());
+//                .setProfileImage() 
+        // TODO: 2/2/21 add setProfileImage to the mix
         user.updateFirebase();
 
         moveToMainActivity();

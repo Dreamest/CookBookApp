@@ -94,6 +94,8 @@ public class MySharedPreferences {
         String NO_OBJECT = "NO_OBJECT";
         String RECIPE = "RECIPE";
         String USER = "USER";
+        String INGREDIENT = "INGREDIENT";
+        String UPDATED_INGREDIENT = "UPDATED_INGREDIENT";
     }
 
 
