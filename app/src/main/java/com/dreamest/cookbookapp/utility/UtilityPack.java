@@ -22,5 +22,16 @@ public class UtilityPack {
         String DISPLAY_NAME = "displayName";
         String USER_ID = "userID";
         String PROFILE_IMAGE = "profileImage";
+        String RECIPE_ID = "RecipeID";
+        String DATE = "date";
+        String DIFFICULTY = "difficulty";
+        String METHOD = "method";
+        String OWNER = "owner";
+        String OWNER_ID = "ownerID";
+        String PREP_TIME = "prepTime";
+        String TITLE = "title";
+        String IMAGE = "image";
+        String INGREDIENTS = "ingredients";
+
     }
 }

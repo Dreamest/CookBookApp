@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
@@ -57,15 +58,13 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("dddd", "onResume called");
-        loadFromDatabase(); //onResume so it'll load a new recipe when adding one.
+        loadUserRecipesFromDatabase(); //onResume so it'll load a new recipe when adding one.
     }
-
 
     /**
      * Loads all recipes that belong to the current user to a recyclerView
      */
-    private void loadFromDatabase() {
+    private void loadUserRecipesFromDatabase() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
@@ -77,7 +76,6 @@ public class MainActivity extends BaseActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     main_TXT_no_recipes.setVisibility(View.GONE);
-
                     Iterable<DataSnapshot> recipeIds = snapshot.getChildren();
                     for(DataSnapshot id: recipeIds) {
                         loadRecipe(id, database);
@@ -106,6 +104,21 @@ public class MainActivity extends BaseActivity {
         recipeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                // TODO: 2/2/21 Use this code if loading ingredients becomes an issue.
+//                Recipe recipe = new Recipe()
+//                        .setRecipeID(snapshot.child(UtilityPack.KEYS.RECIPE_ID).getValue(String.class))
+//                        .setDate(snapshot.child(UtilityPack.KEYS.DATE).getValue(String.class))
+//                        .setDifficulty(snapshot.child(UtilityPack.KEYS.DIFFICULTY).getValue(Integer.class))
+//                        .setImage(snapshot.child(UtilityPack.KEYS.IMAGE).getValue(StorageReference.class))
+//                        .setIngredients(getListFromDatabase(snapshot.child(UtilityPack.KEYS.INGREDIENTS)))
+//                        .setMethod(snapshot.child(UtilityPack.KEYS.METHOD).getValue(String.class))
+//                        .setOwner(snapshot.child(UtilityPack.KEYS.OWNER).getValue(String.class))
+//                        .setOwnerID(snapshot.child(UtilityPack.KEYS.OWNER_ID).getValue(String.class))
+//                        .setPrepTime(snapshot.child(UtilityPack.KEYS.PREP_TIME).getValue(Integer.class))
+//                        .setTitle(snapshot.child(UtilityPack.KEYS.TITLE).getValue(String.class));
+//                myRecipesList.add(recipe);
+
                 myRecipesMap.put(id.getValue(String.class), snapshot.getValue(Recipe.class));
                 initAdapter();
             }
@@ -115,6 +128,15 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
+
+    //May be redundant
+//    private <T> ArrayList<T> getIngredientListFromDatabase(DataSnapshot dataSnapshot) {
+//        ArrayList<T> list = new ArrayList<T>();
+//        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+//            list.add(postSnapshot.getValue(T.class));
+//        }
+//        return list;
+//    }
 
     private void initAdapter() {
         myRecipesList = new ArrayList<>(myRecipesMap.values());
@@ -183,16 +205,17 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private ArrayList<String> getListFromDatabase(DataSnapshot dataSnapshot) {
-        ArrayList<String> list = new ArrayList<String>();
+    private <T> ArrayList<T> getListFromDatabase(DataSnapshot dataSnapshot) {
+        ArrayList<T> list = new ArrayList<T>();
         for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-            list.add(postSnapshot.getValue(String.class));
+            list.add((T)postSnapshot.getValue());
         }
         return list;
     }
 
     private void toFriendsList() {
         Log.d("dddd", "going to friendslist");
+        Toast.makeText(this, "Friendlist not implemented yet", Toast.LENGTH_SHORT);
         // TODO: 1/29/21 implement
 
     }
@@ -201,7 +224,6 @@ public class MainActivity extends BaseActivity {
         MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, new Recipe());
         Intent myIntent = new Intent(this, EditRecipeActivity.class);
         startActivity(myIntent);
-        // TODO: 1/27/21 implement: Send to create post activity.
     }
 
     private void findViews() {

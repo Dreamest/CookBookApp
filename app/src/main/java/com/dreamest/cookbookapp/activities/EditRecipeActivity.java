@@ -77,15 +77,12 @@ public class EditRecipeActivity extends BaseActivity {
                 .into(edit_IMG_image)
                 .onLoadFailed(getDrawable(R.drawable.ic_no_image));
 
-        edit_CTR_prepTime.setCurrentValue((double)recipe.getPrepTime());
+        edit_CTR_prepTime.setCurrentValue((double) recipe.getPrepTime());
         edit_CTR_prepTime.setDisplayingInteger(true);
         /*
         Code for this library is slightly faulty. setCurrentValue updates the stored value but not the view.
         Calling setDisplayInteger activates a private function that updates the view.
         */
-
-
-
     }
 
     private void initViews() {
@@ -96,13 +93,14 @@ public class EditRecipeActivity extends BaseActivity {
                         .saveDir(new File(Environment.getExternalStorageDirectory(), "ImagePicker"))
                         //Currently stores in basic "camera" folder
                         .start();
+                // TODO: 2/2/21 Image picker isn't working properly.
             }
         });
 
         edit_EDT_method.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     edit_EDT_method.clearFocus();
                     HideUI.hideSystemUI(EditRecipeActivity.this);
                 }
@@ -113,7 +111,7 @@ public class EditRecipeActivity extends BaseActivity {
         edit_EDT_title.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     edit_EDT_title.clearFocus();
                     HideUI.hideSystemUI(EditRecipeActivity.this);
                 }
@@ -154,16 +152,15 @@ public class EditRecipeActivity extends BaseActivity {
         loadIngredients();
     }
 
-    private void changeDifficulty(int rank) {
-        // TODO: 1/29/21 requires testing
+    private void changeDifficulty(int difficulty) {
         for (ImageView star : stars) {
-            if ((int) star.getTag() <= rank) {
+            if ((int) star.getTag() <= difficulty) {
                 star.setImageResource(R.drawable.ic_full_star);
             } else {
                 star.setImageResource(R.drawable.ic_empty_star);
             }
         }
-        difficulty = rank;
+        this.difficulty = difficulty;
     }
 
     private void loadIngredients() {
@@ -207,7 +204,6 @@ public class EditRecipeActivity extends BaseActivity {
 
     private void submitRecipe() {
         updateRecipe();
-
         MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe);
         recipe.storeInFirebase();
         User.addRecipeToCurrentUser(recipe.getRecipeID());
@@ -226,13 +222,13 @@ public class EditRecipeActivity extends BaseActivity {
 //        recipe.setImage() //todo: Figure how to set the image
         recipe.setIngredients(ingredients);
         recipe.setMethod(edit_EDT_method.getText().toString());
-        recipe.setOwner(firebaseUser.getDisplayName()); //todo: test
-        recipe.setOwnerID(firebaseUser.getUid()); //todo: test
+        recipe.setOwner(firebaseUser.getDisplayName());
+        recipe.setOwnerID(firebaseUser.getUid());
         recipe.setPrepTime(edit_CTR_prepTime.getCurrentValue().intValue());
         recipe.setDifficulty(difficulty);
         recipe.setTitle(edit_EDT_title.getText().toString());
-        if(recipe.getRecipeID().equals("")) {
-            recipe.setRecipeID(KeyMaker.getNewRecipeKey()); //todo: test
+        if (recipe.getRecipeID().equals("")) {
+            recipe.setRecipeID(KeyMaker.getNewRecipeKey()); // TODO: 2/2/21 This isn't implemented. 
             Log.d("dddd", recipe.getRecipeID());
         }
     }
