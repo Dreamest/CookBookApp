@@ -56,6 +56,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("dddd", "onResume called");
         loadFromDatabase(); //onResume so it'll load a new recipe when adding one.
     }
 
@@ -172,12 +173,6 @@ public class MainActivity extends BaseActivity {
                 Log.w("dddd", "Failed to read value.", error.toException());
             }
         });
-
-
-
-
-        Log.d("dddd", "going to profile");
-        // TODO: 1/29/21 implement
     }
 
     private void toFriendsList() {

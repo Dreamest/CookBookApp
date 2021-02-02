@@ -34,22 +34,23 @@ public class RecipeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-        loadRecipe();
         findViews();
         initViews();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadRecipe(); //So that recipe will update when returning from Edit as well.
+        initAdapter(); //Needs to run after the recipe was loaded
+        visualizeRecipe();
     }
 
     private void initViews() {
-        recipe_LST_ingredients.setLayoutManager(new LinearLayoutManager(this));
-        IngredientAdapterCheckbox ingredientAdapter = new IngredientAdapterCheckbox(this, recipe.getIngredients());
-
-        ingredientAdapter.setClickListener(new IngredientAdapterCheckbox.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-
-            }
-        });
-        recipe_LST_ingredients.setAdapter(ingredientAdapter);
+        if(recipe != null) {
+            initAdapter();
+        }
 
         recipe_BTN_share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +66,9 @@ public class RecipeActivity extends BaseActivity {
             }
         });
 
-        //todo: untested.
+    }
+
+    private void visualizeRecipe() {
         if(!recipe.getOwnerID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             recipe_BTN_edit.setVisibility(View.GONE);
         }
@@ -79,6 +82,19 @@ public class RecipeActivity extends BaseActivity {
                 .centerCrop()
                 .into(recipe_IMG_image)
                 .onLoadFailed(getDrawable(R.drawable.ic_no_image));
+    }
+
+    private void initAdapter() {
+        recipe_LST_ingredients.setLayoutManager(new LinearLayoutManager(this));
+        IngredientAdapterCheckbox ingredientAdapter = new IngredientAdapterCheckbox(this, recipe.getIngredients());
+
+        ingredientAdapter.setClickListener(new IngredientAdapterCheckbox.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+            }
+        });
+        recipe_LST_ingredients.setAdapter(ingredientAdapter);
     }
 
     private void editRecipe() {

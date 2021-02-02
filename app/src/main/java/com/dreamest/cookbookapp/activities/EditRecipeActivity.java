@@ -202,6 +202,16 @@ public class EditRecipeActivity extends BaseActivity {
     }
 
     private void submitRecipe() {
+        updateRecipe();
+
+        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe);
+        recipe.storeInFirebase();
+        User.addRecipeToCurrentUser(recipe.getRecipeID());
+
+        finish();
+    }
+
+    private void updateRecipe() {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
@@ -221,11 +231,6 @@ public class EditRecipeActivity extends BaseActivity {
             recipe.setRecipeID(KeyMaker.getNewRecipeKey()); //todo: test
             Log.d("dddd", recipe.getRecipeID());
         }
-
-        recipe.storeInFirebase();
-        User.addRecipeToCurrentUser(recipe.getRecipeID());
-
-        finish();
     }
 
     private void addNewIngredient() {
