@@ -186,14 +186,15 @@ public class MainActivity extends BaseActivity {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user = new User()
-                        .setPhoneNumber(snapshot.child(UtilityPack.KEYS.PHONE_NUMBER).getValue(String.class))
-                        .setDisplayName(snapshot.child(UtilityPack.KEYS.DISPLAY_NAME).getValue(String.class))
-                        .setUserID(snapshot.child(UtilityPack.KEYS.USER_ID).getValue(String.class))
-                        .setMyRecipes(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_RECIPES)))
-                        .setMyFriends(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_FRIENDS)))
-                        .setMyChats(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_CHATS)))
-                        .setProfileImage(snapshot.child(UtilityPack.KEYS.PROFILE_IMAGE).getValue(StorageReference.class));
+//                User user = new User()
+//                        .setPhoneNumber(snapshot.child(UtilityPack.KEYS.PHONE_NUMBER).getValue(String.class))
+//                        .setDisplayName(snapshot.child(UtilityPack.KEYS.DISPLAY_NAME).getValue(String.class))
+//                        .setUserID(snapshot.child(UtilityPack.KEYS.USER_ID).getValue(String.class))
+//                        .setMyRecipes(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_RECIPES)))
+//                        .setMyFriends(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_FRIENDS)))
+//                        .setMyChats(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_CHATS)))
+//                        .setProfileImage(snapshot.child(UtilityPack.KEYS.PROFILE_IMAGE).getValue(StorageReference.class));
+                User user = snapshot.getValue(User.class);
                 MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.USER, user);
                 Intent myIntent = new Intent(MainActivity.this, goToClass);
                 startActivity(myIntent);

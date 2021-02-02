@@ -56,9 +56,6 @@ public class User {
     }
 
     public ArrayList<String> getMyRecipes() {
-        for (String x : myRecipes) {
-            Log.d("dddd", "User has " + x);
-        }
         return myRecipes;
     }
 
