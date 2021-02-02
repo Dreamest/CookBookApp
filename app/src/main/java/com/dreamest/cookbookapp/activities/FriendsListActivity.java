@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dreamest.cookbookapp.R;
@@ -17,6 +18,7 @@ import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.logic.RecipeAdapter;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
+import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,6 +41,7 @@ public class FriendsListActivity extends BaseActivity {
     private TextView friends_TXT_no_friends;
     private ArrayList<User> friendslist;
     private User currentUser;
+    private RelativeLayout friendslist_LAY_master;
 
 
     @Override
@@ -117,7 +120,21 @@ public class FriendsListActivity extends BaseActivity {
                     addNewFriend();
                 }
             });
-        }
+
+
+            friendslist_LST_friends.setOnTouchListener(new OnSwipeTouchListener(this) {
+                public void onSwipeLeft() {
+                    finish();
+                }
+
+            });
+
+            friendslist_LAY_master.setOnTouchListener(new OnSwipeTouchListener(this){
+                public void onSwipeLeft() {
+                    finish();
+                }
+            });
+    }
 
         private void addNewFriend () {
             // TODO: 2/2/21 implement
@@ -127,6 +144,7 @@ public class FriendsListActivity extends BaseActivity {
             friendslist_LST_friends = findViewById(R.id.friendslist_LST_friends);
             friendslist_BTN_add_friend = findViewById(R.id.friendslist_BTN_add_friend);
             friends_TXT_no_friends = findViewById(R.id.friends_TXT_no_friends);
+            friendslist_LAY_master = findViewById(R.id.friendslist_LAY_master);
         }
 
         private void initAdapter () {

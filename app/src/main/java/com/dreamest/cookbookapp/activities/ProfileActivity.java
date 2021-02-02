@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -15,6 +16,7 @@ import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
+import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
 import com.google.android.material.button.MaterialButton;
 
 public class ProfileActivity extends BaseActivity {
@@ -25,6 +27,7 @@ public class ProfileActivity extends BaseActivity {
     private TextView profile_TXT_count_recipes;
     private TextView profile_TXT_count_friends;
     private User user;
+    private RelativeLayout profile_LAY_master;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,7 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 confirmNameChange();
+                profile_EDT_change_name.clearFocus();
             }
         });
 
@@ -75,6 +79,19 @@ public class ProfileActivity extends BaseActivity {
             }
         });
 
+        profile_LAY_master.setOnTouchListener(new OnSwipeTouchListener(this){
+            public void onSwipeRight() {
+                finish();
+            }
+        });
+
+        //Swipes on the image don't work otherwise
+        profile_IMG_image.setOnTouchListener(new OnSwipeTouchListener(this){
+            public void onSwipeRight() {
+                finish();
+            }
+        });
+
     }
 
     private void findViews() {
@@ -84,6 +101,7 @@ public class ProfileActivity extends BaseActivity {
         profile_BTN_confirm_name = findViewById(R.id.profile_BTN_confirm_name);
         profile_TXT_count_recipes = findViewById(R.id.profile_TXT_count_recipes);
         profile_TXT_count_friends = findViewById(R.id.profile_TXT_count_friends);
+        profile_LAY_master= findViewById(R.id.profile_LAY_master);
     }
 
     private void confirmNameChange() {

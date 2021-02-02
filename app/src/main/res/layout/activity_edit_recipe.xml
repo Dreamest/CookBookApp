@@ -133,6 +133,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
+                android:inputType="textMultiLine"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -245,6 +246,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/edit_CTR_prepTime"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
             android:layout_centerHorizontal="true"
             android:orientation="horizontal"
             >
