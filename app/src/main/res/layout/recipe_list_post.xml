@@ -76,11 +76,13 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/listRecipe_IMG_image"
+
             android:layout_width="350dp"
             android:layout_height="300dp"
             android:layout_below="@id/listRecipe_TXT_owner"
             android:layout_alignStart="@id/listRecipe_TXT_added_on"
             android:layout_centerHorizontal="true"
+
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/roundedImageView"
             android:background="@color/black_fade"
@@ -88,6 +90,7 @@
 
         <TextView
             android:id="@+id/listRecipe_TXT_prepTime"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/listRecipe_IMG_image"
@@ -100,6 +103,7 @@
 
         <TextView
             android:id="@+id/listRecipe_TXT_time"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/listRecipe_IMG_image"
@@ -107,11 +111,12 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
 
-            android:text="200 "
+            android:text="@string/number_30"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/listRecipe_TXT_minutes"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/listRecipe_IMG_image"
@@ -123,6 +128,7 @@
 
         <TextView
             android:id="@+id/listRecipe_TXT_difficulty"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/listRecipe_TXT_prepTime"
@@ -143,6 +149,7 @@
 
             <ImageView
                 android:id="@+id/listRecipe_IMG_star1"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="3dp"
@@ -150,6 +157,7 @@
 
             <ImageView
                 android:id="@+id/listRecipe_IMG_star2"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="3dp"
@@ -159,6 +167,7 @@
 
             <ImageView
                 android:id="@+id/listRecipe_IMG_star3"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="3dp"
@@ -168,6 +177,7 @@
 
             <ImageView
                 android:id="@+id/listRecipe_IMG_star4"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="3dp"
@@ -177,6 +187,7 @@
 
             <ImageView
                 android:id="@+id/listRecipe_IMG_star5"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="3dp"

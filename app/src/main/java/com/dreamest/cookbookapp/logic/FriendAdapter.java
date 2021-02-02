@@ -14,17 +14,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
+import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
 
-public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
+public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder> {
 
-    private ArrayList<Recipe> mData;
+    private ArrayList<User> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    public RecipeAdapter(Context context, ArrayList<Recipe> data) {
+    public FriendAdapter(Context context, ArrayList<User> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
@@ -32,31 +33,20 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     // inflates the row layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.recipe_list_post, parent, false);
+        View view = mInflater.inflate(R.layout.friend_list_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Recipe recipe = mData.get(position);
-        holder.listRecipe_TXT_title.setText(recipe.getTitle());
-        holder.listRecipe_TXT_owner.setText(recipe.getOwner());
-        holder.listRecipe_TXT_date.setText(recipe.getDate());
+        User user = mData.get(position);
+        holder.friend_TXT_name.setText(user.getDisplayName());
         Glide
                 .with(mInflater.getContext())
-                .load(recipe.getImage())
+                .load(user.getProfileImage())
                 .centerCrop()
-                .into(holder.listRecipe_IMG_image)
-                .onLoadStarted(ContextCompat.getDrawable(holder.listRecipe_IMG_image.getContext(), R.drawable.ic_no_image));
-        holder.listRecipe_TXT_time.setText(recipe.getPrepTime() + "");
-
-        for (int i = 0; i < recipe.getDifficulty(); i++) {
-            holder.stars[i].setImageResource(R.drawable.ic_full_star);
-        }
-        for (int i = recipe.getDifficulty(); i < 5; i++) {
-            holder.stars[i].setImageResource(R.drawable.ic_empty_star);
-        }
-
+                .into(holder.friend_IMG_profile)
+                .onLoadStarted(ContextCompat.getDrawable(holder.friend_IMG_profile.getContext(), R.drawable.ic_no_image));
     }
 
     // total number of rows
@@ -66,7 +56,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     }
 
     // convenience method for getting data at click position
-    Recipe getItem(int id) {
+    User getItem(int id) {
         return mData.get(id);
     }
 
@@ -82,12 +72,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView listRecipe_TXT_title;
-        TextView listRecipe_TXT_date;
-        TextView listRecipe_TXT_owner;
-        ImageView listRecipe_IMG_image;
-        TextView listRecipe_TXT_time;
-        ImageView[] stars;
+        ShapeableImageView friend_IMG_profile;
+        TextView friend_TXT_name;
 
 
         ViewHolder(View itemView) {
@@ -106,17 +92,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         }
 
         public void findViews(View itemView) {
-            stars = new ImageView[5];
-            listRecipe_TXT_title = itemView.findViewById(R.id.listRecipe_TXT_title);
-            listRecipe_TXT_date = itemView.findViewById(R.id.listRecipe_TXT_date);
-            listRecipe_TXT_owner = itemView.findViewById(R.id.listRecipe_TXT_owner);
-            listRecipe_IMG_image = itemView.findViewById(R.id.listRecipe_IMG_image);
-            listRecipe_TXT_time = itemView.findViewById(R.id.listRecipe_TXT_time);
-            stars[0] = itemView.findViewById(R.id.listRecipe_IMG_star1);
-            stars[1] = itemView.findViewById(R.id.listRecipe_IMG_star2);
-            stars[2] = itemView.findViewById(R.id.listRecipe_IMG_star3);
-            stars[3] = itemView.findViewById(R.id.listRecipe_IMG_star4);
-            stars[4] = itemView.findViewById(R.id.listRecipe_IMG_star5);
+            friend_TXT_name = itemView.findViewById(R.id.friend_TXT_name);
+            friend_IMG_profile = itemView.findViewById(R.id.friend_IMG_profile);
+
         }
     }
 }

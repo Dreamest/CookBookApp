@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,7 +41,6 @@ public class MainActivity extends BaseActivity {
     private ImageView main_IMG_background;
     private HashMap<String, Recipe> myRecipesMap;// = TestUnit.getPosts();
     private ArrayList<Recipe> myRecipesList;// = TestUnit.getPosts();
-    private RecipeAdapter recipeAdapter;
     private TextView main_TXT_no_recipes;
 
     @Override
@@ -48,10 +48,10 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViews();
         myRecipesMap = new HashMap<>();
         myRecipesList = new ArrayList<>();
 
+        findViews();
         initViews();
     }
 
@@ -141,7 +141,7 @@ public class MainActivity extends BaseActivity {
     private void initAdapter() {
         myRecipesList = new ArrayList<>(myRecipesMap.values());
         main_LST_recipes.setLayoutManager(new LinearLayoutManager(this));
-        recipeAdapter = new RecipeAdapter(this, myRecipesList);
+        RecipeAdapter recipeAdapter = new RecipeAdapter(this, myRecipesList);
 
         recipeAdapter.setClickListener(new RecipeAdapter.ItemClickListener() {
             @Override
@@ -179,7 +179,7 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void toProfile() {
+    private void loadUserToActivity(Class goToClass) {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(uid);
@@ -195,7 +195,7 @@ public class MainActivity extends BaseActivity {
                         .setMyChats(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_CHATS)))
                         .setProfileImage(snapshot.child(UtilityPack.KEYS.PROFILE_IMAGE).getValue(StorageReference.class));
                 MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.USER, user);
-                Intent myIntent = new Intent(MainActivity.this, ProfileActivity.class);
+                Intent myIntent = new Intent(MainActivity.this, goToClass);
                 startActivity(myIntent);
             }
             @Override
@@ -203,6 +203,33 @@ public class MainActivity extends BaseActivity {
                 Log.w("dddd", "Failed to read value.", error.toException());
             }
         });
+    }
+
+    private void toProfile() {
+        loadUserToActivity(ProfileActivity.class);
+//        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(uid);
+//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                User user = new User()
+//                        .setPhoneNumber(snapshot.child(UtilityPack.KEYS.PHONE_NUMBER).getValue(String.class))
+//                        .setDisplayName(snapshot.child(UtilityPack.KEYS.DISPLAY_NAME).getValue(String.class))
+//                        .setUserID(snapshot.child(UtilityPack.KEYS.USER_ID).getValue(String.class))
+//                        .setMyRecipes(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_RECIPES)))
+//                        .setMyFriends(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_FRIENDS)))
+//                        .setMyChats(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_CHATS)))
+//                        .setProfileImage(snapshot.child(UtilityPack.KEYS.PROFILE_IMAGE).getValue(StorageReference.class));
+//                MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.USER, user);
+//                Intent myIntent = new Intent(MainActivity.this, ProfileActivity.class);
+//                startActivity(myIntent);
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Log.w("dddd", "Failed to read value.", error.toException());
+//            }
+//        });
     }
 
     private <T> ArrayList<T> getListFromDatabase(DataSnapshot dataSnapshot) {
@@ -214,10 +241,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void toFriendsList() {
-        Log.d("dddd", "going to friendslist");
-        Toast.makeText(this, "Friendlist not implemented yet", Toast.LENGTH_SHORT);
-        // TODO: 1/29/21 implement
-
+        loadUserToActivity(FriendsListActivity.class);
     }
 
     private void addNewRecipe() {

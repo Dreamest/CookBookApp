@@ -75,7 +75,7 @@ public class EditRecipeActivity extends BaseActivity {
                 .load(recipe.getImage())
                 .centerCrop()
                 .into(edit_IMG_image)
-                .onLoadFailed(getDrawable(R.drawable.ic_no_image));
+                .onLoadStarted(getDrawable(R.drawable.ic_no_image));
 
         edit_CTR_prepTime.setCurrentValue((double) recipe.getPrepTime());
         edit_CTR_prepTime.setDisplayingInteger(true);
@@ -228,7 +228,7 @@ public class EditRecipeActivity extends BaseActivity {
         recipe.setDifficulty(difficulty);
         recipe.setTitle(edit_EDT_title.getText().toString());
         if (recipe.getRecipeID().equals("")) {
-            recipe.setRecipeID(KeyMaker.getNewRecipeKey()); // TODO: 2/2/21 This isn't implemented. 
+            recipe.setRecipeID(KeyMaker.getNewRecipeKey()); // TODO: 2/2/21 This isn't implemented.
             Log.d("dddd", recipe.getRecipeID());
         }
     }

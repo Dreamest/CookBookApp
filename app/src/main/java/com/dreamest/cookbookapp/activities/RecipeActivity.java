@@ -81,7 +81,7 @@ public class RecipeActivity extends BaseActivity {
                 .load(recipe.getImage())
                 .centerCrop()
                 .into(recipe_IMG_image)
-                .onLoadFailed(getDrawable(R.drawable.ic_no_image));
+                .onLoadStarted(getDrawable(R.drawable.ic_no_image));
     }
 
     private void initAdapter() {
