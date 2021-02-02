@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
+import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.KeyMaker;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -207,6 +208,7 @@ public class LoginActivity extends BaseActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
                     login_EDT_input.clearFocus();
+                    HideUI.hideSystemUI(LoginActivity.this);
                 }
                 return false;
             }

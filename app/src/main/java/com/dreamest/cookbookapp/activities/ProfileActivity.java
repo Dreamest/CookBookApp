@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
+import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.google.android.material.button.MaterialButton;
 
@@ -67,6 +68,8 @@ public class ProfileActivity extends BaseActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
                     profile_EDT_change_name.clearFocus();
+                    HideUI.hideSystemUI(ProfileActivity.this);
+
                 }
                 return false;
             }

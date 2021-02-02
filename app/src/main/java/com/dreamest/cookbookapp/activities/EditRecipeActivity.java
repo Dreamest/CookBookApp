@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import com.dreamest.cookbookapp.logic.Ingredient;
 import com.dreamest.cookbookapp.logic.IngredientAdapterRemoveBTN;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.logic.User;
+import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.KeyMaker;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.UtilityPack;
@@ -102,6 +104,7 @@ public class EditRecipeActivity extends BaseActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
                     edit_EDT_method.clearFocus();
+                    HideUI.hideSystemUI(EditRecipeActivity.this);
                 }
                 return false;
             }
@@ -112,6 +115,7 @@ public class EditRecipeActivity extends BaseActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
                     edit_EDT_title.clearFocus();
+                    HideUI.hideSystemUI(EditRecipeActivity.this);
                 }
                 return false;
             }

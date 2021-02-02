@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
+import com.dreamest.cookbookapp.utility.HideUI;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,6 +52,8 @@ public class WelcomeActivity extends BaseActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
                     welcome_EDT_name.clearFocus();
+                    HideUI.hideSystemUI(WelcomeActivity.this);
+
                 }
                 return false;
             }
