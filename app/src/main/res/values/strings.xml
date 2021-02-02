@@ -37,4 +37,11 @@
     <string name="no_recipes_yet">No recipes yet</string>
     <string name="change_your_username">Change your username?</string>
     <string name="no_friends_yet">No friends yet</string>
+    <string name="add_an_ingredient">Add an ingredient</string>
+    <string name="the_ingredient">The ingredient:</string>
+    <string name="what_are_you_adding">What are you adding?</string>
+    <string name="enter_amount">Enter amount:</string>
+    <string name="how_much_of_it">How much of it?</string>
+    <string name="measuring_unit">Measuring unit:</string>
+    <string name="how_do_you_count_it">How do you measure it?</string>
 </resources>
