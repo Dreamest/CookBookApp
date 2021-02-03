@@ -19,7 +19,6 @@ import com.google.android.material.imageview.ShapeableImageView;
 import java.util.ArrayList;
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder> {
-    // TODO: 2/3/21 friends have no names? 
 
     private ArrayList<User> mData;
     private LayoutInflater mInflater;

@@ -66,7 +66,8 @@ public class FriendsListActivity extends BaseActivity {
 
     private void loadFriendsFromDatabase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
+        DatabaseReference ref = database
+                .getReference(UtilityPack.KEYS.USERS)
                 .child(currentUser.getUserID())
                 .child(UtilityPack.KEYS.MY_FRIENDS);
 
@@ -92,17 +93,18 @@ public class FriendsListActivity extends BaseActivity {
     }
 
     private void loadUserFromDatabase(DataSnapshot id, FirebaseDatabase database) {
-        DatabaseReference friendRef = database.getReference(UtilityPack.KEYS.RECIPES)
+        DatabaseReference friendRef = database.getReference(UtilityPack.KEYS.USERS)
                 .child(id.getValue(String.class));
         friendRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 User friend = new User()
                         .setDisplayName(snapshot.child(UtilityPack.KEYS.DISPLAY_NAME).getValue(String.class))
                         .setProfileImage(snapshot.child(UtilityPack.KEYS.PROFILE_IMAGE).getValue(StorageReference.class));
-                friendslist.add(friend);
                 //Don't care about other values
+
+                Log.d("dddd", "The name is: " + friend.getDisplayName() );
+                friendslist.add(friend);
                 initAdapter();
             }
 
