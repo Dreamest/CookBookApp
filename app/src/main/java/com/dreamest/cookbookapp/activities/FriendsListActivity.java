@@ -146,7 +146,7 @@ public class FriendsListActivity extends BaseActivity {
 
         private void addNewFriend () {
         Intent myIntent = new Intent(this, AddFriendActivity.class);
-        myIntent.putExtra(MySharedPreferences.KEYS.FRIENDS_COUNT, friendslist.size());
+        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.FRIENDS_ARRAY, friendslist);
         startActivity(myIntent);
         }
 

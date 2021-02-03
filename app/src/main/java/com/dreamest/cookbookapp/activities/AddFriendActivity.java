@@ -22,6 +22,7 @@ import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,15 +36,20 @@ public class AddFriendActivity extends AppCompatActivity {
     private CountryCodePicker add_friend_CCP_code_picker;
     private TextInputEditText add_friend_EDT_input;
     private MaterialButton add_friend_BTN_search;
-    private int friendsCount;
+    private ArrayList<User> currentFriends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
-        friendsCount = getIntent().getIntExtra(MySharedPreferences.KEYS.FRIENDS_COUNT, 0);
+
+        loadCurrentFriends();
         findViews();
         initViews();
+    }
+
+    private void loadCurrentFriends() {
+        currentFriends = (ArrayList<User>) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.FRIENDS_ARRAY, new ArrayList<>());
     }
 
     private void initViews() {
@@ -68,6 +74,9 @@ public class AddFriendActivity extends AppCompatActivity {
 
     private void search() {
         String searchValue = UtilityPack.extractPhoneNumber(add_friend_CCP_code_picker, add_friend_EDT_input);
+        if(duplicateNumber(searchValue)) {
+            return;
+        }
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -76,7 +85,7 @@ public class AddFriendActivity extends AppCompatActivity {
                 for(DataSnapshot user: snapshot.getChildren()) {
 
                     if(user.child(UtilityPack.KEYS.PHONE_NUMBER).getValue(String.class).equals(searchValue)) {
-                        User.addFriendToCurrentUserDatabase(user.child(UtilityPack.KEYS.USER_ID).getValue(String.class), friendsCount);
+                        User.addFriendToCurrentUserDatabase(user.child(UtilityPack.KEYS.USER_ID).getValue(String.class), currentFriends.size());
                         String userName = user.child(UtilityPack.KEYS.DISPLAY_NAME).getValue(String.class);
                         Toast.makeText(AddFriendActivity.this, "User " + userName + " added.", Toast.LENGTH_SHORT).show();
                         finish();
@@ -91,6 +100,31 @@ public class AddFriendActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private boolean duplicateNumber(String searchValue) { // TODO: 2/3/21 untested. 
+        String currentUserPhoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+        if(searchValue.equals(currentUserPhoneNumber)) {
+            notifyNotHappening("You can't befriend yourself");
+            return true;
+        } else{
+            return (userInFriendsAlready(searchValue));
+        }
+    }
+
+    private boolean userInFriendsAlready(String searchValue) {
+        for(User friend: currentFriends) {
+            if(friend.getPhoneNumber().equals(searchValue)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void notifyNotHappening(String s) {
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+        add_friend_EDT_input.setText("");
+
     }
 
     private void findViews() {
