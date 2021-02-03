@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -21,7 +22,6 @@ import com.dreamest.cookbookapp.logic.IngredientAdapterRemoveBTN;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.HideUI;
-import com.dreamest.cookbookapp.utility.KeyMaker;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.gildaswise.horizontalcounter.HorizontalCounter;
 import com.github.drjacky.imagepicker.ImagePicker;
@@ -45,6 +45,7 @@ public class EditRecipeActivity extends BaseActivity {
     private RecyclerView edit_LST_ingredients;
     private ImageView[] stars;
     private HorizontalCounter edit_CTR_prepTime;
+    private ScrollView edit_LAY_scroll;
     private Recipe recipe;
     private ArrayList<Ingredient> ingredients;
     private int difficulty;
@@ -56,6 +57,15 @@ public class EditRecipeActivity extends BaseActivity {
         findViews();
         loadRecipe();
         initViews();
+    }
+
+    private void focusOnView(ScrollView sv, View v){
+        sv.post(new Runnable() {
+            @Override
+            public void run() {
+                sv.smoothScrollTo(0,v.getHeight());
+            }
+        });
     }
 
     private void loadRecipe() {
@@ -80,7 +90,7 @@ public class EditRecipeActivity extends BaseActivity {
         Calling setDisplayInteger activates a private function that updates the view.
         */
 
-        loadIngredients();
+        loadIngredientsAdapter();
 
     }
 
@@ -88,6 +98,7 @@ public class EditRecipeActivity extends BaseActivity {
         edit_IMG_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                HideUI.clearFocus(EditRecipeActivity.this, edit_EDT_method);
                 ImagePicker.Companion.with(EditRecipeActivity.this)
                         .saveDir(new File(Environment.getExternalStorageDirectory(), "ImagePicker"))
                         //Currently stores in basic "camera" folder
@@ -99,6 +110,7 @@ public class EditRecipeActivity extends BaseActivity {
         edit_EDT_method.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                focusOnView(edit_LAY_scroll, edit_EDT_method);
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     HideUI.clearFocus(EditRecipeActivity.this, edit_EDT_method);
                 }
@@ -140,13 +152,15 @@ public class EditRecipeActivity extends BaseActivity {
 
         for (ImageView star : stars) {
             star.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View v) {
+                    HideUI.clearFocus(EditRecipeActivity.this, edit_EDT_method);
                     changeDifficulty((int) star.getTag());
                 }
             });
         }
-        loadIngredients();
+        loadIngredientsAdapter();
     }
 
     private void changeDifficulty(int difficulty) {
@@ -160,13 +174,14 @@ public class EditRecipeActivity extends BaseActivity {
         this.difficulty = difficulty;
     }
 
-    private void loadIngredients() {
+    private void loadIngredientsAdapter() {
         edit_LST_ingredients.setLayoutManager(new LinearLayoutManager(this));
         IngredientAdapterRemoveBTN ingredientAdapter = new IngredientAdapterRemoveBTN(this, ingredients);
 
         ingredientAdapter.setClickListener(new IngredientAdapterRemoveBTN.ItemClickListener() {
             @Override
             public void onRemoveClick(int position) {
+                HideUI.clearFocus(EditRecipeActivity.this, edit_EDT_method);
                 ingredients.remove(position);
                 updateAdapter(ingredientAdapter); //Needs to be reapplied to update the view
             }
@@ -193,7 +208,7 @@ public class EditRecipeActivity extends BaseActivity {
         if(MySharedPreferences.getMsp().getBoolean(MySharedPreferences.KEYS.UPDATED_INGREDIENT, false)) {
             MySharedPreferences.getMsp().putBoolean(MySharedPreferences.KEYS.UPDATED_INGREDIENT, false);
             ingredients.add((Ingredient) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.INGREDIENT, new Ingredient()));
-            loadIngredients();
+            loadIngredientsAdapter();
 
         }
     }
@@ -227,7 +242,7 @@ public class EditRecipeActivity extends BaseActivity {
         recipe.setDifficulty(difficulty);
         recipe.setTitle(edit_EDT_title.getText().toString());
         if (recipe.getRecipeID().equals("")) {
-            recipe.setRecipeID(KeyMaker.getNewRecipeKey()); // TODO: 2/2/21 This isn't implemented.
+            recipe.setRecipeID(Recipe.CreateRecipeID(firebaseUser.getUid())); // TODO: 2/2/21 This isn't implemented.
             Log.d("dddd", recipe.getRecipeID());
         }
     }
@@ -243,6 +258,7 @@ public class EditRecipeActivity extends BaseActivity {
         edit_EDT_title = findViewById(R.id.edit_EDT_title);
         edit_BTN_add_ingredient = findViewById(R.id.edit_BTN_add_ingredient);
         edit_EDT_method = findViewById(R.id.edit_EDT_method);
+        edit_EDT_method.setImeOptions(EditorInfo.IME_ACTION_DONE);
         edit_IMG_image = findViewById(R.id.edit_IMG_image);
         edit_BTN_submit = findViewById(R.id.edit_BTN_submit);
         edit_BTN_preview = findViewById(R.id.edit_BTN_preview);
@@ -258,5 +274,6 @@ public class EditRecipeActivity extends BaseActivity {
         stars[4] = findViewById(R.id.edit_IMG_star5);
         stars[4].setTag(5);
         edit_CTR_prepTime = findViewById(R.id.edit_CTR_prepTime);
+        edit_LAY_scroll = findViewById(R.id.edit_LAY_scroll);
     }
 }

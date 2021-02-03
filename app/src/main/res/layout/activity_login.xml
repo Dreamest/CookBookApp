@@ -90,7 +90,7 @@
 
                 android:inputType="number"
                 android:ems="8"
-                android:imeOptions="actionDone"
+                android:imeOptions="actionGo"
 
                 android:hint="@string/phone_number"
                 android:textColorHint="@color/teal_100"

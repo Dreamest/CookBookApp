@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
 
         android:ems="15"
-        android:imeOptions="actionDone"
+        android:imeOptions="actionNext"
         android:inputType="text"
         android:hint="@string/what_are_you_adding"
 
@@ -85,7 +85,7 @@
 
       android:ems="15"
       android:hint="@string/how_much_of_it"
-      android:imeOptions="actionDone"
+      android:imeOptions="actionNext"
       android:inputType="numberDecimal"
       />
 </com.google.android.material.textfield.TextInputLayout>

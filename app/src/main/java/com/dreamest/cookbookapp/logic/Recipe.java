@@ -30,6 +30,10 @@ public class Recipe {
         prepTime = 5;
     }
 
+    public static String CreateRecipeID(String uid) {
+        return uid + System.currentTimeMillis();
+    }
+
     public String getOwnerID() {
         return ownerID;
     }
@@ -126,5 +130,4 @@ public class Recipe {
         ref.setValue(this);
     }
 
-//    timestap+uid
 }

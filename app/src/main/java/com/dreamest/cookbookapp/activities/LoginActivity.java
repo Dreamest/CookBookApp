@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.utility.HideUI;
-import com.dreamest.cookbookapp.utility.KeyMaker;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
