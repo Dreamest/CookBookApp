@@ -100,8 +100,7 @@ public class EditRecipeActivity extends BaseActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    edit_EDT_method.clearFocus();
-                    HideUI.hideSystemUI(EditRecipeActivity.this);
+                    HideUI.clearFocus(EditRecipeActivity.this, edit_EDT_method);
                 }
                 return false;
             }
@@ -111,8 +110,7 @@ public class EditRecipeActivity extends BaseActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    edit_EDT_title.clearFocus();
-                    HideUI.hideSystemUI(EditRecipeActivity.this);
+                    HideUI.clearFocus(EditRecipeActivity.this, edit_EDT_title);
                 }
                 return false;
             }

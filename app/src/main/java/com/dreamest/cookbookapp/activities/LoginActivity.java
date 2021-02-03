@@ -227,8 +227,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    login_EDT_input.clearFocus();
-                    HideUI.hideSystemUI(LoginActivity.this);
+                    HideUI.clearFocus(LoginActivity.this, login_EDT_input);
                     continueClicked();
                 }
                 return false;

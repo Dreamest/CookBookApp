@@ -42,4 +42,17 @@ public class HideUI {
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
+    public static void clearFocus(AppCompatActivity activity, View... views) {
+        for(View v: views) {
+            v.clearFocus();
+        }
+        hideSystemUI(activity);
+
+    }
+
+    public static void setNextFocus(AppCompatActivity activity, View next) {
+        next.requestFocus();
+        hideSystemUI(activity);
+    }
+
 }

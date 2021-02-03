@@ -66,8 +66,7 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 confirmNameChange();
-                profile_EDT_change_name.clearFocus();
-                HideUI.hideSystemUI(ProfileActivity.this);
+                HideUI.clearFocus(ProfileActivity.this, profile_BTN_confirm_name);
             }
         });
 
@@ -75,8 +74,7 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
-                    profile_EDT_change_name.clearFocus();
-                    HideUI.hideSystemUI(ProfileActivity.this);
+                    HideUI.clearFocus(ProfileActivity.this, profile_EDT_change_name);
 
                 }
                 return false;

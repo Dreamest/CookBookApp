@@ -36,10 +36,7 @@ public class AddIngredientActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
-//                    add_ingredient_EDT_ingredient.clearFocus();
-                    add_ingredient_EDT_amount.requestFocus();
-                    HideUI.hideSystemUI(AddIngredientActivity.this);
-
+                    HideUI.setNextFocus(AddIngredientActivity.this, add_ingredient_EDT_amount);
                 }
                 return false;
             }
@@ -48,10 +45,7 @@ public class AddIngredientActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
-//                    add_ingredient_EDT_amount.clearFocus();
-                    add_ingredient_EDT_units.requestFocus();
-                    HideUI.hideSystemUI(AddIngredientActivity.this);
-
+                    HideUI.setNextFocus(AddIngredientActivity.this, add_ingredient_EDT_units);
                 }
                 return false;
             }
@@ -60,8 +54,7 @@ public class AddIngredientActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
-                    add_ingredient_EDT_units.clearFocus();
-                    HideUI.hideSystemUI(AddIngredientActivity.this);
+                    HideUI.clearFocus(AddIngredientActivity.this, add_ingredient_EDT_units);
                 }
                 return false;
             }

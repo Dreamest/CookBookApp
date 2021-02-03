@@ -51,14 +51,11 @@ public class WelcomeActivity extends BaseActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
-                    welcome_EDT_name.clearFocus();
-                    HideUI.hideSystemUI(WelcomeActivity.this);
-
+                    HideUI.clearFocus(WelcomeActivity.this, welcome_EDT_name);
                 }
                 return false;
             }
         });
-
     }
 
     private void submitData() {

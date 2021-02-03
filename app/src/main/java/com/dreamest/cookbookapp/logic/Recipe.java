@@ -125,4 +125,6 @@ public class Recipe {
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.RECIPES).child(this.getRecipeID());
         ref.setValue(this);
     }
+
+//    timestap+uid
 }
