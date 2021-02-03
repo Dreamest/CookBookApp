@@ -91,7 +91,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void startLoginProcess() {
-        getPhoneNumber();
+        phoneInput = UtilityPack.extractPhoneNumber(login_CCP_code, login_EDT_input);
         PhoneAuthOptions options =
                 PhoneAuthOptions.newBuilder(firebaseAuth)
                         .setPhoneNumber(phoneInput)       // Phone number to verify
@@ -106,12 +106,7 @@ public class LoginActivity extends BaseActivity {
     /**
      * Attaches country code to phone number, and drops leading zero if there is one
      */
-    private void getPhoneNumber() {
-        phoneInput = login_EDT_input.getText().toString();
-        if (phoneInput.charAt(0) == '0' && phoneInput.length() == 10)
-            phoneInput = phoneInput.substring(1);
-        phoneInput = login_CCP_code.getSelectedCountryCodeWithPlus() + phoneInput;
-    }
+
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override

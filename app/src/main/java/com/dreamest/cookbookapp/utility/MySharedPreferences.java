@@ -99,6 +99,8 @@ public class MySharedPreferences {
         String LOGOUT = "LOGOUT";
         boolean LOGOUT_SIGNAL = true;
         boolean STAY_LOGGED = false;
+        String FRIENDS_COUNT = "FRIENDS_COUNT";
+        String RECIPE_COUNT = "RECIPE_COUNT";
     }
 
 

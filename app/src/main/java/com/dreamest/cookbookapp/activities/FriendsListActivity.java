@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.FriendAdapter;
@@ -53,8 +55,13 @@ public class FriendsListActivity extends BaseActivity {
 
         findViews();
         loadUser();
-        loadFriendsFromDatabase();
         initViews();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadFriendsFromDatabase();
     }
 
     private void loadFriendsFromDatabase() {
@@ -91,7 +98,6 @@ public class FriendsListActivity extends BaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                // TODO: 2/2/21 Use this code if loading ingredients becomes an issue.
                 User friend = new User()
                         .setDisplayName(snapshot.child(UtilityPack.KEYS.DISPLAY_NAME).getValue(String.class))
                         .setProfileImage(snapshot.child(UtilityPack.KEYS.PROFILE_IMAGE).getValue(StorageReference.class));
@@ -137,7 +143,9 @@ public class FriendsListActivity extends BaseActivity {
     }
 
         private void addNewFriend () {
-            // TODO: 2/2/21 implement
+        Intent myIntent = new Intent(this, AddFriendActivity.class);
+        myIntent.putExtra(MySharedPreferences.KEYS.FRIENDS_COUNT, friendslist.size());
+        startActivity(myIntent);
         }
 
         private void findViews () {
@@ -160,6 +168,7 @@ public class FriendsListActivity extends BaseActivity {
             friendslist_LST_friends.setAdapter(friendAdapter);
         }
         private void openChatWith ( int position){
+            Toast.makeText(FriendsListActivity.this, "Not implemented yet.", Toast.LENGTH_SHORT).show();
             // TODO: 2/2/21 implement
         }
     }

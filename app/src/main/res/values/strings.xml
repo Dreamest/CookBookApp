@@ -45,4 +45,6 @@
     <string name="measuring_unit">Measuring unit:</string>
     <string name="how_do_you_count_it">How do you measure it?</string>
     <string name="sign_out">Sign out</string>
+    <string name="search">Search</string>
+    <string name="add">Add</string>
 </resources>

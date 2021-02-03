@@ -236,6 +236,7 @@ public class MainActivity extends BaseActivity {
     private void addNewRecipe() {
         MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, new Recipe());
         Intent myIntent = new Intent(this, EditRecipeActivity.class);
+        myIntent.putExtra(MySharedPreferences.KEYS.RECIPE_COUNT, myRecipesList.size());
         startActivity(myIntent);
     }
 

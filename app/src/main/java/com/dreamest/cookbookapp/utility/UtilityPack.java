@@ -1,6 +1,8 @@
 package com.dreamest.cookbookapp.utility;
 
 import com.dreamest.cookbookapp.R;
+import com.google.android.material.textfield.TextInputEditText;
+import com.rilixtech.CountryCodePicker;
 
 import java.util.Random;
 
@@ -10,6 +12,14 @@ public class UtilityPack {
 
     public static int randomBackground() {
         return allBackgrounds[new Random().nextInt(4)];
+    }
+
+    public static String extractPhoneNumber(CountryCodePicker ccp, TextInputEditText editText) {
+            String phoneInput = editText.getText().toString();
+            if (phoneInput.charAt(0) == '0' && phoneInput.length() == 10)
+                phoneInput = phoneInput.substring(1);
+            phoneInput = ccp.getSelectedCountryCodeWithPlus() + phoneInput;
+            return phoneInput;
     }
 
     public interface KEYS {

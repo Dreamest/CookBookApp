@@ -40,4 +40,6 @@
     <string name="measuring_unit">יחידות מידה:</string>
     <string name="how_do_you_count_it">איך מודדים?</string>
     <string name="sign_out">התנתק</string>
+    <string name="search">חיפוש</string>
+    <string name="add">הוסף</string>
 </resources>

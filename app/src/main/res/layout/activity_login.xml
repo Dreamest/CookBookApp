@@ -67,10 +67,8 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/phone_number"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layoutDirection="ltr"
             android:background="@drawable/rounded_layout"
             android:padding="5dp"
 

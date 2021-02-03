@@ -49,11 +49,13 @@ public class EditRecipeActivity extends BaseActivity {
     private Recipe recipe;
     private ArrayList<Ingredient> ingredients;
     private int difficulty;
+    private int recipeCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_recipe);
+        recipeCount = getIntent().getIntExtra(MySharedPreferences.KEYS.RECIPE_COUNT, 0);
         findViews();
         loadRecipe();
         initViews();
@@ -221,7 +223,7 @@ public class EditRecipeActivity extends BaseActivity {
         updateRecipe();
         MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe);
         recipe.storeInFirebase();
-        User.addRecipeToCurrentUserDatabase(recipe.getRecipeID());
+        User.addRecipeToCurrentUserDatabase(recipe.getRecipeID(), recipeCount);
         finish();
     }
 

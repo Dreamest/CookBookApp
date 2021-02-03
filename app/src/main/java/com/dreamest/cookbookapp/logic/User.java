@@ -36,14 +36,24 @@ public class User {
         return this;
     }
 
-    public static void addRecipeToCurrentUserDatabase(String recipeID) {
+    public static void addRecipeToCurrentUserDatabase(String recipeID, int position) {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
                 .child(firebaseUser.getUid())
                 .child(UtilityPack.KEYS.MY_RECIPES)
-                .child(recipeID);
+                .child(String.valueOf(position));
         ref.setValue(recipeID);
+    }
+
+    public static void addFriendToCurrentUserDatabase(String friendID, int position) {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
+                .child(firebaseUser.getUid())
+                .child(UtilityPack.KEYS.MY_FRIENDS)
+                .child(String.valueOf(position));
+        ref.setValue(friendID);
     }
 
     public String getUserID() {

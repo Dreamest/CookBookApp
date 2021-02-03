@@ -25,7 +25,7 @@
         android:layout_marginTop="5dp"
 
         android:text="@string/owner_name"
-        android:textSize="35sp" />
+        android:textSize="30sp" />
 
     <ImageView
         android:layout_width="match_parent"
