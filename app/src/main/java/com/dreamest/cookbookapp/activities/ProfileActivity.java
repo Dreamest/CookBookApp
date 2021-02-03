@@ -18,6 +18,7 @@ import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileActivity extends BaseActivity {
     private TextView profile_TXT_username;
@@ -28,6 +29,8 @@ public class ProfileActivity extends BaseActivity {
     private TextView profile_TXT_count_friends;
     private User user;
     private RelativeLayout profile_LAY_master;
+    private MaterialButton profile_BTN_sign_out;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +95,19 @@ public class ProfileActivity extends BaseActivity {
             }
         });
 
+        profile_BTN_sign_out.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+            }
+        });
+
+    }
+
+    private void logout() {
+        FirebaseAuth.getInstance().signOut(); // enable for testing
+        MySharedPreferences.getMsp().putBoolean(MySharedPreferences.KEYS.LOGOUT, MySharedPreferences.KEYS.LOGOUT_SIGNAL);
+        finish();
     }
 
     private void findViews() {
@@ -101,7 +117,8 @@ public class ProfileActivity extends BaseActivity {
         profile_BTN_confirm_name = findViewById(R.id.profile_BTN_confirm_name);
         profile_TXT_count_recipes = findViewById(R.id.profile_TXT_count_recipes);
         profile_TXT_count_friends = findViewById(R.id.profile_TXT_count_friends);
-        profile_LAY_master= findViewById(R.id.profile_LAY_master);
+        profile_LAY_master = findViewById(R.id.profile_LAY_master);
+        profile_BTN_sign_out = findViewById(R.id.profile_BTN_sign_out);
     }
 
     private void confirmNameChange() {

@@ -58,7 +58,18 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if(MySharedPreferences.getMsp().getBoolean(MySharedPreferences.KEYS.LOGOUT, MySharedPreferences.KEYS.STAY_LOGGED)) {
+            preformLogout();
+        }
         loadUserRecipesFromDatabase(); //onResume so it'll load a new recipe when adding one.
+    }
+
+    private void preformLogout() {
+        MySharedPreferences.getMsp().putBoolean(MySharedPreferences.KEYS.LOGOUT, MySharedPreferences.KEYS.STAY_LOGGED); //logically might fit better in LoginActivity onCreate, but this saves running this line every login
+        Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
+        Intent myIntent = new Intent(this, LoginActivity.class);
+        startActivity(myIntent);
+        finish();
     }
 
     /**

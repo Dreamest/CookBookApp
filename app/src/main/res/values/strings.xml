@@ -28,7 +28,7 @@
     <string name="preview">Preview</string>
     <string name="submit">Submit</string>
     <string name="remove">remove</string>
-    <string name="profile_page">Profile Page</string>
+    <string name="profile_page">Profile</string>
     <string name="num_recipes"># of recipes:</string>
     <string name="num_friends"># of friends:</string>
     <string name="number_30" translatable="false">30</string>
@@ -44,4 +44,5 @@
     <string name="how_much_of_it">How much of it?</string>
     <string name="measuring_unit">Measuring unit:</string>
     <string name="how_do_you_count_it">How do you measure it?</string>
+    <string name="sign_out">Sign out</string>
 </resources>

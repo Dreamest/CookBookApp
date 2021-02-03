@@ -96,6 +96,9 @@ public class MySharedPreferences {
         String USER = "USER";
         String INGREDIENT = "INGREDIENT";
         String UPDATED_INGREDIENT = "UPDATED_INGREDIENT";
+        String LOGOUT = "LOGOUT";
+        boolean LOGOUT_SIGNAL = true;
+        boolean STAY_LOGGED = false;
     }
 
 

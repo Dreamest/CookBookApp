@@ -24,7 +24,7 @@
     <string name="submit">אישור</string>
     <string name="add_first_ingredient">הוסף מרכיב</string>
     <string name="remove">הסר</string>
-    <string name="profile_page">עמוד פרופיל</string>
+    <string name="profile_page">פרופיל</string>
     <string name="num_recipes">מספר מתכונים:</string>
     <string name="num_friends">מספר חברים:</string>
     <string name="what_your_name">איך קוראים לך?</string>
@@ -39,4 +39,5 @@
     <string name="how_much_of_it">כמה מוסיפים?</string>
     <string name="measuring_unit">יחידות מידה:</string>
     <string name="how_do_you_count_it">איך מודדים?</string>
+    <string name="sign_out">התנתק</string>
 </resources>
