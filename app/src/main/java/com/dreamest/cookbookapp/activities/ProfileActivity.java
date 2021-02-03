@@ -67,6 +67,7 @@ public class ProfileActivity extends BaseActivity {
             public void onClick(View v) {
                 confirmNameChange();
                 profile_EDT_change_name.clearFocus();
+                HideUI.hideSystemUI(ProfileActivity.this);
             }
         });
 

@@ -58,7 +58,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(MySharedPreferences.getMsp().getBoolean(MySharedPreferences.KEYS.LOGOUT, MySharedPreferences.KEYS.STAY_LOGGED)) {
+        if(FirebaseAuth.getInstance().getCurrentUser() == null) {
             preformLogout();
         }
         loadUserRecipesFromDatabase(); //onResume so it'll load a new recipe when adding one.
