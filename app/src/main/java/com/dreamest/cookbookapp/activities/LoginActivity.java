@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.FirebaseException;
+import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -48,13 +49,19 @@ public class LoginActivity extends BaseActivity {
     private CountryCodePicker login_CCP_code;
     private ProgressBar login_PROGBAR_spinner;
     private ImageView login_IMG_background;
+    private FirebaseAuth firebaseAuth;
+
 
     private String phoneInput = "";
+    private String mVerificationId;
+    private PhoneAuthProvider.ForceResendingToken mResendToken;
+
     private enum LOGIN_STATE {
         ENTERING_NUMBER,
         ENTERING_CODE,
         LOADING
     }
+
     private LOGIN_STATE login_state = LOGIN_STATE.ENTERING_NUMBER;
 
     @Override
@@ -66,38 +73,33 @@ public class LoginActivity extends BaseActivity {
         initViews();
         Glide.with(this).load(UtilityPack.randomBackground()).fitCenter().into(login_IMG_background);
 
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        Log.d("dddd", "user = " + firebaseUser);
         if (firebaseUser != null) {
+//            firebaseAuth.signOut(); // enable for testing
+//            finish();
             userSignedIn(firebaseUser);
         }
     }
 
     private void codeEntered() {
         String smsVerificationCode = login_EDT_input.getText().toString();
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseAuthSettings firebaseAuthSettings = firebaseAuth.getFirebaseAuthSettings();
-        firebaseAuthSettings.setAutoRetrievedSmsCodeForPhoneNumber(phoneInput, smsVerificationCode);
-        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(firebaseAuth)
-                .setPhoneNumber(phoneInput)
-                .setTimeout(60L, TimeUnit.SECONDS)
-                .setActivity(this)
-                .setCallbacks(onVerificationStateChangedCallbacks)
-                .build();
-        PhoneAuthProvider.verifyPhoneNumber(options);
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, smsVerificationCode);
+        signInWithPhoneAuthCredential(credential);
         changeState(LOGIN_STATE.LOADING);
     }
 
     private void startLoginProcess() {
         getPhoneNumber();
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(firebaseAuth)
-                .setPhoneNumber(phoneInput)
-                .setTimeout(60L, TimeUnit.SECONDS)
-                .setActivity(this)
-                .setCallbacks(onVerificationStateChangedCallbacks)
-                .build();
+        PhoneAuthOptions options =
+                PhoneAuthOptions.newBuilder(firebaseAuth)
+                        .setPhoneNumber(phoneInput)       // Phone number to verify
+                        .setTimeout(120L, TimeUnit.SECONDS) // Timeout and unit
+                        .setActivity(this)                 // Activity (for callback binding)
+                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+                        .build();
         PhoneAuthProvider.verifyPhoneNumber(options);
         changeState(LOGIN_STATE.LOADING);
     }
@@ -107,52 +109,72 @@ public class LoginActivity extends BaseActivity {
      */
     private void getPhoneNumber() {
         phoneInput = login_EDT_input.getText().toString();
-        if(phoneInput.charAt(0) == '0' && phoneInput.length() == 10)
+        if (phoneInput.charAt(0) == '0' && phoneInput.length() == 10)
             phoneInput = phoneInput.substring(1);
         phoneInput = login_CCP_code.getSelectedCountryCodeWithPlus() + phoneInput;
     }
 
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks onVerificationStateChangedCallbacks
-            = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-        @Override
-        public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-            changeState(LOGIN_STATE.ENTERING_CODE);
-        }
-
-        @Override
-        public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-            signInWithPhoneAuthCredential(phoneAuthCredential);
-            changeState(LOGIN_STATE.ENTERING_NUMBER);
-        }
-
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override
         public void onCodeAutoRetrievalTimeOut(@NonNull String s) {
             super.onCodeAutoRetrievalTimeOut(s);
-            changeState(LOGIN_STATE.ENTERING_NUMBER);
+            changeState(LOGIN_STATE.ENTERING_CODE);
             Toast.makeText(LoginActivity.this, "Timed out.Try again", Toast.LENGTH_SHORT).show();
         }
 
         @Override
+        public void onVerificationCompleted(PhoneAuthCredential credential) {
+            // This callback will be invoked in two situations:
+            // 1 - Instant verification. In some cases the phone number can be instantly
+            //     verified without needing to send or enter a verification code.
+            // 2 - Auto-retrieval. On some devices Google Play services can automatically
+            //     detect the incoming verification SMS and perform verification without
+            //     user action.
+            Log.d("dddd", "onVerificationCompleted:" + credential);
+
+            signInWithPhoneAuthCredential(credential);
+            changeState(LOGIN_STATE.LOADING);
+        }
+
+        @Override
         public void onVerificationFailed(FirebaseException e) {
-            e.printStackTrace();
+
+            if (e instanceof FirebaseAuthInvalidCredentialsException) {
+                Log.e("dddd", e.getMessage());
+                // Invalid request
+            } else if (e instanceof FirebaseTooManyRequestsException) {
+                Log.e("dddd", e.getMessage());
+                // The SMS quota for the project has been exceeded
+            }
             Toast.makeText(LoginActivity.this, "Verification Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             changeState(LOGIN_STATE.ENTERING_NUMBER);
+        }
 
+        @Override
+        public void onCodeSent(@NonNull String verificationId,
+                               @NonNull PhoneAuthProvider.ForceResendingToken token) {
+            Log.d("dddd", "onCodeSent:" + verificationId);
+            mVerificationId = verificationId;
+            mResendToken = token;
+            changeState(LOGIN_STATE.ENTERING_CODE);
         }
     };
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("dddd", "signInWithCredential:success");
                             FirebaseUser user = task.getResult().getUser();
                             Toast.makeText(LoginActivity.this, "Signed in successfully.", Toast.LENGTH_SHORT).show();
-
                             userSignedIn(user);
+                            // ...
                         } else {
+                            // Sign in failed, display a message and update the UI
+                            Log.w("dddd", "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 Toast.makeText(LoginActivity.this, "Invalid Code", Toast.LENGTH_SHORT).show();
                                 changeState(LOGIN_STATE.ENTERING_CODE);
@@ -170,7 +192,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Intent myIntent;
-                if(snapshot.getValue() != null) {
+                if (snapshot.getValue() != null) {
                     myIntent = new Intent(LoginActivity.this, MainActivity.class);
                 } else {
                     myIntent = new Intent(LoginActivity.this, WelcomeActivity.class);
@@ -178,6 +200,7 @@ public class LoginActivity extends BaseActivity {
                 startActivity(myIntent);
                 finish();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.w("dddd", "Failed to read value.", error.toException());
@@ -196,27 +219,34 @@ public class LoginActivity extends BaseActivity {
         login_BTN_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(login_state == LOGIN_STATE.ENTERING_NUMBER)
-                    startLoginProcess();
-                else if (login_state == LOGIN_STATE.ENTERING_CODE)
-                    codeEntered();
+                continueClicked();
             }
         });
 
         login_EDT_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     login_EDT_input.clearFocus();
                     HideUI.hideSystemUI(LoginActivity.this);
+                    continueClicked();
                 }
                 return false;
             }
         });
     }
 
+    private void continueClicked() {
+        if (login_state == LOGIN_STATE.ENTERING_NUMBER) {
+            startLoginProcess();
+        }
+        else if (login_state == LOGIN_STATE.ENTERING_CODE) {
+            codeEntered();
+        }
+    }
+
     private void cancelClicked() {
-        // TODO: 1/26/21 Cancel only works after timeout had occoured. Waiting for reply from Guy
+        // Trying to input new values after cancelClicked only actually works after timeout. Guy said it's ok on email
         changeState(LOGIN_STATE.ENTERING_NUMBER);
     }
 
@@ -231,6 +261,7 @@ public class LoginActivity extends BaseActivity {
 
     /**
      * Changes the activity state and updates the UI
+     *
      * @param state state to change to
      */
     private void changeState(LOGIN_STATE state) {
@@ -243,7 +274,7 @@ public class LoginActivity extends BaseActivity {
      */
     private void updateUI() {
         login_EDT_input.setText("");
-        if(login_state == LOGIN_STATE.ENTERING_NUMBER) {
+        if (login_state == LOGIN_STATE.ENTERING_NUMBER) {
             login_EDT_input.setHint(getString(R.string.phone_number));
 
             login_EDT_input.setVisibility(View.VISIBLE);
@@ -252,8 +283,7 @@ public class LoginActivity extends BaseActivity {
             login_CCP_code.setVisibility(View.VISIBLE);
             login_PROGBAR_spinner.setVisibility(View.GONE);
 
-        }
-        else if (login_state == LOGIN_STATE.ENTERING_CODE) {
+        } else if (login_state == LOGIN_STATE.ENTERING_CODE) {
             login_EDT_input.setHint(getString(R.string.code));
 
             login_EDT_input.setVisibility(View.VISIBLE);
@@ -261,8 +291,7 @@ public class LoginActivity extends BaseActivity {
             login_BTN_continue.setVisibility(View.VISIBLE);
             login_CCP_code.setVisibility(View.GONE);
             login_PROGBAR_spinner.setVisibility(View.GONE);
-        }
-        else if (login_state == LOGIN_STATE.LOADING) {
+        } else if (login_state == LOGIN_STATE.LOADING) {
             login_EDT_input.setVisibility(View.GONE);
             login_BTN_cancel.setVisibility(View.GONE);
             login_BTN_continue.setVisibility(View.GONE);
