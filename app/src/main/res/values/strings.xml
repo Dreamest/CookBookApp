@@ -47,4 +47,8 @@
     <string name="sign_out">Sign out</string>
     <string name="search">Search</string>
     <string name="add">Add</string>
+    <string name="you_have_k_pending_recipes">You have K pending recipes</string>
+    <string name="you_have">You have</string>
+    <string name="pending_recipes">pending recipes</string>
+
 </resources>

@@ -1,7 +1,6 @@
-package com.dreamest.cookbookapp.logic;
+package com.dreamest.cookbookapp.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dreamest.cookbookapp.R;
+import com.dreamest.cookbookapp.logic.Ingredient;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;

@@ -12,10 +12,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CookBookApp">
-        <activity android:name=".activities.AddFriendActivity"></activity>
+        <activity android:name=".activities.PendingRecipesActivity"
+            android:screenOrientation="portrait"
+            ></activity>
+        <activity android:name=".activities.AddFriendActivity"
+            android:screenOrientation="portrait"
+
+            />
         <activity
             android:name=".activities.AddIngredientActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".activities.FriendsListActivity"
             android:screenOrientation="portrait" />

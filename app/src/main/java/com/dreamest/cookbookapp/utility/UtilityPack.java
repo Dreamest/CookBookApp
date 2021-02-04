@@ -28,6 +28,8 @@ public class UtilityPack {
         String MY_RECIPES = "myRecipes";
         String MY_FRIENDS = "myFriends";
         String MY_CHATS = "myChats";
+        String PENDING_RECIPES = "pendingRecipes";
+        String PENDING_FRIENDS = "pendingFriends";
         String PHONE_NUMBER = "phoneNumber";
         String DISPLAY_NAME = "displayName";
         String USER_ID = "userID";

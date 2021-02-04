@@ -42,4 +42,7 @@
     <string name="sign_out">התנתק</string>
     <string name="search">חיפוש</string>
     <string name="add">הוסף</string>
+    <string name="you_have_k_pending_recipes">ישנם X מתכונים ממתינים</string>
+    <string name="you_have">ישנם</string>
+    <string name="pending_recipes">מתכונים ממתינים</string>
 </resources>

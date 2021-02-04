@@ -1,10 +1,10 @@
 package com.dreamest.cookbookapp.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,31 +17,37 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Recipe;
-import com.dreamest.cookbookapp.logic.RecipeAdapter;
+import com.dreamest.cookbookapp.adapters.RecipeAdapter;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
 import com.dreamest.cookbookapp.utility.UtilityPack;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivity extends BaseActivity {
 
+    // TODO: 2/4/21 check if hashMap can be removed.
     private RecyclerView main_LST_recipes;
     private ImageButton main_BTN_add;
     private ImageView main_IMG_background;
     private HashMap<String, Recipe> myRecipesMap;// = TestUnit.getPosts();
     private ArrayList<Recipe> myRecipesList;// = TestUnit.getPosts();
     private TextView main_TXT_no_recipes;
+    private MaterialButton main_BTN_pending;
+    private ArrayList<Recipe> pendingRecipes;
+    private final int PENDING_RECIPES = 123;
+    private final int MY_RECIPES = 345;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +56,13 @@ public class MainActivity extends BaseActivity {
 
         myRecipesMap = new HashMap<>();
         myRecipesList = new ArrayList<>();
+        pendingRecipes = new ArrayList<>();
 
         findViews();
+        loadPendingRecipes();
         initViews();
     }
-
+    
     @Override
     protected void onResume() {
         super.onResume();
@@ -89,7 +97,7 @@ public class MainActivity extends BaseActivity {
                     main_TXT_no_recipes.setVisibility(View.GONE);
                     Iterable<DataSnapshot> recipeIds = snapshot.getChildren();
                     for(DataSnapshot id: recipeIds) {
-                        loadRecipe(id, database);
+                        loadRecipe(id, database, MY_RECIPES);
                     }
                 } else { //No recipes
                     main_TXT_no_recipes.setVisibility(View.VISIBLE);
@@ -103,20 +111,61 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    private void loadPendingRecipes() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
+                .child(firebaseUser.getUid())
+                .child(UtilityPack.KEYS.PENDING_RECIPES);
+        ref.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                loadRecipe(snapshot, database, PENDING_RECIPES);
+                String message = getString(R.string.you_have) + " " + pendingRecipes.size() + " " + getString(R.string.pending_recipes);
+                main_BTN_pending.setVisibility(View.VISIBLE);
+            }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                removePending(snapshot);
+                if(pendingRecipes.size() == 0) {
+                    main_BTN_pending.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("dddd", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    private void removePending(DataSnapshot id) {
+//        pendingRecipes.removeIf(recipe -> recipe.getRecipeID().equals(id)); //requires SDK 26 ask Guy
+        for(Recipe recipe: pendingRecipes) {
+            if(recipe.getRecipeID().equals(id)) {
+                pendingRecipes.remove(recipe);
+                return;
+            }
+        }
+    }
+
+
     /**
      * Loads a recipe from firebase into recyclerView
      * @param id Recipe ID
      * @param database firebase database
      */
     //This functions needs to be here and not in Recipe to be able to handle the adapter synchronically.
-    private void loadRecipe(DataSnapshot id, FirebaseDatabase database) {
+    private void loadRecipe(DataSnapshot id, FirebaseDatabase database, int loadTo) {
         DatabaseReference recipeRef = database.getReference(UtilityPack.KEYS.RECIPES)
                 .child(id.getValue(String.class));
         recipeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                // TODO: 2/2/21 Use this code if loading ingredients becomes an issue.
 //                Recipe recipe = new Recipe()
 //                        .setRecipeID(snapshot.child(UtilityPack.KEYS.RECIPE_ID).getValue(String.class))
 //                        .setDate(snapshot.child(UtilityPack.KEYS.DATE).getValue(String.class))
@@ -129,8 +178,11 @@ public class MainActivity extends BaseActivity {
 //                        .setPrepTime(snapshot.child(UtilityPack.KEYS.PREP_TIME).getValue(Integer.class))
 //                        .setTitle(snapshot.child(UtilityPack.KEYS.TITLE).getValue(String.class));
 //                myRecipesList.add(recipe);
-
-                myRecipesMap.put(id.getValue(String.class), snapshot.getValue(Recipe.class));
+                if(loadTo == MY_RECIPES) {
+                    myRecipesMap.put(id.getValue(String.class), snapshot.getValue(Recipe.class));
+                } else if(loadTo == PENDING_RECIPES) {
+                    pendingRecipes.add(snapshot.getValue(Recipe.class));
+                }
                 initAdapter();
             }
             @Override
@@ -139,15 +191,6 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
-
-    //May be redundant
-//    private <T> ArrayList<T> getIngredientListFromDatabase(DataSnapshot dataSnapshot) {
-//        ArrayList<T> list = new ArrayList<T>();
-//        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-//            list.add(postSnapshot.getValue(T.class));
-//        }
-//        return list;
-//    }
 
     private void initAdapter() {
         myRecipesList = new ArrayList<>(myRecipesMap.values());
@@ -188,6 +231,20 @@ public class MainActivity extends BaseActivity {
             }
 
         });
+
+        main_BTN_pending.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPendingRecipes();
+            }
+        });
+    }
+
+    private void openPendingRecipes() {
+        Intent myIntent = new Intent(this, PendingRecipesActivity.class);
+        myIntent.putExtra(MySharedPreferences.KEYS.RECIPE_COUNT, myRecipesList.size());
+        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPES_LIST, pendingRecipes);
+        startActivity(myIntent);
     }
 
     private void loadUserToActivity(Class goToClass) {
@@ -245,6 +302,7 @@ public class MainActivity extends BaseActivity {
         main_LST_recipes = findViewById(R.id.main_LST_recipes);
         main_IMG_background = findViewById(R.id.main_IMG_background);
         main_TXT_no_recipes = findViewById(R.id.main_TXT_no_recipes);
+        main_BTN_pending = findViewById(R.id.main_BTN_pending);
     }
 
     private void openRecipeActivity(int position) {

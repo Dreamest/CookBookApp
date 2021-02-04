@@ -17,6 +17,8 @@ public class User {
     private ArrayList<String> myRecipes;
     private ArrayList<String> myFriends;
     private ArrayList<String> myChats;
+    private ArrayList<String> pendingRecipes;
+    private ArrayList<String> pendingFriends;
     private String displayName;
     private String phoneNumber;
     private StorageReference profileImage;
@@ -25,6 +27,30 @@ public class User {
         myRecipes = new ArrayList<>();
         myFriends = new ArrayList<>();
         myChats = new ArrayList<>();
+        pendingRecipes = new ArrayList<>();
+        pendingFriends = new ArrayList<>();
+    }
+
+    public static void removePendingFromCurrentUserDatabase(int position) {
+
+    }
+
+    public ArrayList<String> getPendingRecipes() {
+        return pendingRecipes;
+    }
+
+    public User setPendingRecipes(ArrayList<String> pendingRecipes) {
+        this.pendingRecipes = pendingRecipes;
+        return this;
+    }
+
+    public ArrayList<String> getPendingFriends() {
+        return pendingFriends;
+    }
+
+    public User setPendingFriends(ArrayList<String> pendingFriends) {
+        this.pendingFriends = pendingFriends;
+        return this;
     }
 
     public StorageReference getProfileImage() {
@@ -44,6 +70,15 @@ public class User {
                 .child(UtilityPack.KEYS.MY_RECIPES)
                 .child(String.valueOf(position));
         ref.setValue(recipeID);
+    }
+
+    public static void removePendingRecipe(int position) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
+                .child(FirebaseAuth.getInstance().getUid())
+                .child(UtilityPack.KEYS.PENDING_RECIPES)
+                .child(String.valueOf(position));
+        ref.removeValue();
     }
 
     public static void addFriendToCurrentUserDatabase(String friendID, int position) {

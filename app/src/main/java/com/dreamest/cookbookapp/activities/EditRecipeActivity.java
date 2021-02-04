@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Ingredient;
-import com.dreamest.cookbookapp.logic.IngredientAdapterRemoveBTN;
+import com.dreamest.cookbookapp.adapters.IngredientAdapterRemoveBTN;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.HideUI;

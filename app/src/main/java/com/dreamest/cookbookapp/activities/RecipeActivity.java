@@ -1,7 +1,6 @@
 package com.dreamest.cookbookapp.activities;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,7 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
-import com.dreamest.cookbookapp.logic.IngredientAdapterCheckbox;
+import com.dreamest.cookbookapp.adapters.IngredientAdapterCheckbox;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.UtilityPack;

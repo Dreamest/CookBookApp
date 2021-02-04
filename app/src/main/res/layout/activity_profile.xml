@@ -80,12 +80,12 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/profile_BTN_confirm_name"
 
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/profile_IMG_image"
         android:layout_alignEnd="@id/profile_IMG_image"
 
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_marginTop="5dp"
         android:backgroundTint="@color/teal_200"
         android:text="@string/submit"
