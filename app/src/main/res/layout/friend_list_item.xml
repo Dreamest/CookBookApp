@@ -5,11 +5,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
+    <ImageView
+        android:id="@+id/friend_IMG_header"
+
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+
+
+        />
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/friend_IMG_profile"
 
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:layout_below="@+id/friend_IMG_header"
 
         android:scaleType="centerCrop"
         app:shapeAppearanceOverlay="@style/circularImageView"
@@ -29,10 +40,9 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:layout_marginTop="2dp"
         android:layout_below="@id/friend_IMG_profile"
-        android:layout_marginBottom="10dp"
 
         android:background="@color/black"
 

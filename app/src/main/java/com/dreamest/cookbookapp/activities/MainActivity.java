@@ -39,10 +39,12 @@ public class MainActivity extends BaseActivity {
     private RecyclerView main_LST_recipes;
     private ImageButton main_BTN_add;
     private ImageView main_IMG_background;
-    private ArrayList<Recipe> myRecipesList;// = TestUnit.getPosts();
     private TextView main_TXT_no_recipes;
     private MaterialButton main_BTN_pending;
     private ArrayList<Recipe> pendingRecipes;
+    private ArrayList<Recipe> myRecipesList;// = TestUnit.getPosts();
+    private User currentUser;
+
     private final int PENDING_RECIPES = 123;
     private final int MY_RECIPES = 345;
 
@@ -55,7 +57,7 @@ public class MainActivity extends BaseActivity {
         pendingRecipes = new ArrayList<>();
 
         findViews();
-        loadPendingRecipes();
+
         initViews();
     }
     
@@ -65,8 +67,12 @@ public class MainActivity extends BaseActivity {
         if(FirebaseAuth.getInstance().getCurrentUser() == null) {
             preformLogout();
         }
-        loadUserRecipesFromDatabase(); //onResume so it'll load a new recipe when adding one.
+        //onResume so it'll update on returning to the activity
+        loadUserRecipesFromDatabase();
+        loadPendingRecipes();
+        loadCurrentUser();
     }
+
 
     private void preformLogout() {
         MySharedPreferences.getMsp().putBoolean(MySharedPreferences.KEYS.LOGOUT, MySharedPreferences.KEYS.STAY_LOGGED); //logically might fit better in LoginActivity onCreate, but this saves running this line every login
@@ -142,7 +148,7 @@ public class MainActivity extends BaseActivity {
     private void removePending(DataSnapshot id) {
 //        pendingRecipes.removeIf(recipe -> recipe.getRecipeID().equals(id)); //requires SDK 26 ask Guy
         for(Recipe recipe: pendingRecipes) {
-            if(recipe.getRecipeID().equals(id)) {
+            if(recipe.getRecipeID().equals(id.getValue())) {
                 pendingRecipes.remove(recipe);
                 return;
             }
@@ -243,25 +249,14 @@ public class MainActivity extends BaseActivity {
         startActivity(myIntent);
     }
 
-    private void loadUserToActivity(Class goToClass) {
+    private void loadCurrentUser() {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(uid);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                User user = new User()
-//                        .setPhoneNumber(snapshot.child(UtilityPack.KEYS.PHONE_NUMBER).getValue(String.class))
-//                        .setDisplayName(snapshot.child(UtilityPack.KEYS.DISPLAY_NAME).getValue(String.class))
-//                        .setUserID(snapshot.child(UtilityPack.KEYS.USER_ID).getValue(String.class))
-//                        .setMyRecipes(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_RECIPES)))
-//                        .setMyFriends(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_FRIENDS)))
-//                        .setMyChats(getListFromDatabase(snapshot.child(UtilityPack.KEYS.MY_CHATS)))
-//                        .setProfileImage(snapshot.child(UtilityPack.KEYS.PROFILE_IMAGE).getValue(StorageReference.class));
-                User user = snapshot.getValue(User.class);
-                MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.USER, user);
-                Intent myIntent = new Intent(MainActivity.this, goToClass);
-                startActivity(myIntent);
+                currentUser = snapshot.getValue(User.class);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -271,7 +266,9 @@ public class MainActivity extends BaseActivity {
     }
 
     private void toProfile() {
-        loadUserToActivity(ProfileActivity.class);
+        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.USER, currentUser);
+        Intent myIntent = new Intent(MainActivity.this, ProfileActivity.class);
+        startActivity(myIntent);
     }
 
     private <T> ArrayList<T> getListFromDatabase(DataSnapshot dataSnapshot) {
@@ -283,7 +280,9 @@ public class MainActivity extends BaseActivity {
     }
 
     private void toFriendsList() {
-        loadUserToActivity(FriendsListActivity.class);
+        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.USER, currentUser);
+        Intent myIntent = new Intent(MainActivity.this, FriendsListActivity.class);
+        startActivity(myIntent);
     }
 
     private void addNewRecipe() {
@@ -302,7 +301,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void openRecipeActivity(int position) {
-        Log.d("dddd", String.format("Post %d pressed.", position));
+        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.USER, currentUser);
         MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, myRecipesList.get(position));
         Intent myIntent = new Intent(this, RecipeActivity.class);
         startActivity(myIntent);

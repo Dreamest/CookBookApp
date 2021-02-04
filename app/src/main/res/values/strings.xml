@@ -50,5 +50,6 @@
     <string name="you_have_k_pending_recipes">You have K pending recipes</string>
     <string name="you_have">You have</string>
     <string name="pending_recipes">pending recipes</string>
+    <string name="share_recipe">Share recipe with</string>
 
 </resources>
