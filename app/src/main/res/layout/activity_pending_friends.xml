@@ -5,28 +5,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.PendingRecipesActivity">
+    tools:context=".activities.PendingFriendsActivity">
 
     <TextView
-        android:id="@+id/pending_recipe_TXT_title"
+        android:id="@+id/pending_friend_TXT_title"
 
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
 
-        android:text="@string/pending_recipes"
+        android:text="@string/friend_requests"
         android:textSize="45sp"
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/pending_recipe_LST_recipes"
+        android:id="@+id/pending_friend_LST_recipes"
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/pending_recipe_TXT_title"
+        android:layout_below="@id/pending_friend_TXT_title"
 
         tools:itemCount="3"
-        tools:listitem="@layout/pending_recipe_item" />
+        tools:listitem="@layout/pending_friend_item" />
 
 </RelativeLayout>

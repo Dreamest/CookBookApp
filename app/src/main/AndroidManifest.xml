@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CookBookApp">
-        <activity android:name=".activities.ShareRecipeActivity"></activity>
+        <activity android:name=".activities.PendingFriendsActivity"></activity>
+        <activity android:name=".activities.ShareRecipeActivity" />
         <activity
             android:name=".activities.PendingRecipesActivity"
             android:screenOrientation="portrait" />

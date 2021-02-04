@@ -23,6 +23,7 @@ import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
+import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.gildaswise.horizontalcounter.HorizontalCounter;
 import com.github.drjacky.imagepicker.ImagePicker;
 import com.google.android.material.button.MaterialButton;
@@ -223,7 +224,7 @@ public class EditRecipeActivity extends BaseActivity {
         updateRecipe();
         MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe);
         recipe.storeInFirebase();
-        User.addRecipeToCurrentUserDatabase(recipe.getRecipeID(), recipeCount);
+        User.addToCurrentUserDatabase(recipe.getRecipeID(), recipeCount, UtilityPack.KEYS.MY_RECIPES);
         finish();
     }
 

@@ -1,17 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:id="@+id/friendslist_LAY_master"
+<RelativeLayout android:id="@+id/friendslist_LAY_master"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.FriendsListActivity">
+    tools:context=".activities.FriendsListActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/friendslist_TXT_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+
+        android:text="@string/pending_recipes"
+        android:textSize="45sp"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/friendslist_BTN_pending"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@id/friendslist_TXT_title"
+
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginTop="5dp"
+        android:backgroundTint="@color/teal_200"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        app:cornerRadius="10dp"
+        app:strokeColor="@color/black"
+        app:strokeWidth="2dp"
+        android:text="@string/you_have_k_pending_recipes"
+        />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/friendslist_LST_friends"
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/friendslist_BTN_pending"
 
         tools:listitem="@layout/friend_list_item"
         tools:itemCount="3"

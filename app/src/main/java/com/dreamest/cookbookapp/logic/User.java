@@ -31,9 +31,7 @@ public class User {
         pendingFriends = new ArrayList<>();
     }
 
-    public static void removePendingFromCurrentUserDatabase(int position) {
 
-    }
 
     public ArrayList<String> getPendingRecipes() {
         return pendingRecipes;
@@ -62,24 +60,25 @@ public class User {
         return this;
     }
 
-    public static void addRecipeToCurrentUserDatabase(String recipeID, int position) {
+    public static void addToCurrentUserDatabase(String id, int position, String key) {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
                 .child(firebaseUser.getUid())
-                .child(UtilityPack.KEYS.MY_RECIPES)
+                .child(key)
                 .child(String.valueOf(position));
-        ref.setValue(recipeID);
+        ref.setValue(id);
     }
 
-    public static void removePendingRecipe(int position) {
+    public static void removePendingFromCurrentUser(int position, String pendingType) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
                 .child(FirebaseAuth.getInstance().getUid())
-                .child(UtilityPack.KEYS.PENDING_RECIPES)
+                .child(pendingType)
                 .child(String.valueOf(position));
         ref.removeValue();
     }
+
 
     public static void addFriendToCurrentUserDatabase(String friendID, int position) {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();

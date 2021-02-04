@@ -51,5 +51,8 @@
     <string name="you_have">You have</string>
     <string name="pending_recipes">pending recipes</string>
     <string name="share_recipe">Share recipe with</string>
+    <string name="pending_friends">pending friends</string>
+    <string name="friend_requests">Friend requests</string>
+
 
 </resources>

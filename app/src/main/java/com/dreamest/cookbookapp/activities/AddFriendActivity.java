@@ -32,6 +32,8 @@ public class AddFriendActivity extends AppCompatActivity {
     private TextInputEditText add_friend_EDT_input;
     private MaterialButton add_friend_BTN_search;
     private ArrayList<User> currentFriends;
+    private ArrayList<User> pendingFriends;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +80,11 @@ public class AddFriendActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot user: snapshot.getChildren()) {
-
                     if(user.child(UtilityPack.KEYS.PHONE_NUMBER).getValue(String.class).equals(searchValue)) {
-                        User.addFriendToCurrentUserDatabase(user.child(UtilityPack.KEYS.USER_ID).getValue(String.class), currentFriends.size());
-                        String userName = user.child(UtilityPack.KEYS.DISPLAY_NAME).getValue(String.class);
-                        Toast.makeText(AddFriendActivity.this, "User " + userName + " added.", Toast.LENGTH_SHORT).show();
+                        String friendID = user.child(UtilityPack.KEYS.USER_ID).getValue(String.class);
+                        long pendingRequests = user.child(UtilityPack.KEYS.PENDING_FRIENDS).getChildrenCount();
+                        ref.child(friendID).child(UtilityPack.KEYS.PENDING_FRIENDS).child(String.valueOf(pendingRequests)).setValue(FirebaseAuth.getInstance().getUid());
+                        Toast.makeText(AddFriendActivity.this, "Request sent.", Toast.LENGTH_SHORT).show();
                         finish();
                         return;
                     }
@@ -103,14 +105,15 @@ public class AddFriendActivity extends AppCompatActivity {
             notifyNotHappening("You can't befriend yourself");
             return true;
         } else{
-            return (userInFriendsAlready(searchValue));
+            return userInList(currentFriends, searchValue, "User is already a friend") ||
+                    userInList(pendingFriends, searchValue, "User is pending");
         }
     }
 
-    private boolean userInFriendsAlready(String searchValue) {
-        for(User friend: currentFriends) {
+    private boolean userInList(ArrayList<User> list, String searchValue, String message) {
+        for(User friend: list) {
             if(friend.getPhoneNumber().equals(searchValue)) {
-                notifyNotHappening("User is already a friend");
+                notifyNotHappening(message);
                 return true;
             }
         }

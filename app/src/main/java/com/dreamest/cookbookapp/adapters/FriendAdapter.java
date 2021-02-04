@@ -46,7 +46,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                 .load(user.getProfileImage())
                 .centerCrop()
                 .into(holder.friend_IMG_profile)
-                .onLoadStarted(ContextCompat.getDrawable(holder.friend_IMG_profile.getContext(), R.drawable.ic_no_image));
+                .onLoadStarted(ContextCompat.getDrawable(mInflater.getContext(), R.drawable.ic_man_avatar));
     }
 
     // total number of rows

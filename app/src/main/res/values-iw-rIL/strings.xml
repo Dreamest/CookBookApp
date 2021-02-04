@@ -46,4 +46,6 @@
     <string name="you_have">ישנם</string>
     <string name="pending_recipes">מתכונים ממתינים</string>
     <string name="share_recipe">שיתוף מתכון עם</string>
+    <string name="pending_friends">חברים ממתינים</string>
+    <string name="friend_requests">בקשות חברות</string>
 </resources>

@@ -6,14 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.utility.UtilityPack;
@@ -46,14 +43,14 @@ public class PendingRecipeAdapter extends RecyclerView.Adapter<PendingRecipeAdap
     @Override
     public void onBindViewHolder(@NonNull PendingRecipeAdapter.ViewHolder holder, int position) {
         Recipe recipe = mData.get(position);
-        holder.pending_item_TXT_title.setText(recipe.getTitle());
+        holder.pending_item_recipe_TXT_title.setText(recipe.getTitle());
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(recipe.getOwnerID()).child(UtilityPack.KEYS.DISPLAY_NAME);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                holder.pending_item_TXT_owner.setText(snapshot.getValue(String.class));
+                holder.pending_item_recipe_TXT_owner.setText(snapshot.getValue(String.class));
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -86,21 +83,27 @@ public class PendingRecipeAdapter extends RecyclerView.Adapter<PendingRecipeAdap
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView pending_item_TXT_title;
-        private TextView pending_item_TXT_owner;
-        private ImageButton pending_item_BTN_add;
-        private ImageButton pending_item_BTN_remove;
+        private TextView pending_item_recipe_TXT_title;
+        private TextView pending_item_recipe_TXT_owner;
+        private ImageButton pending_item_recipe_BTN_add;
+        private ImageButton pending_item_recipe_BTN_remove;
 
         ViewHolder(View itemView) {
             super(itemView);
             findViews(itemView);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            pending_item_recipe_BTN_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mClickListener != null) {
-                        Log.d("dddd", "inside recipeAdapter " + getAdapterPosition());
+                    if(mClickListener != null) {
                         mClickListener.onAddClick(getAdapterPosition());
+                    }
+                }
+            });
+            pending_item_recipe_BTN_remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mClickListener != null) {
                         mClickListener.onRemoveClick(getAdapterPosition());
                     }
                 }
@@ -108,10 +111,10 @@ public class PendingRecipeAdapter extends RecyclerView.Adapter<PendingRecipeAdap
         }
 
         public void findViews(View itemView) {
-            pending_item_TXT_title = itemView.findViewById(R.id.pending_item_TXT_title);
-            pending_item_TXT_owner = itemView.findViewById(R.id.pending_item_TXT_owner);
-            pending_item_BTN_add = itemView.findViewById(R.id.pending_item_BTN_add);
-            pending_item_BTN_remove = itemView.findViewById(R.id.pending_item_BTN_remove);
+            pending_item_recipe_TXT_title = itemView.findViewById(R.id.pending_item_recipe_TXT_title);
+            pending_item_recipe_TXT_owner = itemView.findViewById(R.id.pending_item_recipe_TXT_owner);
+            pending_item_recipe_BTN_add = itemView.findViewById(R.id.pending_item_recipe_BTN_add);
+            pending_item_recipe_BTN_remove = itemView.findViewById(R.id.pending_item_recipe_BTN_remove);
 
         }
     }

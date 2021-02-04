@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,39 +13,53 @@
 
     app:cardElevation="20dp">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
         >
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/pending_item_friend_IMG_profile_image"
+
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:layout_alignParentStart="true"
+
+
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/circularImageView"
+            android:background="@drawable/ic_man_avatar"
+            />
 
         <TextView
-            android:id="@+id/pending_item_recipe_TXT_title"
+            android:id="@+id/pending_item_friend_TXT_displayName"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/pending_item_friend_IMG_profile_image"
+            android:layout_alignTop="@id/pending_item_friend_IMG_profile_image"
 
-            android:text="@string/recipe_title"
+            android:lines="2"
+            android:text="@string/owner_name"
             android:textSize="30sp" />
 
         <TextView
-            android:id="@+id/pending_item_recipe_TXT_owner"
+            android:id="@+id/pending_item_friend_TXT_phoneNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/pending_item_recipe_TXT_title"
-            android:layout_centerHorizontal="true"
+            android:layout_below="@id/pending_item_friend_TXT_displayName"
+            android:layout_alignStart="@id/pending_item_friend_TXT_displayName"
             android:layout_marginTop="5dp"
 
-            android:text="@string/owner_name"
+            android:text="@string/phone_number"
             android:textSize="20sp" />
 
         <ImageButton
-            android:id="@+id/pending_item_recipe_BTN_add"
+            android:id="@+id/pending_item_friend_BTN_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/pending_item_recipe_TXT_owner"
+            android:layout_below="@id/pending_item_friend_TXT_phoneNumber"
             android:layout_alignParentStart="true"
             android:layout_marginStart="100dp"
             android:layout_marginTop="5dp"
@@ -52,10 +67,10 @@
             android:background="@drawable/ic_check" />
 
         <ImageButton
-            android:id="@+id/pending_item_recipe_BTN_remove"
+            android:id="@+id/pending_item_friend_BTN_remove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/pending_item_recipe_TXT_owner"
+            android:layout_below="@id/pending_item_friend_TXT_phoneNumber"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="100dp"
