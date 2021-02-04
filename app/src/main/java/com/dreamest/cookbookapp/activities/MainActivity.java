@@ -33,15 +33,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MainActivity extends BaseActivity {
 
-    // TODO: 2/4/21 check if hashMap can be removed.
     private RecyclerView main_LST_recipes;
     private ImageButton main_BTN_add;
     private ImageView main_IMG_background;
-    private HashMap<String, Recipe> myRecipesMap;// = TestUnit.getPosts();
     private ArrayList<Recipe> myRecipesList;// = TestUnit.getPosts();
     private TextView main_TXT_no_recipes;
     private MaterialButton main_BTN_pending;
@@ -54,7 +51,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        myRecipesMap = new HashMap<>();
         myRecipesList = new ArrayList<>();
         pendingRecipes = new ArrayList<>();
 
@@ -178,12 +174,13 @@ public class MainActivity extends BaseActivity {
 //                        .setPrepTime(snapshot.child(UtilityPack.KEYS.PREP_TIME).getValue(Integer.class))
 //                        .setTitle(snapshot.child(UtilityPack.KEYS.TITLE).getValue(String.class));
 //                myRecipesList.add(recipe);
+
                 if(loadTo == MY_RECIPES) {
-                    myRecipesMap.put(id.getValue(String.class), snapshot.getValue(Recipe.class));
+                    myRecipesList.add(snapshot.getValue(Recipe.class));
+                    initAdapter();
                 } else if(loadTo == PENDING_RECIPES) {
                     pendingRecipes.add(snapshot.getValue(Recipe.class));
                 }
-                initAdapter();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -193,7 +190,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initAdapter() {
-        myRecipesList = new ArrayList<>(myRecipesMap.values());
         main_LST_recipes.setLayoutManager(new LinearLayoutManager(this));
         RecipeAdapter recipeAdapter = new RecipeAdapter(this, myRecipesList);
 

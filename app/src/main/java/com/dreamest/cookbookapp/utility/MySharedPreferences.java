@@ -102,6 +102,7 @@ public class MySharedPreferences {
         String FRIENDS_COUNT = "FRIENDS_COUNT";
         String RECIPE_COUNT = "RECIPE_COUNT";
         String FRIENDS_ARRAY = "FRIENDS_ARRAY";
+        String RECIPES_LIST = "RECIPES_LIST";
     }
 
 
