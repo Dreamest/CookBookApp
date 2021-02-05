@@ -70,6 +70,7 @@
             android:orientation="horizontal"
             android:gravity="center"
             android:background="@drawable/rounded_layout"
+            android:layoutDirection="ltr"
             android:padding="5dp"
 
             >
@@ -101,30 +102,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:divider="@drawable/divider8p"
-            android:showDividers="middle"
-
             >
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/login_BTN_cancel"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="50dp"
+
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+
                 app:cornerRadius="10dp"
                 app:strokeColor="@color/teal_100"
                 android:textColor="@color/teal_100"
                 android:textAllCaps="false"
                 android:backgroundTint="@color/black_fade"
                 app:strokeWidth="2dp"
-
                 android:text="@string/cancel"
 
                 />
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/login_BTN_continue"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 app:cornerRadius="10dp"
                 app:strokeColor="@color/teal_100"
                 android:textColor="@color/teal_100"

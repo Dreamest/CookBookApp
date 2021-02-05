@@ -15,6 +15,7 @@ import com.dreamest.cookbookapp.adapters.FriendAdapter;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.UtilityPack;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,10 +37,14 @@ public class ShareRecipeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_recipe);
         recipeToShare = getIntent().getStringExtra(UtilityPack.KEYS.RECIPE_ID);
-        currentUser = (User) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.USER, new User(), User.class);
-        friendslist = new ArrayList<>();
         findViews();
-        loadFriendsFromDatabase();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        friendslist = new ArrayList<>();
+        loadCurrentUser();
     }
 
     private void findViews() {
@@ -69,20 +74,6 @@ public class ShareRecipeActivity extends BaseActivity {
                 .child(UtilityPack.KEYS.PENDING_RECIPES).child(recipeToShare);
         ref.setValue(recipeToShare);
         // TODO: 2/5/21 assumption: Adding an onSuccess listener here for toast will work only if new value is added?
-//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                long count = snapshot.getChildrenCount(); //How many pending recipes the user currently have
-//                ref.child(String.valueOf(count)).setValue(recipeToShare); //Ensures the storing method is array
-//                Toast.makeText(ShareRecipeActivity.this, "Recipe shared", Toast.LENGTH_SHORT).show();
-//                finish();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Log.w("dddd", "Failed to read value.", error.toException());
-//            }
-//        });
     }
 
     private void loadFriendsFromDatabase() {
@@ -126,6 +117,24 @@ public class ShareRecipeActivity extends BaseActivity {
                 if(last) {
                     initAdapter();
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("dddd", "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    private void loadCurrentUser() {
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(uid);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                currentUser = snapshot.getValue(User.class);
+                loadFriendsFromDatabase();
             }
 
             @Override

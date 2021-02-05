@@ -6,13 +6,11 @@
     >
 
     <ImageView
-        android:id="@+id/friend_IMG_header"
+        android:id="@+id/friend_IMG_top_seperator"
 
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/black"
-
-
         />
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -20,7 +18,8 @@
 
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_below="@+id/friend_IMG_header"
+        android:layout_below="@+id/friend_IMG_top_seperator"
+        android:layout_centerVertical="true"
 
         android:scaleType="centerCrop"
         app:shapeAppearanceOverlay="@style/circularImageView"
@@ -33,6 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/friend_IMG_profile"
+        android:layout_centerVertical="true"
         android:layout_marginTop="5dp"
 
         android:text="@string/owner_name"

@@ -71,8 +71,9 @@
 
         android:layout_alignStart="@id/profile_IMG_image"
         android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
 
-        android:ems="12"
+        android:ems="10"
         android:hint="@string/change_your_username"
         android:imeOptions="actionDone"
         android:inputType="text" />
@@ -83,7 +84,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/profile_IMG_image"
-        android:layout_alignEnd="@id/profile_IMG_image"
+        android:layout_toEndOf="@id/profile_EDT_change_name"
 
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_marginTop="5dp"

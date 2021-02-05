@@ -7,7 +7,7 @@
     <string name="code">הזן קוד</string>
     <string name="recipe_title">כותרת מתכון</string>
     <string name="added_on">נוסף בתאריך </string>
-    <string name="by">ע"י </string>
+    <string name="by">"ע\"י "</string>
     <string name="owner_name">ישראל ישראלי</string>
     <string name="prep_time">זמן הכנה: </string>
     <string name="minutes">דקות</string>

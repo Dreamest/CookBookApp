@@ -216,6 +216,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/edit_LAY_stars"
+            android:layout_alignStart="@id/edit_IMG_image"
 
             android:textColor="@color/black"
             android:text="@string/prep_time"
