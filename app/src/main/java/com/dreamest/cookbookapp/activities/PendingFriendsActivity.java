@@ -46,7 +46,7 @@ public class PendingFriendsActivity extends BaseActivity {
                 User.actionToCurrentUserDatabase(User.ADD, friend.getUserID(), UtilityPack.KEYS.MY_FRIENDS);
                 friend.getMyFriends().put(FirebaseAuth.getInstance().getUid(), FirebaseAuth.getInstance().getUid());
                 friend.updateFirebase();
-                User.actionToCurrentUserDatabase(User.ADD, friend.getUserID(), UtilityPack.KEYS.PENDING_FRIENDS);
+                User.actionToCurrentUserDatabase(User.REMOVE, friend.getUserID(), UtilityPack.KEYS.PENDING_FRIENDS);
                 pendingFriends.remove(position);
                 Toast.makeText(PendingFriendsActivity.this, "Friend added", Toast.LENGTH_SHORT).show();
 

@@ -42,7 +42,7 @@ public class PendingRecipesActivity extends BaseActivity {
             public void onAddClick(int position) {
                 Recipe recipe = pendingRecipes.get(position);
                 User.actionToCurrentUserDatabase(User.ADD, recipe.getRecipeID(), UtilityPack.KEYS.MY_RECIPES);
-                User.actionToCurrentUserDatabase(User.ADD, recipe.getRecipeID(), UtilityPack.KEYS.PENDING_RECIPES);
+                User.actionToCurrentUserDatabase(User.REMOVE, recipe.getRecipeID(), UtilityPack.KEYS.PENDING_RECIPES);
                 pendingRecipes.remove(position);
                 Toast.makeText(PendingRecipesActivity.this, "Recipe added", Toast.LENGTH_SHORT).show();
             }
