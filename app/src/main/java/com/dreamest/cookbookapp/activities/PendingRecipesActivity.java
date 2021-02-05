@@ -54,7 +54,7 @@ public class PendingRecipesActivity extends BaseActivity {
                 User.actionToCurrentUserDatabase(User.ADD, recipe.getRecipeID(), UtilityPack.KEYS.MY_RECIPES);
                 User.actionToCurrentUserDatabase(User.REMOVE, recipe.getRecipeID(), UtilityPack.KEYS.PENDING_RECIPES);
                 pendingRecipes.remove(position);
-                Toast.makeText(PendingRecipesActivity.this, "Recipe added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PendingRecipesActivity.this, R.string.recipe_added, Toast.LENGTH_SHORT).show();
                 showNoPending();
                 pending_recipe_LST_recipes.setAdapter(pendingRecipeAdapter);
 
@@ -65,7 +65,7 @@ public class PendingRecipesActivity extends BaseActivity {
                 Recipe recipe = pendingRecipes.get(position);
                 pendingRecipes.remove(position);
                 User.actionToCurrentUserDatabase(User.REMOVE, recipe.getRecipeID(), UtilityPack.KEYS.PENDING_RECIPES);
-                Toast.makeText(PendingRecipesActivity.this, "Recipe removed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PendingRecipesActivity.this, R.string.recipe_ignored, Toast.LENGTH_SHORT).show();
                 showNoPending();
                 pending_recipe_LST_recipes.setAdapter(pendingRecipeAdapter);
 

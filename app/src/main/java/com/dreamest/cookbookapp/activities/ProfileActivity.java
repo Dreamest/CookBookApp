@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
@@ -128,6 +129,8 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void changePhoto() {
+        Toast.makeText(ProfileActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
+
         // TODO: 1/31/21 implement
 
         user.updateFirebase();

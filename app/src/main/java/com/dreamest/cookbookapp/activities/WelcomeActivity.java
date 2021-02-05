@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
@@ -92,6 +93,8 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void takePhoto() {
+        Toast.makeText(WelcomeActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
+
         // TODO: 2/1/21 implement
         //If no picture taken, use a default one that will be stored in firebase storage
     }

@@ -54,10 +54,6 @@ public class RecipeActivity extends BaseActivity {
     }
 
     private void initViews() {
-        if(recipe != null) {
-            initAdapter();
-        }
-
         recipe_BTN_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

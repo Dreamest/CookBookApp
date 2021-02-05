@@ -56,6 +56,19 @@
     <string name="friendslist">Friendslist</string>
     <string name="no_pending_recipes">No pending recipes</string>
     <string name="no_friend_requests">No friend requests</string>
+    <string name="logging_out">Logging out</string>
+    <string name="friend_request_send">Request sent.</string>
+    <string name="recipe_added">Recipe added</string>
+    <string name="friend_added">Friend added</string>
+    <string name="recipe_shared">Recipe shared</string>
+    <string name="user_not_in_database">User not in database</string>
+    <string name="recipe_ignored">Recipe ignored</string>
+    <string name="not_implemented">Not implemented yet.</string>
+    <string name="time_out_try_again">Timed out.Try again</string>
+    <string name="verification_failed">\"Verification Failed: \"</string>
+    <string name="signed_in_successfully">Signed in successfully.</string>
+    <string name="invalid_code">Invalid Code</string>
+    <string name="request_removed">Request removed</string>
 
 
 </resources>

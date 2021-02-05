@@ -75,7 +75,7 @@ public class MainActivity extends BaseActivity {
 
     private void preformLogout() {
         MySharedPreferences.getMsp().putBoolean(MySharedPreferences.KEYS.LOGOUT, MySharedPreferences.KEYS.STAY_LOGGED); //logically might fit better in LoginActivity onCreate, but this saves running this line every login
-        Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.logging_out, Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(this, LoginActivity.class);
         startActivity(myIntent);
         finish();

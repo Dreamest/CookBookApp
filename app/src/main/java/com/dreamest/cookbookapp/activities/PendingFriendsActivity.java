@@ -58,7 +58,7 @@ public class PendingFriendsActivity extends BaseActivity {
                 friend.updateFirebase();
                 User.actionToCurrentUserDatabase(User.REMOVE, friend.getUserID(), UtilityPack.KEYS.PENDING_FRIENDS);
                 pendingFriends.remove(position);
-                Toast.makeText(PendingFriendsActivity.this, "Friend added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PendingFriendsActivity.this, R.string.friend_added, Toast.LENGTH_SHORT).show();
                 showNoPending();
                 pending_friend_LST_recipes.setAdapter(pendingFriendAdapter);
 
@@ -70,7 +70,7 @@ public class PendingFriendsActivity extends BaseActivity {
                 pendingFriends.remove(position);
 
                 User.actionToCurrentUserDatabase(User.REMOVE, friend.getUserID(), UtilityPack.KEYS.PENDING_FRIENDS);
-                Toast.makeText(PendingFriendsActivity.this, "Request removed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PendingFriendsActivity.this, R.string.request_removed, Toast.LENGTH_SHORT).show();
                 showNoPending();
 
                 pending_friend_LST_recipes.setAdapter(pendingFriendAdapter);

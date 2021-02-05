@@ -249,7 +249,7 @@ public class FriendsListActivity extends BaseActivity {
     }
 
     private void openChatWith(int position) {
-        Toast.makeText(FriendsListActivity.this, "Not implemented yet.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(FriendsListActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
         // TODO: 2/2/21 implement
     }
 }

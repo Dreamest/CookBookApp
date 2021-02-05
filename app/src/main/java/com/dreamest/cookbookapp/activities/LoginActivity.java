@@ -117,7 +117,7 @@ public class LoginActivity extends BaseActivity {
         public void onCodeAutoRetrievalTimeOut(@NonNull String s) {
             super.onCodeAutoRetrievalTimeOut(s);
             changeState(LOGIN_STATE.ENTERING_CODE);
-            Toast.makeText(LoginActivity.this, "Timed out.Try again", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, R.string.time_out_try_again, Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -144,7 +144,7 @@ public class LoginActivity extends BaseActivity {
                 Log.e("dddd", e.getMessage());
                 // The SMS quota for the project has been exceeded
             }
-            Toast.makeText(LoginActivity.this, "Verification Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, getString(R.string.verification_failed) + e.getMessage(), Toast.LENGTH_SHORT).show();
             changeState(LOGIN_STATE.ENTERING_NUMBER);
         }
 
@@ -167,14 +167,14 @@ public class LoginActivity extends BaseActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("dddd", "signInWithCredential:success");
                             FirebaseUser user = task.getResult().getUser();
-                            Toast.makeText(LoginActivity.this, "Signed in successfully.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, R.string.signed_in_successfully, Toast.LENGTH_SHORT).show();
                             userSignedIn(user);
                             // ...
                         } else {
                             // Sign in failed, display a message and update the UI
                             Log.w("dddd", "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                Toast.makeText(LoginActivity.this, "Invalid Code", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, R.string.invalid_code, Toast.LENGTH_SHORT).show();
                                 changeState(LOGIN_STATE.ENTERING_CODE);
                             }
                         }

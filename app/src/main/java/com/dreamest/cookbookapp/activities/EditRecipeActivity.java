@@ -14,6 +14,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
@@ -100,10 +101,7 @@ public class EditRecipeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 HideUI.clearFocus(EditRecipeActivity.this, edit_EDT_method);
-                ImagePicker.Companion.with(EditRecipeActivity.this)
-                        .saveDir(new File(Environment.getExternalStorageDirectory(), "ImagePicker"))
-                        //Currently stores in basic "camera" folder
-                        .start();
+                Toast.makeText(EditRecipeActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
                 // TODO: 2/2/21 Image picker isn't working properly.
             }
         });

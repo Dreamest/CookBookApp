@@ -89,12 +89,12 @@ public class AddFriendActivity extends BaseActivity {
                         String friendID = user.child(UtilityPack.KEYS.USER_ID).getValue(String.class);
                         long pendingRequests = user.child(UtilityPack.KEYS.PENDING_FRIENDS).getChildrenCount();
                         ref.child(friendID).child(UtilityPack.KEYS.PENDING_FRIENDS).child(currentUserID).setValue(currentUserID); //could've called User.actionToCurrentUser instead, but half the work has already been done here so just continuing.
-                        Toast.makeText(AddFriendActivity.this, "Request sent.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddFriendActivity.this, R.string.friend_request_send, Toast.LENGTH_SHORT).show();
                         finish();
                         return;
                     }
                 }
-                Toast.makeText(AddFriendActivity.this, "User not in database", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddFriendActivity.this, R.string.user_not_in_database, Toast.LENGTH_SHORT).show();
             }
 
             @Override

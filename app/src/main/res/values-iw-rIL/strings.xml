@@ -51,4 +51,17 @@
     <string name="friendslist">רשימת חברים</string>
     <string name="no_pending_recipes">אין מתכונים ממתינים</string>
     <string name="no_friend_requests">אין בקשות חברות</string>
+    <string name="logging_out">מבצע התנתקות</string>
+    <string name="friend_request_send">בקשת חברות נשלחה</string>
+    <string name="recipe_added">המתכון נוסף</string>
+    <string name="friend_added">הוספת חבר הצליחה</string>
+    <string name="recipe_shared">המתכון שותף</string>
+    <string name="user_not_in_database">המשתמש לא קיים במאגר</string>
+    <string name="recipe_ignored">המתכון הוסר</string>
+    <string name="not_implemented">לא ממומש</string>
+    <string name="verification_failed">אימות נכשל</string>
+    <string name="signed_in_successfully">התחברות בוצעה בהצלחה</string>
+    <string name="invalid_code">קוד שגוי</string>
+    <string name="request_removed">הבקשה הוסרה</string>
+    <string name="time_out_try_again">נגמר הזמן. נסה שוב</string>
 </resources>
