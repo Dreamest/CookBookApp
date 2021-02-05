@@ -11,44 +11,28 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class User {
     private String userID;
-    private ArrayList<String> myRecipes;
-    private ArrayList<String> myFriends;
-    private ArrayList<String> myChats;
-    private ArrayList<String> pendingRecipes;
-    private ArrayList<String> pendingFriends;
+    private HashMap<String, String> myRecipes;
+    private HashMap<String, String> myFriends;
+    private HashMap<String, String> myChats;
+    private HashMap<String, String> pendingRecipes;
+    private HashMap<String, String> pendingFriends;
     private String displayName;
     private String phoneNumber;
     private StorageReference profileImage;
 
+    public static final int ADD = 1;
+    public static final int REMOVE = 2;
+
     public User(){
-        myRecipes = new ArrayList<>();
-        myFriends = new ArrayList<>();
-        myChats = new ArrayList<>();
-        pendingRecipes = new ArrayList<>();
-        pendingFriends = new ArrayList<>();
-    }
-
-
-
-    public ArrayList<String> getPendingRecipes() {
-        return pendingRecipes;
-    }
-
-    public User setPendingRecipes(ArrayList<String> pendingRecipes) {
-        this.pendingRecipes = pendingRecipes;
-        return this;
-    }
-
-    public ArrayList<String> getPendingFriends() {
-        return pendingFriends;
-    }
-
-    public User setPendingFriends(ArrayList<String> pendingFriends) {
-        this.pendingFriends = pendingFriends;
-        return this;
+        myRecipes = new HashMap<>();
+        myFriends = new HashMap<>();
+        myChats = new HashMap<>();
+        pendingRecipes = new HashMap<>();
+        pendingFriends = new HashMap<>();
     }
 
     public StorageReference getProfileImage() {
@@ -60,35 +44,28 @@ public class User {
         return this;
     }
 
-    public static void addToCurrentUserDatabase(String id, int position, String key) {
+    public static void actionToCurrentUserDatabase(int action, String id, String key) {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
                 .child(firebaseUser.getUid())
                 .child(key)
-                .child(String.valueOf(position));
-        ref.setValue(id);
+                .child(id);
+        if(action == ADD) {
+            ref.setValue(id);
+        } else if (action == REMOVE) {
+            ref.removeValue();
+        }
     }
-
-    public static void removePendingFromCurrentUser(int position, String pendingType) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
-                .child(FirebaseAuth.getInstance().getUid())
-                .child(pendingType)
-                .child(String.valueOf(position));
-        ref.removeValue();
-    }
-
-
-    public static void addFriendToCurrentUserDatabase(String friendID, int position) {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
-                .child(firebaseUser.getUid())
-                .child(UtilityPack.KEYS.MY_FRIENDS)
-                .child(String.valueOf(position));
-        ref.setValue(friendID);
-    }
+//    public static void addFriendToCurrentUserDatabase(String friendID, int position) {
+//        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
+//                .child(firebaseUser.getUid())
+//                .child(UtilityPack.KEYS.MY_FRIENDS)
+//                .child(String.valueOf(position));
+//        ref.setValue(friendID);
+//    }
 
     public String getUserID() {
         return userID;
@@ -96,33 +73,6 @@ public class User {
 
     public User setUserID(String userID) {
         this.userID = userID;
-        return this;
-    }
-
-    public ArrayList<String> getMyRecipes() {
-        return myRecipes;
-    }
-
-    public User setMyRecipes(ArrayList<String> myRecipes) {
-        this.myRecipes = myRecipes;
-        return this;
-    }
-
-    public ArrayList<String> getMyFriends() {
-        return myFriends;
-    }
-
-    public User setMyFriends(ArrayList<String> myFriends) {
-        this.myFriends = myFriends;
-        return this;
-    }
-
-    public ArrayList<String> getMyChats() {
-        return myChats;
-    }
-
-    public User setMyChats(ArrayList<String> myChats) {
-        this.myChats = myChats;
         return this;
     }
 
@@ -157,5 +107,50 @@ public class User {
                 .build();
         firebaseUser.updateProfile(profileUpdates);
         firebaseAuth.updateCurrentUser(firebaseUser);
+    }
+
+    public HashMap<String, String> getMyRecipes() {
+        return myRecipes;
+    }
+
+    public User setMyRecipes(HashMap<String, String> myRecipes) {
+        this.myRecipes = myRecipes;
+        return this;
+    }
+
+    public HashMap<String, String> getMyFriends() {
+        return myFriends;
+    }
+
+    public User setMyFriends(HashMap<String, String> myFriends) {
+        this.myFriends = myFriends;
+        return this;
+    }
+
+    public HashMap<String, String> getMyChats() {
+        return myChats;
+    }
+
+    public User setMyChats(HashMap<String, String> myChats) {
+        this.myChats = myChats;
+        return this;
+    }
+
+    public HashMap<String, String> getPendingRecipes() {
+        return pendingRecipes;
+    }
+
+    public User setPendingRecipes(HashMap<String, String> pendingRecipes) {
+        this.pendingRecipes = pendingRecipes;
+        return this;
+    }
+
+    public HashMap<String, String> getPendingFriends() {
+        return pendingFriends;
+    }
+
+    public User setPendingFriends(HashMap<String, String> pendingFriends) {
+        this.pendingFriends = pendingFriends;
+        return this;
     }
 }

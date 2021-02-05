@@ -48,6 +48,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         Recipe recipe = mData.get(position);
         holder.listRecipe_TXT_title.setText(recipe.getTitle());
 
+/*
+        Calling the FirebaseDatabase from here ensures that the user's DisplayName is up to date as we don't actually store it in recipe
+        This is intentional because if we wanted to update a user's name in all his recipes otherwise, we would have to iterate over all recipes and fix manually in every one.
+        Which might be smarter for a small database with a few users and a few recipes, but it's a good practice to think about the future.
+ */
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(recipe.getOwnerID()).child(UtilityPack.KEYS.DISPLAY_NAME);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {

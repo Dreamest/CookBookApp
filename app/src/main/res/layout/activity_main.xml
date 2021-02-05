@@ -36,6 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
 
+        android:visibility="gone"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_marginTop="5dp"
         android:backgroundTint="@color/teal_200"

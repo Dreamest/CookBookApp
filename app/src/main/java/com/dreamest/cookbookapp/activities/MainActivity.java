@@ -33,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class MainActivity extends BaseActivity {
 
@@ -53,11 +54,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        myRecipesList = new ArrayList<>();
-        pendingRecipes = new ArrayList<>();
-
         findViews();
-
         initViews();
     }
     
@@ -68,7 +65,9 @@ public class MainActivity extends BaseActivity {
             preformLogout();
         }
         //onResume so it'll update on returning to the activity
-        loadUserRecipesFromDatabase();
+        myRecipesList = new ArrayList<>();
+        pendingRecipes = new ArrayList<>();
+        loadCurrentUserRecipesFromDatabase();
         loadPendingRecipes();
         loadCurrentUser();
     }
@@ -85,22 +84,25 @@ public class MainActivity extends BaseActivity {
     /**
      * Loads all recipes that belong to the current user to a recyclerView
      */
-    private void loadUserRecipesFromDatabase() {
+    private void loadCurrentUserRecipesFromDatabase() {
+
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
                 .child(firebaseUser.getUid())
                 .child(UtilityPack.KEYS.MY_RECIPES);
 
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     main_TXT_no_recipes.setVisibility(View.GONE);
-                    Iterable<DataSnapshot> recipeIds = snapshot.getChildren();
-                    for(DataSnapshot id: recipeIds) {
-                        loadRecipe(id, database, MY_RECIPES);
+                    Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
+                    while(iterator.hasNext()) {
+                        DataSnapshot recipeSnapshot = iterator.next();
+                            loadRecipe(recipeSnapshot, database, MY_RECIPES, !iterator.hasNext());
                     }
+
                 } else { //No recipes
                     main_TXT_no_recipes.setVisibility(View.VISIBLE);
                 }
@@ -122,9 +124,7 @@ public class MainActivity extends BaseActivity {
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                loadRecipe(snapshot, database, PENDING_RECIPES);
-                String message = getString(R.string.you_have) + " " + pendingRecipes.size() + " " + getString(R.string.pending_recipes);
-                main_BTN_pending.setVisibility(View.VISIBLE);
+                loadRecipe(snapshot, database, PENDING_RECIPES, false);
             }
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
@@ -146,7 +146,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void removePending(DataSnapshot id) {
-//        pendingRecipes.removeIf(recipe -> recipe.getRecipeID().equals(id)); //requires SDK 26 ask Guy
         for(Recipe recipe: pendingRecipes) {
             if(recipe.getRecipeID().equals(id.getValue())) {
                 pendingRecipes.remove(recipe);
@@ -155,17 +154,16 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-
     /**
      * Loads a recipe from firebase into recyclerView
      * @param id Recipe ID
      * @param database firebase database
      */
-    //This functions needs to be here and not in Recipe to be able to handle the adapter synchronically.
-    private void loadRecipe(DataSnapshot id, FirebaseDatabase database, int loadTo) {
+    //This functions needs to be here and not in Recipe to be able to handle the adapter properly.
+    private void loadRecipe(DataSnapshot id, FirebaseDatabase database, int loadTo, boolean last) {
         DatabaseReference recipeRef = database.getReference(UtilityPack.KEYS.RECIPES)
                 .child(id.getValue(String.class));
-        recipeRef.addValueEventListener(new ValueEventListener() {
+        recipeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 //                Recipe recipe = new Recipe()
@@ -180,12 +178,16 @@ public class MainActivity extends BaseActivity {
 //                        .setPrepTime(snapshot.child(UtilityPack.KEYS.PREP_TIME).getValue(Integer.class))
 //                        .setTitle(snapshot.child(UtilityPack.KEYS.TITLE).getValue(String.class));
 //                myRecipesList.add(recipe);
-
                 if(loadTo == MY_RECIPES) {
                     myRecipesList.add(snapshot.getValue(Recipe.class));
-                    initAdapter();
+                    if(last) {
+                        initAdapter();
+                    }
                 } else if(loadTo == PENDING_RECIPES) {
                     pendingRecipes.add(snapshot.getValue(Recipe.class));
+                    String message = getString(R.string.you_have) + " " + pendingRecipes.size() + " " + getString(R.string.pending_recipes);
+                    main_BTN_pending.setText(message);
+                    main_BTN_pending.setVisibility(View.VISIBLE);
                 }
             }
             @Override
@@ -209,8 +211,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initViews() {
-        initAdapter();
-
         main_BTN_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -244,12 +244,11 @@ public class MainActivity extends BaseActivity {
 
     private void openPendingRecipes() {
         Intent myIntent = new Intent(this, PendingRecipesActivity.class);
-        myIntent.putExtra(MySharedPreferences.KEYS.RECIPE_COUNT, myRecipesList.size());
         MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPES_LIST, pendingRecipes);
         startActivity(myIntent);
     }
 
-    private void loadCurrentUser() {
+    private void loadCurrentUser() { // TODO: 2/5/21 might be smart to make static and move under User
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(uid);
@@ -271,14 +270,6 @@ public class MainActivity extends BaseActivity {
         startActivity(myIntent);
     }
 
-    private <T> ArrayList<T> getListFromDatabase(DataSnapshot dataSnapshot) {
-        ArrayList<T> list = new ArrayList<>();
-        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-            list.add((T)postSnapshot.getValue());
-        }
-        return list;
-    }
-
     private void toFriendsList() {
         MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.USER, currentUser);
         Intent myIntent = new Intent(MainActivity.this, FriendsListActivity.class);
@@ -286,9 +277,9 @@ public class MainActivity extends BaseActivity {
     }
 
     private void addNewRecipe() {
+        Log.d("dddd", "New recipe clicked");
         MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, new Recipe());
         Intent myIntent = new Intent(this, EditRecipeActivity.class);
-        myIntent.putExtra(MySharedPreferences.KEYS.RECIPE_COUNT, myRecipesList.size());
         startActivity(myIntent);
     }
 

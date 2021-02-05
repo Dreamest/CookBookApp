@@ -47,6 +47,7 @@ public class AddFriendActivity extends AppCompatActivity {
 
     private void loadCurrentFriends() {
         currentFriends = (ArrayList<User>) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.FRIENDS_ARRAY, new ArrayList<>());
+        pendingFriends = new ArrayList<>(); // TODO: 2/5/21 actually load from sharedPreferences
     }
 
     private void initViews() {
@@ -81,9 +82,10 @@ public class AddFriendActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot user: snapshot.getChildren()) {
                     if(user.child(UtilityPack.KEYS.PHONE_NUMBER).getValue(String.class).equals(searchValue)) {
+                        String currentUserID = FirebaseAuth.getInstance().getUid();
                         String friendID = user.child(UtilityPack.KEYS.USER_ID).getValue(String.class);
                         long pendingRequests = user.child(UtilityPack.KEYS.PENDING_FRIENDS).getChildrenCount();
-                        ref.child(friendID).child(UtilityPack.KEYS.PENDING_FRIENDS).child(String.valueOf(pendingRequests)).setValue(FirebaseAuth.getInstance().getUid());
+                        ref.child(friendID).child(UtilityPack.KEYS.PENDING_FRIENDS).child(currentUserID).setValue(currentUserID); //could've called User.actionToCurrentUser instead, but half the work has already been done here so just continuing.
                         Toast.makeText(AddFriendActivity.this, "Request sent.", Toast.LENGTH_SHORT).show();
                         finish();
                         return;

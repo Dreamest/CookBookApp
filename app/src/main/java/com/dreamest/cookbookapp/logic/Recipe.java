@@ -61,15 +61,6 @@ public class Recipe {
         return this;
     }
 
-//    public String getOwner() {
-//        return owner;
-//    }
-//
-//    public Recipe setOwner(String owner) {
-//        this.owner = owner;
-//        return this;
-//    }
-
     public String getDate() {
         return date;
     }

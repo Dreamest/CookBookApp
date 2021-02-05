@@ -77,10 +77,14 @@ public class LoginActivity extends BaseActivity {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         Log.d("dddd", "user = " + firebaseUser);
         if (firebaseUser != null) {
-//            firebaseAuth.signOut(); // enable for testing
-//            finish();
+//            stayInActivity(); enable for testing
             userSignedIn(firebaseUser);
         }
+    }
+
+    private void stayInActivity() {
+            firebaseAuth.signOut();
+            finish();
     }
 
     private void codeEntered() {

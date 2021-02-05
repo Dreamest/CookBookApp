@@ -53,6 +53,7 @@
     <string name="share_recipe">Share recipe with</string>
     <string name="pending_friends">pending friends</string>
     <string name="friend_requests">Friend requests</string>
+    <string name="friendslist">Friendslist</string>
 
 
 </resources>

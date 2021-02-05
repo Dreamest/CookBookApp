@@ -50,13 +50,11 @@ public class EditRecipeActivity extends BaseActivity {
     private Recipe recipe;
     private ArrayList<Ingredient> ingredients;
     private int difficulty;
-    private int recipeCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_recipe);
-        recipeCount = getIntent().getIntExtra(MySharedPreferences.KEYS.RECIPE_COUNT, 0);
         findViews();
         loadRecipe();
         initViews();
@@ -89,8 +87,8 @@ public class EditRecipeActivity extends BaseActivity {
         edit_CTR_prepTime.setCurrentValue((double) recipe.getPrepTime());
         edit_CTR_prepTime.setDisplayingInteger(true);
         /*
-        Code for this library is slightly faulty. setCurrentValue updates the stored value but not the view.
-        Calling setDisplayInteger activates a private function that updates the view.
+        Code for HorizontalCounter is kinda weird. setCurrentValue updates the stored value but not the view.
+        Calling setDisplayInteger activates a private function that updates the view. We want it to be int, anyways.
         */
 
         loadIngredientsAdapter();
@@ -224,7 +222,7 @@ public class EditRecipeActivity extends BaseActivity {
         updateRecipe();
         MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe);
         recipe.storeInFirebase();
-        User.addToCurrentUserDatabase(recipe.getRecipeID(), recipeCount, UtilityPack.KEYS.MY_RECIPES);
+        User.actionToCurrentUserDatabase(User.ADD, recipe.getRecipeID(), UtilityPack.KEYS.MY_RECIPES);
         finish();
     }
 

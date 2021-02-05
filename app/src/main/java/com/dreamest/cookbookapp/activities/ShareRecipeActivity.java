@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.FriendAdapter;
@@ -21,9 +20,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ShareRecipeActivity extends AppCompatActivity {
     private RecyclerView share_LST_friends;
@@ -38,9 +37,9 @@ public class ShareRecipeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_share_recipe);
         recipeToShare = getIntent().getStringExtra(UtilityPack.KEYS.RECIPE_ID);
         currentUser = (User) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.USER, new User());
+        friendslist = new ArrayList<>();
         findViews();
         loadFriendsFromDatabase();
-        initAdapter();
     }
 
     private void findViews() {
@@ -67,21 +66,23 @@ public class ShareRecipeActivity extends AppCompatActivity {
         DatabaseReference ref = database
                 .getReference(UtilityPack.KEYS.USERS)
                 .child(friendUID)
-                .child(UtilityPack.KEYS.PENDING_RECIPES);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                long count = snapshot.getChildrenCount(); //How many pending recipes the user currently have
-                ref.child(String.valueOf(count)).setValue(recipeToShare); //Ensures the storing method is array
-                Toast.makeText(ShareRecipeActivity.this, "Recipe shared", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("dddd", "Failed to read value.", error.toException());
-            }
-        });
+                .child(UtilityPack.KEYS.PENDING_RECIPES).child(recipeToShare);
+        ref.setValue(recipeToShare);
+        // TODO: 2/5/21 assumption: Adding an onSuccess listener here for toast will work only if new value is added?
+//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                long count = snapshot.getChildrenCount(); //How many pending recipes the user currently have
+//                ref.child(String.valueOf(count)).setValue(recipeToShare); //Ensures the storing method is array
+//                Toast.makeText(ShareRecipeActivity.this, "Recipe shared", Toast.LENGTH_SHORT).show();
+//                finish();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Log.w("dddd", "Failed to read value.", error.toException());
+//            }
+//        });
     }
 
     private void loadFriendsFromDatabase() {
@@ -96,9 +97,10 @@ public class ShareRecipeActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()) {
                     share_TXT_no_friends.setVisibility(View.GONE);
-                    Iterable<DataSnapshot> friendsIDs = snapshot.getChildren();
-                    for (DataSnapshot id : friendsIDs) {
-                        loadUserFromDatabase(id, database);
+                    Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
+                    while(iterator.hasNext()) {
+                        DataSnapshot friendSnapshot = iterator.next();
+                        loadFriend(friendSnapshot, database, !iterator.hasNext());
                     }
                 } else {
                     share_TXT_no_friends.setVisibility(View.VISIBLE);
@@ -112,20 +114,18 @@ public class ShareRecipeActivity extends AppCompatActivity {
         });
     }
 
-    private void loadUserFromDatabase(DataSnapshot id, FirebaseDatabase database) {
+    private void loadFriend(DataSnapshot id, FirebaseDatabase database, boolean last) {
         DatabaseReference friendRef = database.getReference(UtilityPack.KEYS.USERS)
                 .child(id.getValue(String.class));
         friendRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User friend = new User()
-                        .setDisplayName(snapshot.child(UtilityPack.KEYS.DISPLAY_NAME).getValue(String.class))
-                        .setProfileImage(snapshot.child(UtilityPack.KEYS.PROFILE_IMAGE).getValue(StorageReference.class));
-                //Don't care about other values
-
+                User friend = snapshot.getValue(User.class);
                 Log.d("dddd", "The name is: " + friend.getDisplayName() );
                 friendslist.add(friend);
-                initAdapter();
+                if(last) {
+                    initAdapter();
+                }
             }
 
             @Override

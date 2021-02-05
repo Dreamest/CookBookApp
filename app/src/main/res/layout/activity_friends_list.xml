@@ -14,7 +14,7 @@
         android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
 
-        android:text="@string/pending_recipes"
+        android:text="@string/friendslist"
         android:textSize="45sp"
         />
 
@@ -26,6 +26,7 @@
         android:layout_margin="10dp"
         android:layout_below="@id/friendslist_TXT_title"
 
+        android:visibility="gone"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_marginTop="5dp"
         android:backgroundTint="@color/teal_200"
