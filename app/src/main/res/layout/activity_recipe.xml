@@ -35,6 +35,18 @@
             android:background="@drawable/ic_edit"
             android:elevation="20dp" />
 
+        <ImageButton
+            android:id="@+id/recipe_BTN_remove"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recipe_BTN_edit"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+
+            android:background="@drawable/ic_remove"
+            android:elevation="20dp" />
+
         <TextView
             android:id="@+id/recipe_TXT_title"
 

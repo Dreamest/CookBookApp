@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 public class RecipeActivity extends BaseActivity {
     private ImageButton recipe_BTN_share;
     private ImageButton recipe_BTN_edit;
+    private ImageButton recipe_BTN_remove;
     private TextView recipe_TXT_title;
     private TextView recipe_TXT_owner;
     private TextView recipe_TXT_date;
@@ -68,6 +69,24 @@ public class RecipeActivity extends BaseActivity {
             }
         });
 
+        recipe_BTN_remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeRecipe();
+            }
+        });
+
+    }
+
+    private void removeRecipe() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database
+                .getReference(UtilityPack.KEYS.USERS)
+                .child(FirebaseAuth.getInstance().getUid())
+                .child(UtilityPack.KEYS.MY_RECIPES)
+                .child(recipe.getRecipeID());
+        ref.removeValue();
+        finish();
     }
 
     private void visualizeRecipe() {
@@ -130,6 +149,7 @@ public class RecipeActivity extends BaseActivity {
     private void findViews() {
         recipe_BTN_share = findViewById(R.id.recipe_BTN_share);
         recipe_BTN_edit = findViewById(R.id.recipe_BTN_edit);
+        recipe_BTN_remove = findViewById(R.id.recipe_BTN_remove);
         recipe_TXT_title = findViewById(R.id.recipe_TXT_title);
         recipe_TXT_owner = findViewById(R.id.recipe_TXT_owner);
         recipe_TXT_date = findViewById(R.id.recipe_TXT_date);
