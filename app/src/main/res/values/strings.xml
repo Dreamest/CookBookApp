@@ -54,6 +54,8 @@
     <string name="pending_friends">pending friends</string>
     <string name="friend_requests">Friend requests</string>
     <string name="friendslist">Friendslist</string>
+    <string name="no_pending_recipes">No pending recipes</string>
+    <string name="no_friend_requests">No friend requests</string>
 
 
 </resources>

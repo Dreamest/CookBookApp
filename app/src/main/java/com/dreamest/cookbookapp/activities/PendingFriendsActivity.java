@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamest.cookbookapp.R;
@@ -23,6 +25,7 @@ public class PendingFriendsActivity extends BaseActivity {
     // TODO: 2/4/21 untested. 
     private RecyclerView pending_friend_LST_recipes;
     private ArrayList<User> pendingFriends;
+    private TextView pending_friend_TXT_no_pending;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,13 @@ public class PendingFriendsActivity extends BaseActivity {
 
         findViews();
         initAdapter();
+        showNoPending();
+    }
+
+    private void showNoPending() {
+        if(pendingFriends.size() == 0) {
+            pending_friend_TXT_no_pending.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initAdapter() {
@@ -49,7 +59,7 @@ public class PendingFriendsActivity extends BaseActivity {
                 User.actionToCurrentUserDatabase(User.REMOVE, friend.getUserID(), UtilityPack.KEYS.PENDING_FRIENDS);
                 pendingFriends.remove(position);
                 Toast.makeText(PendingFriendsActivity.this, "Friend added", Toast.LENGTH_SHORT).show();
-
+                showNoPending();
                 pending_friend_LST_recipes.setAdapter(pendingFriendAdapter);
 
             }
@@ -61,6 +71,7 @@ public class PendingFriendsActivity extends BaseActivity {
 
                 User.actionToCurrentUserDatabase(User.REMOVE, friend.getUserID(), UtilityPack.KEYS.PENDING_FRIENDS);
                 Toast.makeText(PendingFriendsActivity.this, "Request removed", Toast.LENGTH_SHORT).show();
+                showNoPending();
 
                 pending_friend_LST_recipes.setAdapter(pendingFriendAdapter);
 
@@ -71,5 +82,6 @@ public class PendingFriendsActivity extends BaseActivity {
 
     private void findViews() {
         pending_friend_LST_recipes = findViewById(R.id.pending_friend_LST_recipes);
+        pending_friend_TXT_no_pending = findViewById(R.id.pending_friend_TXT_no_pending);
     }
 }

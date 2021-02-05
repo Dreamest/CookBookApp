@@ -49,4 +49,6 @@
     <string name="pending_friends">חברים ממתינים</string>
     <string name="friend_requests">בקשות חברות</string>
     <string name="friendslist">רשימת חברים</string>
+    <string name="no_pending_recipes">אין מתכונים ממתינים</string>
+    <string name="no_friend_requests">אין בקשות חברות</string>
 </resources>
