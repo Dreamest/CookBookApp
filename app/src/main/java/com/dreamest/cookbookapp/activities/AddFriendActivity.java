@@ -23,11 +23,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.reflect.TypeToken;
 import com.rilixtech.CountryCodePicker;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class AddFriendActivity extends AppCompatActivity {
+public class AddFriendActivity extends BaseActivity {
     private CountryCodePicker add_friend_CCP_code_picker;
     private TextInputEditText add_friend_EDT_input;
     private MaterialButton add_friend_BTN_search;
@@ -46,8 +48,9 @@ public class AddFriendActivity extends AppCompatActivity {
     }
 
     private void loadCurrentFriends() {
-        currentFriends = (ArrayList<User>) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.FRIENDS_ARRAY, new ArrayList<>());
-        pendingFriends = new ArrayList<>(); // TODO: 2/5/21 actually load from sharedPreferences
+        Type listType = new TypeToken<ArrayList<User>>(){}.getType();
+        currentFriends = (ArrayList<User>) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.FRIENDSLIST_ARRAY, new ArrayList<User>(), listType);
+        pendingFriends = (ArrayList<User>) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.PENDING_FRIENDS_ARRAY, new ArrayList<User>(), listType);
     }
 
     private void initViews() {

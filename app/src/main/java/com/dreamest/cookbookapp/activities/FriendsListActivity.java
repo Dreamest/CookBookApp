@@ -74,8 +74,6 @@ public class FriendsListActivity extends BaseActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 loadFriend(snapshot, database, PENDING_FRIENDS, false);
-                String message = getString(R.string.you_have) + " " + pendingFriends.size() + " " + getString(R.string.pending_recipes);
-                friendslist_BTN_pending.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -154,6 +152,9 @@ public class FriendsListActivity extends BaseActivity {
                     }
                 } else if (loadTo == PENDING_FRIENDS) {
                     pendingFriends.add(friend);
+                    String message = getString(R.string.you_have) + " " + pendingFriends.size() + " " + getString(R.string.pending_friends);
+                    friendslist_BTN_pending.setText(message);
+                    friendslist_BTN_pending.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -214,13 +215,15 @@ public class FriendsListActivity extends BaseActivity {
     }
 
     private void pendingFriends() {
-        // TODO: 2/5/21 implement gotoactivity 
+        Intent myIntent = new Intent(this, PendingFriendsActivity.class);
+        MySharedPreferences.getMsp().putObject(UtilityPack.KEYS.PENDING_FRIENDS, pendingFriends);
+        startActivity(myIntent);
     }
 
     private void addNewFriend() {
         Intent myIntent = new Intent(this, AddFriendActivity.class);
-        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.FRIENDS_ARRAY, friendslist);
-        // TODO: 2/5/21 also send pendingFriends list
+        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.FRIENDSLIST_ARRAY, friendslist);
+        MySharedPreferences.getMsp().putObject(UtilityPack.KEYS.PENDING_FRIENDS, pendingFriends);
         startActivity(myIntent);
     }
 

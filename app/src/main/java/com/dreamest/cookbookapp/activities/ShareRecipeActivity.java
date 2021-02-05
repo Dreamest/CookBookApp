@@ -24,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class ShareRecipeActivity extends AppCompatActivity {
+public class ShareRecipeActivity extends BaseActivity {
     private RecyclerView share_LST_friends;
     private TextView share_TXT_no_friends;
     private String recipeToShare;
@@ -36,7 +36,7 @@ public class ShareRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_recipe);
         recipeToShare = getIntent().getStringExtra(UtilityPack.KEYS.RECIPE_ID);
-        currentUser = (User) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.USER, new User());
+        currentUser = (User) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.USER, new User(), User.class);
         friendslist = new ArrayList<>();
         findViews();
         loadFriendsFromDatabase();

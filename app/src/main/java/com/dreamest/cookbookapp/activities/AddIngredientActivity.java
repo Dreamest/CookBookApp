@@ -15,7 +15,7 @@ import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class AddIngredientActivity extends AppCompatActivity {
+public class AddIngredientActivity extends BaseActivity {
 
     private TextInputEditText add_ingredient_EDT_ingredient;
     private TextInputEditText add_ingredient_EDT_amount;

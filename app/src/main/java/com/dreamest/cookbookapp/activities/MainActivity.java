@@ -244,7 +244,7 @@ public class MainActivity extends BaseActivity {
 
     private void openPendingRecipes() {
         Intent myIntent = new Intent(this, PendingRecipesActivity.class);
-        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPES_LIST, pendingRecipes);
+        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.MY_RECIPES_ARRAY, pendingRecipes);
         startActivity(myIntent);
     }
 
@@ -271,7 +271,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void toFriendsList() {
-        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.USER, currentUser);
         Intent myIntent = new Intent(MainActivity.this, FriendsListActivity.class);
         startActivity(myIntent);
     }

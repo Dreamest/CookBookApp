@@ -126,7 +126,7 @@ public class RecipeActivity extends BaseActivity {
     }
 
     private void loadRecipe() {
-        recipe = (Recipe) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.RECIPE, new Recipe());
+        recipe = (Recipe) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.RECIPE, new Recipe(), Recipe.class);
     }
 
     private void findViews() {

@@ -13,10 +13,12 @@ import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.UtilityPack;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class PendingRecipesActivity extends AppCompatActivity {
+public class PendingRecipesActivity extends BaseActivity {
     // TODO: 2/4/21 untested.
     private RecyclerView pending_recipe_LST_recipes;
     private ArrayList<Recipe> pendingRecipes;
@@ -25,7 +27,8 @@ public class PendingRecipesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending_recipes);
-        pendingRecipes = (ArrayList<Recipe>) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.RECIPES_LIST, new ArrayList<>());
+        Type listType = new TypeToken<ArrayList<Recipe>>(){}.getType();
+        pendingRecipes = (ArrayList<Recipe>) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.MY_RECIPES_ARRAY, new ArrayList<Recipe>(), listType);
         findViews();
         initAdapter();
     }

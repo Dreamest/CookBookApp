@@ -2,8 +2,13 @@ package com.dreamest.cookbookapp.utility;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.google.gson.Gson;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MySharedPreferences {
 
@@ -82,12 +87,29 @@ public class MySharedPreferences {
      * @param defaultValue if loading failed, will load this
      * @return object saved under key
      */
-    public Object getObject(String key, Object defaultValue) {
+    public Object getObject(String key, Object defaultValue, Type objectType) {
         String objectJson = getString(key, KEYS.NO_OBJECT);
         if (objectJson.equals(KEYS.NO_OBJECT))
             return defaultValue;
-        return gson.fromJson(objectJson, defaultValue.getClass());
+        return gson.fromJson(objectJson, objectType);
     }
+
+//    public void putListObject(String key, List listObject) {
+//        List<String> jsonList = new ArrayList<>();
+//        for(Object o: listObject) {
+//            jsonList.add(gson.toJson(o));
+//        }
+//        putString(key, gson.toJson(jsonList));
+//
+//    }
+//
+//    public Object getListObject(String key, Object defaultValue, Object defaultElementValue) {
+//        String objectJson = getString(key, KEYS.NO_OBJECT);
+//        if(objectJson.equals(KEYS.NO_OBJECT)) {
+//            return defaultValue;
+//        }
+//
+//    }
 
     public interface KEYS {
         String MY_SP = "MY_SP";
@@ -99,10 +121,11 @@ public class MySharedPreferences {
         String LOGOUT = "LOGOUT";
         boolean LOGOUT_SIGNAL = true;
         boolean STAY_LOGGED = false;
-        String FRIENDS_COUNT = "FRIENDS_COUNT";
-        String RECIPE_COUNT = "RECIPE_COUNT";
-        String FRIENDS_ARRAY = "FRIENDS_ARRAY";
-        String RECIPES_LIST = "RECIPES_LIST";
+        String FRIENDSLIST_ARRAY = "FRIENDS_ARRAY";
+        String PENDING_FRIENDS_ARRAY = "PENDING_FRIENDS_ARRAY";
+        String MY_RECIPES_ARRAY = "RECIPES_LIST";
+        String PENDING_RECIPES_ARRAY = "PENDING_RECIPES_ARRAY";
+
     }
 
 

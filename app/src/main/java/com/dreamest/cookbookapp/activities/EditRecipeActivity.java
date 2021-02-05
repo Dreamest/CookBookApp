@@ -70,7 +70,7 @@ public class EditRecipeActivity extends BaseActivity {
     }
 
     private void loadRecipe() {
-        recipe = (Recipe) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.RECIPE, new Recipe());
+        recipe = (Recipe) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.RECIPE, new Recipe(), Recipe.class);
         ingredients = recipe.getIngredients();
         difficulty = recipe.getDifficulty();
         edit_EDT_title.setText(recipe.getTitle());
@@ -208,7 +208,7 @@ public class EditRecipeActivity extends BaseActivity {
         super.onResume();
         if(MySharedPreferences.getMsp().getBoolean(MySharedPreferences.KEYS.UPDATED_INGREDIENT, false)) {
             MySharedPreferences.getMsp().putBoolean(MySharedPreferences.KEYS.UPDATED_INGREDIENT, false);
-            ingredients.add((Ingredient) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.INGREDIENT, new Ingredient()));
+            ingredients.add((Ingredient) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.INGREDIENT, new Ingredient(), Ingredient.class));
             loadIngredientsAdapter();
 
         }

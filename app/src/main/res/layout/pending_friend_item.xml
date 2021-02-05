@@ -54,28 +54,30 @@
 
             android:text="@string/phone_number"
             android:textSize="20sp" />
-
-        <ImageButton
-            android:id="@+id/pending_item_friend_BTN_add"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_below="@id/pending_item_friend_TXT_phoneNumber"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="100dp"
-            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
 
-            android:background="@drawable/ic_check" />
+            >
+            <ImageButton
+                android:id="@+id/pending_item_friend_BTN_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="50dp"
 
-        <ImageButton
-            android:id="@+id/pending_item_friend_BTN_remove"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/pending_item_friend_TXT_phoneNumber"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="100dp"
+                android:background="@drawable/ic_check" />
 
-            android:background="@drawable/ic_remove" />
+            <ImageButton
+                android:id="@+id/pending_item_friend_BTN_remove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:background="@drawable/ic_remove" />
+        </LinearLayout>
 
     </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>

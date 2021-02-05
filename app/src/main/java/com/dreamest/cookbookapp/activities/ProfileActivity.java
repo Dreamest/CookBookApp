@@ -42,7 +42,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void updateViews() {
-        user = (User) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.USER, new User());
+        user = (User) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.USER, new User(), User.class);
         profile_TXT_username.setText(user.getDisplayName());
         Glide
                 .with(this)
