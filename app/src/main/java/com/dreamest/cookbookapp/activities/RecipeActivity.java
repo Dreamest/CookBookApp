@@ -121,8 +121,10 @@ public class RecipeActivity extends BaseActivity {
     }
 
     private void shareRecipe() {
-        Log.d("dddd", "share clicked");
-        // TODO: 1/28/21 Implement later 
+        Intent myIntent = new Intent(this, ShareRecipeActivity.class);
+        myIntent.putExtra(UtilityPack.KEYS.RECIPE_ID, recipe.getRecipeID()); //ID of the recipe to share
+        startActivity(myIntent);
+
     }
 
     private void loadRecipe() {

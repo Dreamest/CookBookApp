@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.FriendAdapter;
@@ -73,6 +74,8 @@ public class ShareRecipeActivity extends BaseActivity {
                 .child(friendUID)
                 .child(UtilityPack.KEYS.PENDING_RECIPES).child(recipeToShare);
         ref.setValue(recipeToShare);
+        Toast.makeText(this, "Recipe shared", Toast.LENGTH_SHORT).show();
+        finish();
         // TODO: 2/5/21 assumption: Adding an onSuccess listener here for toast will work only if new value is added?
     }
 
