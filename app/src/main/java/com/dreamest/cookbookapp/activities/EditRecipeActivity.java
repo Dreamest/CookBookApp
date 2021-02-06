@@ -43,7 +43,6 @@ public class EditRecipeActivity extends BaseActivity {
     private TextInputEditText edit_EDT_method;
     private ImageView edit_IMG_image;
     private MaterialButton edit_BTN_submit;
-    private MaterialButton edit_BTN_preview;
     private RecyclerView edit_LST_ingredients;
     private ImageView[] stars;
     private HorizontalCounter edit_CTR_prepTime;
@@ -139,13 +138,6 @@ public class EditRecipeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 submitRecipe();
-            }
-        });
-
-        edit_BTN_preview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                previewRecipe();
             }
         });
 
@@ -260,7 +252,6 @@ public class EditRecipeActivity extends BaseActivity {
         edit_EDT_method.setImeOptions(EditorInfo.IME_ACTION_DONE);
         edit_IMG_image = findViewById(R.id.edit_IMG_image);
         edit_BTN_submit = findViewById(R.id.edit_BTN_submit);
-        edit_BTN_preview = findViewById(R.id.edit_BTN_preview);
         edit_LST_ingredients = findViewById(R.id.edit_LST_ingredients);
         stars[0] = findViewById(R.id.edit_IMG_star1);
         stars[0].setTag(1);
