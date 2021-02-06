@@ -6,6 +6,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activities.MainActivity">
 
+    <TextView
+        android:id="@+id/main_TXT_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:text="@string/your_cookbook"
+        />
+
     <ImageView
         android:id="@+id/main_IMG_background"
 
@@ -41,6 +54,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_marginTop="5dp"
         android:backgroundTint="@color/teal_200"
+        android:layout_below="@+id/main_TXT_title"
         android:textAllCaps="false"
         android:textColor="@color/black"
         app:cornerRadius="10dp"
