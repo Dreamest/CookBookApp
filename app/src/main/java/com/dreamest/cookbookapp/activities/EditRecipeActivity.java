@@ -284,23 +284,12 @@ public class EditRecipeActivity extends BaseActivity {
         switch (requestCode){
             case UtilityPack.REQUEST_CODES.GILGAR : {
                 File image = new File(data.getExtras().getStringArray(GligarPicker.IMAGES_RESULT)[0]);
-                try {
-                    UCrop
-                            .of(Uri.fromFile(image), Uri.fromFile(File.createTempFile(recipe.getRecipeID(), UtilityPack.FILE_KEYS.img_POSTFIX)))
-                            .withAspectRatio(1, 1)
-                            .start(this, UtilityPack.REQUEST_CODES.UCROP);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                UtilityPack.cropImage(this, image, recipe.getRecipeID());
                 break;
             }
 
             case UtilityPack.REQUEST_CODES.UCROP : {
-                Glide
-                        .with(this)
-                        .load(UCrop.getOutput(data).getPath())
-                        .into(edit_IMG_image)
-                        .onLoadStarted(ContextCompat.getDrawable(this, R.drawable.ic_man_avatar));
+                UtilityPack.loadUCropResult(this, data, edit_IMG_image, R.drawable.ic_no_image);
                 break;
             }
         }

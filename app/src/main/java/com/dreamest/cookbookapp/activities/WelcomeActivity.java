@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.util.Util;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.HideUI;
@@ -120,23 +121,12 @@ public class WelcomeActivity extends BaseActivity {
         switch (requestCode){
             case UtilityPack.REQUEST_CODES.GILGAR : {
                 File image = new File(data.getExtras().getStringArray(GligarPicker.IMAGES_RESULT)[0]);
-                try {
-                    UCrop
-                            .of(Uri.fromFile(image), Uri.fromFile(File.createTempFile(FirebaseAuth.getInstance().getCurrentUser().getUid(), UtilityPack.FILE_KEYS.img_POSTFIX)))
-                            .withAspectRatio(1, 1)
-                            .start(this, UtilityPack.REQUEST_CODES.UCROP);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                UtilityPack.cropImage(this, image, FirebaseAuth.getInstance().getCurrentUser().getUid());
                 break;
             }
 
             case UtilityPack.REQUEST_CODES.UCROP : {
-                Glide
-                    .with(this)
-                    .load(UCrop.getOutput(data).getPath())
-                    .into(welcome_IMG_user_image)
-                    .onLoadStarted(ContextCompat.getDrawable(this, R.drawable.ic_man_avatar));
+                UtilityPack.loadUCropResult(this, data, welcome_IMG_user_image, R.drawable.ic_man_avatar);
                 break;
             }
         }
