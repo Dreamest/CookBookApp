@@ -14,7 +14,7 @@
     <string name="owner_name">Owner McOwnerson</string>
     <string name="prep_time">Prep time: </string>
     <string name="minutes">minutes</string>
-    <string name="difficulty">"Difficulty: "</string>
+    <string name="difficulty">Difficulty:</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
     <string name="ingredient_amount" translatable="false">500</string>
     <string name="ingredient_units_gr">gram</string>
@@ -73,6 +73,7 @@
     <string name="search_contacts">Search contacts</string>
     <string name="search_for_number">Search for number</string>
     <string name="add_contacts">Add contacts</string>
+    <string name="prep_time_minutes">Prep time(minutes):</string>
 
 
 </resources>

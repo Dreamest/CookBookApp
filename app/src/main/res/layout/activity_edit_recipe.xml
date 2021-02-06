@@ -139,12 +139,26 @@
             android:background="@color/black_fade"
             android:clickable="true" />
 
-        <LinearLayout
-            android:id="@+id/edit_LAY_stars"
+        <TextView
+            android:id="@+id/edit_TXT_difficulty"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/edit_IMG_image"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+
+            android:text="@string/difficulty"
+            android:textSize="30sp"
+            />
+
+        <LinearLayout
+            android:id="@+id/edit_LAY_stars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_TXT_difficulty"
+            android:layout_centerHorizontal="true"
+
             android:layoutDirection="ltr"
             android:orientation="horizontal">
 
@@ -207,12 +221,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/edit_LAY_stars"
-            android:layout_alignStart="@id/edit_IMG_image"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
 
-            android:text="@string/prep_time"
-            android:textColor="@color/black"
+            android:text="@string/prep_time_minutes"
             android:textSize="30sp"
-
             />
 
         <com.gildaswise.horizontalcounter.HorizontalCounter
@@ -220,11 +233,10 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edit_LAY_stars"
+            android:layout_below="@id/edit_TXT_prepTime"
             android:layout_centerHorizontal="true"
-            android:layout_toEndOf="@id/edit_TXT_prepTime"
             android:layoutDirection="ltr"
-
+            android:layout_marginTop="10dp"
 
             app:displayAsInteger="true"
             app:initialValue="5"
