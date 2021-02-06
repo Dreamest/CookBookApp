@@ -70,9 +70,9 @@ public class MainActivity extends BaseActivity {
         pendingRecipes = new ArrayList<>();
 
         //onResume so it'll update on returning to the activity
+        loadCurrentUser();
         loadCurrentUserRecipesFromDatabase();
         loadPendingRecipes();
-        loadCurrentUser();
     }
 
 
@@ -106,6 +106,7 @@ public class MainActivity extends BaseActivity {
 
                 } else { //No recipes
                     main_TXT_no_recipes.setVisibility(View.VISIBLE);
+                    initAdapter(); //The adapter needs to be initialized if there are no recipes, too.
                 }
             }
 
