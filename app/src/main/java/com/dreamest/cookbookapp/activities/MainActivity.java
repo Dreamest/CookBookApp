@@ -63,10 +63,13 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         if(FirebaseAuth.getInstance().getCurrentUser() == null) {
             preformLogout();
+            return;
         }
-        //onResume so it'll update on returning to the activity
+        //Since we use lists, on reloading them they need to be emptied first.
         myRecipesList = new ArrayList<>();
         pendingRecipes = new ArrayList<>();
+
+        //onResume so it'll update on returning to the activity
         loadCurrentUserRecipesFromDatabase();
         loadPendingRecipes();
         loadCurrentUser();
@@ -74,8 +77,6 @@ public class MainActivity extends BaseActivity {
 
 
     private void preformLogout() {
-        MySharedPreferences.getMsp().putBoolean(MySharedPreferences.KEYS.LOGOUT, MySharedPreferences.KEYS.STAY_LOGGED); //logically might fit better in LoginActivity onCreate, but this saves running this line every login
-        Toast.makeText(this, R.string.logging_out, Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(this, LoginActivity.class);
         startActivity(myIntent);
         finish();
