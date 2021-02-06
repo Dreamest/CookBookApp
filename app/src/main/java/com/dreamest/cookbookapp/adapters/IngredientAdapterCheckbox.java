@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -84,7 +85,7 @@ public class IngredientAdapterCheckbox extends RecyclerView.Adapter<IngredientAd
         private TextView ingredient_TXT_units;
         private TextView ingredient_TXT_amount;
         private ImageView ingredient_IMG_check;
-        private MaterialButton ingredient_BTN_remove;
+        private ImageButton ingredient_BTN_remove;
 
 
         MyViewHolder(View itemView) {

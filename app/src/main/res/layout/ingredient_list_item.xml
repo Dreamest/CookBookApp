@@ -14,6 +14,7 @@
 
         android:background="@drawable/checkbox_inactive"
         />
+
     <TextView
         android:id="@+id/ingredient_TXT_amount"
 
@@ -48,23 +49,15 @@
         android:text="@string/ingredient_item"
         android:textSize="15sp"
         />
-    <com.google.android.material.button.MaterialButton
+
+    <ImageButton
         android:id="@+id/ingredient_BTN_remove"
 
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
 
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:cornerRadius="10dp"
-        app:strokeColor="@color/black"
-        app:strokeWidth="2dp"
-        android:textColor="@color/black"
-        android:textAllCaps="false"
-        android:backgroundTint="@color/teal_200"
-
-        android:text="@string/remove"
-
+        android:background="@drawable/ic_remove_small"
         />
 
 </LinearLayout>
