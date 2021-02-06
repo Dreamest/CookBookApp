@@ -17,7 +17,7 @@
         android:layout_marginTop="10dp"
 
         android:textSize="60sp"
-        android:text="@string/welcome"
+        android:text="@string/welcome_"
         />
     <TextView
         android:id="@+id/welcome_TXT_sub_title"
@@ -36,14 +36,14 @@
     <ImageView
         android:id="@+id/welcome_IMG_user_image"
 
-        android:layout_width="350dp"
+        android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_below="@id/welcome_TXT_sub_title"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
 
         android:clickable="true"
-        android:background="@drawable/ic_camera"
+        android:src="@drawable/ic_camera"
         />
 
     <com.google.android.material.textfield.TextInputLayout

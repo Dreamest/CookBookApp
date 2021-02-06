@@ -127,13 +127,13 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/recipe_IMG_image"
 
-            android:layout_width="350dp"
+            android:layout_width="300dp"
             android:layout_height="300dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/recipe_LAY_date"
             android:layout_marginBottom="5dp"
 
-            android:background="@color/black_fade"
+            android:src="@drawable/ic_no_image"
             />
 
         <TextView

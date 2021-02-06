@@ -1,10 +1,13 @@
 package com.dreamest.cookbookapp.activities;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -26,13 +29,15 @@ import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.gildaswise.horizontalcounter.HorizontalCounter;
-import com.github.drjacky.imagepicker.ImagePicker;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.opensooq.supernova.gligar.GligarPicker;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,6 +76,9 @@ public class EditRecipeActivity extends BaseActivity {
 
     private void loadRecipe() {
         recipe = (Recipe) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.RECIPE, new Recipe(), Recipe.class);
+        if(recipe.getRecipeID().equals("")) { //New recipe. Ensures it has an id for image loading
+            recipe.setRecipeID(Recipe.CreateRecipeID(FirebaseAuth.getInstance().getUid()));
+        }
         ingredients = recipe.getIngredients();
         difficulty = recipe.getDifficulty();
         edit_EDT_title.setText(recipe.getTitle());
@@ -101,6 +109,7 @@ public class EditRecipeActivity extends BaseActivity {
             public void onClick(View v) {
                 HideUI.clearFocus(EditRecipeActivity.this, edit_EDT_method);
                 Toast.makeText(EditRecipeActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
+                setImage();
                 // TODO: 2/2/21 Image picker isn't working properly.
             }
         });
@@ -154,6 +163,10 @@ public class EditRecipeActivity extends BaseActivity {
         loadIngredientsAdapter();
     }
 
+    private void setImage() {
+        new GligarPicker().requestCode(UtilityPack.REQUEST_CODES.GILGAR).withActivity(this).limit(1).show();
+    }
+
     private void changeDifficulty(int difficulty) {
         for (ImageView star : stars) {
             if ((int) star.getTag() <= difficulty) {
@@ -204,10 +217,6 @@ public class EditRecipeActivity extends BaseActivity {
         }
     }
 
-    private void previewRecipe() {
-        // TODO: 1/29/21 implement - send to recipeActivity without unnecessary buttons.
-    }
-
     private void submitRecipe() {
         updateRecipe();
         MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe);
@@ -233,8 +242,7 @@ public class EditRecipeActivity extends BaseActivity {
         recipe.setDifficulty(difficulty);
         recipe.setTitle(edit_EDT_title.getText().toString());
         if (recipe.getRecipeID().equals("")) {
-            recipe.setRecipeID(Recipe.CreateRecipeID(firebaseUser.getUid())); // TODO: 2/2/21 This isn't implemented.
-            Log.d("dddd", recipe.getRecipeID());
+            recipe.setRecipeID(Recipe.CreateRecipeID(firebaseUser.getUid()));
         }
     }
 
@@ -265,5 +273,36 @@ public class EditRecipeActivity extends BaseActivity {
         stars[4].setTag(5);
         edit_CTR_prepTime = findViewById(R.id.edit_CTR_prepTime);
         edit_LAY_scroll = findViewById(R.id.edit_LAY_scroll);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        switch (requestCode){
+            case UtilityPack.REQUEST_CODES.GILGAR : {
+                File image = new File(data.getExtras().getStringArray(GligarPicker.IMAGES_RESULT)[0]);
+                try {
+                    UCrop
+                            .of(Uri.fromFile(image), Uri.fromFile(File.createTempFile(recipe.getRecipeID(), UtilityPack.FILE_KEYS.img_POSTFIX)))
+                            .withAspectRatio(1, 1)
+                            .start(this, UtilityPack.REQUEST_CODES.UCROP);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+
+            case UtilityPack.REQUEST_CODES.UCROP : {
+                Glide
+                        .with(this)
+                        .load(UCrop.getOutput(data).getPath())
+                        .into(edit_IMG_image)
+                        .onLoadStarted(ContextCompat.getDrawable(this, R.drawable.ic_man_avatar));
+                break;
+            }
+        }
     }
 }

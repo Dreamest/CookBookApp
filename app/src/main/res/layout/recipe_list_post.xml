@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:alpha="0.7"
-        android:padding="10dp">
+        android:padding="15dp">
 
         <TextView
             android:id="@+id/listRecipe_TXT_title"
@@ -75,15 +75,14 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/listRecipe_IMG_image"
 
-            android:layout_width="350dp"
+            android:layout_width="300dp"
             android:layout_height="300dp"
             android:layout_below="@id/listRecipe_TXT_owner"
-            android:layout_alignStart="@id/listRecipe_TXT_added_on"
             android:layout_centerHorizontal="true"
 
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/roundedImageView"
-            android:background="@color/black_fade"
+            android:src="@drawable/ic_no_image"
             />
 
         <TextView
@@ -92,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/listRecipe_IMG_image"
-            android:layout_alignStart="@id/listRecipe_IMG_image"
+            android:layout_alignStart="@id/listRecipe_TXT_owned_by"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
 

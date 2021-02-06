@@ -1,8 +1,12 @@
 package com.dreamest.cookbookapp.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,11 +24,14 @@ import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.opensooq.supernova.gligar.GligarPicker;
+import com.yalantis.ucrop.UCrop;
+
+import java.io.File;
+import java.io.IOException;
 
 public class ProfileActivity extends BaseActivity {
     private TextView profile_TXT_username;
@@ -72,7 +79,7 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 confirmNameChange();
-                HideUI.clearFocus(ProfileActivity.this, profile_BTN_confirm_name);
+                HideUI.clearFocus(ProfileActivity.this, profile_EDT_change_name);
             }
         });
 
@@ -144,9 +151,40 @@ public class ProfileActivity extends BaseActivity {
 
     private void changePhoto() {
         Toast.makeText(ProfileActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
-
-        // TODO: 1/31/21 implement
+        new GligarPicker().requestCode(UtilityPack.REQUEST_CODES.GILGAR).withActivity(this).limit(1).show();
+        // TODO: 2/6/21 image not stored on firebase yet
 
         user.updateFirebase();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        switch (requestCode){
+            case UtilityPack.REQUEST_CODES.GILGAR : {
+                File image = new File(data.getExtras().getStringArray(GligarPicker.IMAGES_RESULT)[0]);
+                try {
+                    UCrop
+                            .of(Uri.fromFile(image), Uri.fromFile(File.createTempFile(user.getUserID(), UtilityPack.FILE_KEYS.img_POSTFIX)))
+                            .withAspectRatio(1, 1)
+                            .start(this, UtilityPack.REQUEST_CODES.UCROP);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+
+            case UtilityPack.REQUEST_CODES.UCROP : {
+                Glide
+                        .with(this)
+                        .load(UCrop.getOutput(data).getPath())
+                        .into(profile_IMG_image)
+                        .onLoadStarted(ContextCompat.getDrawable(this, R.drawable.ic_man_avatar));
+                break;
+            }
+        }
     }
 }

@@ -75,6 +75,7 @@
     <string name="add_contacts">Add contacts</string>
     <string name="prep_time_minutes">Prep time(minutes):</string>
     <string name="your_cookbook">Your cookbook</string>
+    <string name="welcome_">Welcome</string>
 
 
 </resources>

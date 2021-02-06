@@ -132,11 +132,13 @@
         <ImageView
             android:id="@+id/edit_IMG_image"
 
-            android:layout_width="350dp"
+            android:layout_width="300dp"
             android:layout_height="300dp"
             android:layout_below="@+id/edit_LAY_method_input"
             android:layout_centerHorizontal="true"
-            android:background="@color/black_fade"
+            android:layout_marginTop="5dp"
+
+            android:src="@drawable/ic_no_image"
             android:clickable="true" />
 
         <TextView

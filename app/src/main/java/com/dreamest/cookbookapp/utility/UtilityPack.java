@@ -48,6 +48,14 @@ public class UtilityPack {
         String TITLE = "title";
         String IMAGE = "image";
         String INGREDIENTS = "ingredients";
+    }
 
+    public interface REQUEST_CODES {
+        int UCROP = 1111;
+        int GILGAR = 1112;
+    }
+
+    public interface FILE_KEYS {
+        String img_POSTFIX = ".jpg";
     }
 }

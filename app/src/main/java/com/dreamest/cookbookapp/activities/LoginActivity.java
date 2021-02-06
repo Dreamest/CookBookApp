@@ -229,7 +229,7 @@ public class LoginActivity extends BaseActivity {
         login_EDT_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_GO) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     HideUI.clearFocus(LoginActivity.this, login_EDT_input);
                     continueClicked();
                 }

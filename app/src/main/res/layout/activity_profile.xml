@@ -55,13 +55,15 @@
     <ImageView
         android:id="@+id/profile_IMG_image"
 
-        android:layout_width="350dp"
+        android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_below="@id/profile_TXT_username"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
+        android:clickable="true"
 
-        android:background="@color/black_fade"
-        android:clickable="true" />
+        android:src="@drawable/ic_no_image"
+         />
 
     <EditText
         android:id="@+id/profile_EDT_change_name"
@@ -69,7 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/profile_IMG_image"
 
-        android:layout_alignStart="@id/profile_IMG_image"
+        android:layout_alignParentStart="true"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
 
