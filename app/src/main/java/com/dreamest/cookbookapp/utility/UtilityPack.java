@@ -14,6 +14,10 @@ public class UtilityPack {
         return allBackgrounds[new Random().nextInt(4)];
     }
 
+
+    /**
+     * Attaches country code to phone number, and drops leading zero if there is one
+     */
     public static String extractPhoneNumber(CountryCodePicker ccp, TextInputEditText editText) {
             String phoneInput = editText.getText().toString();
             if (phoneInput.charAt(0) == '0' && phoneInput.length() == 10)

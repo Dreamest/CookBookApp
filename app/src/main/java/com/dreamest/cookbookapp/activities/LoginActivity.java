@@ -88,29 +88,33 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void codeEntered() {
-        String smsVerificationCode = login_EDT_input.getText().toString();
-        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, smsVerificationCode);
-        signInWithPhoneAuthCredential(credential);
-        changeState(LOGIN_STATE.LOADING);
+        if(!login_EDT_input.getText().toString().equals("")) {
+            String smsVerificationCode = login_EDT_input.getText().toString();
+            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, smsVerificationCode);
+            signInWithPhoneAuthCredential(credential);
+            changeState(LOGIN_STATE.LOADING);
+        } else {
+            Toast.makeText(this, "Please enter a code", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void startLoginProcess() {
-        phoneInput = UtilityPack.extractPhoneNumber(login_CCP_code, login_EDT_input);
-        PhoneAuthOptions options =
-                PhoneAuthOptions.newBuilder(firebaseAuth)
-                        .setPhoneNumber(phoneInput)       // Phone number to verify
-                        .setTimeout(120L, TimeUnit.SECONDS) // Timeout and unit
-                        .setActivity(this)                 // Activity (for callback binding)
-                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
-                        .build();
-        PhoneAuthProvider.verifyPhoneNumber(options);
-        changeState(LOGIN_STATE.LOADING);
+        if(!login_EDT_input.getText().toString().equals("")) {
+            phoneInput = UtilityPack.extractPhoneNumber(login_CCP_code, login_EDT_input);
+            PhoneAuthOptions options =
+                    PhoneAuthOptions.newBuilder(firebaseAuth)
+                            .setPhoneNumber(phoneInput)       // Phone number to verify
+                            .setTimeout(120L, TimeUnit.SECONDS) // Timeout and unit
+                            .setActivity(this)                 // Activity (for callback binding)
+                            .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+                            .build();
+            PhoneAuthProvider.verifyPhoneNumber(options);
+            changeState(LOGIN_STATE.LOADING);
+        } else {
+            Toast.makeText(this, "Please enter a phone number", Toast.LENGTH_SHORT).show();
+        }
     }
-
-    /**
-     * Attaches country code to phone number, and drops leading zero if there is one
-     */
-
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override
@@ -144,7 +148,7 @@ public class LoginActivity extends BaseActivity {
                 Log.e("dddd", e.getMessage());
                 // The SMS quota for the project has been exceeded
             }
-            Toast.makeText(LoginActivity.this, getString(R.string.verification_failed) + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, getString(R.string.verification_failed) + e.getMessage(), Toast.LENGTH_LONG).show();
             changeState(LOGIN_STATE.ENTERING_NUMBER);
         }
 
@@ -224,7 +228,7 @@ public class LoginActivity extends BaseActivity {
         login_EDT_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (actionId == EditorInfo.IME_ACTION_GO) {
                     HideUI.clearFocus(LoginActivity.this, login_EDT_input);
                     continueClicked();
                 }
