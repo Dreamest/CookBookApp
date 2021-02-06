@@ -69,6 +69,10 @@
     <string name="signed_in_successfully">Signed in successfully.</string>
     <string name="invalid_code">Invalid Code</string>
     <string name="request_removed">Request removed</string>
+    <string name="add_a_friend">Add a friend</string>
+    <string name="search_contacts">Search contacts</string>
+    <string name="search_for_number">Search for number</string>
+    <string name="add_contacts">Add contacts</string>
 
 
 </resources>

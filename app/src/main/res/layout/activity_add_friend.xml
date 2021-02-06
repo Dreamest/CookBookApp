@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,15 +7,77 @@
     android:layout_height="match_parent"
     tools:context=".activities.AddFriendActivity"
     android:padding="20dp"
-    android:orientation="vertical"
-    android:gravity="center"
     >
+    <TextView
+        android:id="@+id/add_friend_TXT_title"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+
+        android:textSize="40sp"
+        android:text="@string/add_a_friend"
+        />
+
+    <TextView
+        android:id="@+id/add_friend_TXT_contacts"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/add_friend_TXT_title"
+        android:layout_marginTop="100dp"
+
+        android:textSize="30sp"
+        android:text="@string/search_contacts"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_friend_BTN_contacts"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_friend_TXT_contacts"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+
+        android:backgroundTint="@color/teal_200"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        app:cornerRadius="10dp"
+        app:strokeColor="@color/black"
+        app:strokeWidth="2dp"
+        android:text="@string/add_contacts"
+        />
+
+    <TextView
+        android:id="@+id/add_friend_TXT_search"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/add_friend_BTN_contacts"
+        android:layout_marginTop="50dp"
+
+        android:textSize="30sp"
+        android:text="@string/search_for_number"
+        />
+
     <LinearLayout
+        android:id="@+id/add_friend_LAY_phone"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_below="@id/add_friend_TXT_search"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+
+        android:layoutDirection="ltr"
         android:gravity="center"
         >
+
 
         <com.rilixtech.CountryCodePicker
             android:id="@+id/add_friend_CCP_code_picker"
@@ -48,6 +110,9 @@
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/add_friend_LAY_phone"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
 
         android:backgroundTint="@color/teal_200"
         android:textAllCaps="false"
@@ -55,8 +120,8 @@
         app:cornerRadius="10dp"
         app:strokeColor="@color/black"
         app:strokeWidth="2dp"
-        android:text="@string/add"
+        android:text="@string/search"
         />
 
 
-</LinearLayout>
+</RelativeLayout>

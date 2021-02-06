@@ -64,4 +64,8 @@
     <string name="invalid_code">קוד שגוי</string>
     <string name="request_removed">הבקשה הוסרה</string>
     <string name="time_out_try_again">נגמר הזמן. נסה שוב</string>
+    <string name="add_a_friend">הוספת חבר</string>
+    <string name="search_contacts">חפש באנשי קשר</string>
+    <string name="search_for_number">חפש לפי מספר</string>
+    <string name="add_contacts">הוסף איש קשר</string>
 </resources>

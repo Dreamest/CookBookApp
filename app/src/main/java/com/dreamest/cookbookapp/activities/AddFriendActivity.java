@@ -1,9 +1,15 @@
 package com.dreamest.cookbookapp.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -33,8 +39,12 @@ public class AddFriendActivity extends BaseActivity {
     private CountryCodePicker add_friend_CCP_code_picker;
     private TextInputEditText add_friend_EDT_input;
     private MaterialButton add_friend_BTN_search;
+    private MaterialButton add_friend_BTN_contacts;
     private ArrayList<User> currentFriends;
     private ArrayList<User> pendingFriends;
+
+    private final int CONTACT_REQUEST_CODE = 99;
+    private final int PERMISSION_REQUEST_CODE = 101;
 
 
     @Override
@@ -48,7 +58,8 @@ public class AddFriendActivity extends BaseActivity {
     }
 
     private void loadCurrentFriends() {
-        Type listType = new TypeToken<ArrayList<User>>(){}.getType();
+        Type listType = new TypeToken<ArrayList<User>>() {
+        }.getType();
         currentFriends = (ArrayList<User>) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.FRIENDSLIST_ARRAY, new ArrayList<User>(), listType);
         pendingFriends = (ArrayList<User>) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.PENDING_FRIENDS_ARRAY, new ArrayList<User>(), listType);
     }
@@ -59,7 +70,7 @@ public class AddFriendActivity extends BaseActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     HideUI.clearFocus(AddFriendActivity.this, add_friend_EDT_input);
-                    search();
+                    searchByNumber();
                 }
                 return false;
             }
@@ -68,14 +79,34 @@ public class AddFriendActivity extends BaseActivity {
         add_friend_BTN_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                search();
+                searchByNumber();
+            }
+        });
+
+        add_friend_BTN_contacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchByContact();
             }
         });
     }
 
-    private void search() {
-        String searchValue = UtilityPack.extractPhoneNumber(add_friend_CCP_code_picker, add_friend_EDT_input);
-        if(duplicateNumber(searchValue)) {
+    private void searchByContact() {
+        ActivityCompat.requestPermissions(AddFriendActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_CODE);
+
+        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        startActivityForResult(intent, CONTACT_REQUEST_CODE);
+    }
+
+    private void searchByNumber() {
+        String phoneNumber = UtilityPack.extractPhoneNumber(add_friend_CCP_code_picker, add_friend_EDT_input);
+        if (!phoneNumber.equals("")) {
+            searchInFirebase(phoneNumber);
+        }
+    }
+
+    private void searchInFirebase(String searchValue) {
+        if (duplicateNumber(searchValue)) {
             return;
         }
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -83,8 +114,8 @@ public class AddFriendActivity extends BaseActivity {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot user: snapshot.getChildren()) {
-                    if(user.child(UtilityPack.KEYS.PHONE_NUMBER).getValue(String.class).equals(searchValue)) {
+                for (DataSnapshot user : snapshot.getChildren()) {
+                    if (user.child(UtilityPack.KEYS.PHONE_NUMBER).getValue(String.class).equals(searchValue)) {
                         String currentUserID = FirebaseAuth.getInstance().getUid();
                         String friendID = user.child(UtilityPack.KEYS.USER_ID).getValue(String.class);
                         long pendingRequests = user.child(UtilityPack.KEYS.PENDING_FRIENDS).getChildrenCount();
@@ -106,18 +137,18 @@ public class AddFriendActivity extends BaseActivity {
 
     private boolean duplicateNumber(String searchValue) { // TODO: 2/3/21 untested.
         String currentUserPhoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
-        if(searchValue.equals(currentUserPhoneNumber)) {
+        if (searchValue.equals(currentUserPhoneNumber)) {
             notifyNotHappening("You can't befriend yourself");
             return true;
-        } else{
+        } else {
             return userInList(currentFriends, searchValue, "User is already a friend") ||
                     userInList(pendingFriends, searchValue, "User is pending");
         }
     }
 
     private boolean userInList(ArrayList<User> list, String searchValue, String message) {
-        for(User friend: list) {
-            if(friend.getPhoneNumber().equals(searchValue)) {
+        for (User friend : list) {
+            if (friend.getPhoneNumber().equals(searchValue)) {
                 notifyNotHappening(message);
                 return true;
             }
@@ -135,5 +166,30 @@ public class AddFriendActivity extends BaseActivity {
         add_friend_CCP_code_picker = findViewById(R.id.add_friend_CCP_code_picker);
         add_friend_EDT_input = findViewById(R.id.add_friend_EDT_input);
         add_friend_BTN_search = findViewById(R.id.add_friend_BTN_search);
+        add_friend_BTN_contacts = findViewById(R.id.add_friend_BTN_contacts);
+    }
+
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        if (reqCode == CONTACT_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri contactData = data.getData();
+                Cursor c = getContentResolver().query(contactData, null, null, null, null);
+                if (c.moveToFirst()) {
+                    String contactId = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
+                    String hasNumber = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                    if (Integer.parseInt(hasNumber) == 1) {
+                        Cursor numbers = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+                        while (numbers.moveToNext()) {
+                            String phoneNumber = numbers.getString(numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            searchInFirebase(phoneNumber);
+                        }
+                        c.close();
+                        numbers.close();
+                    }
+                }
+            }
+        }
     }
 }
