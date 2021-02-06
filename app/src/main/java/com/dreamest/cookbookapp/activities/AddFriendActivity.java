@@ -135,7 +135,7 @@ public class AddFriendActivity extends BaseActivity {
         });
     }
 
-    private boolean duplicateNumber(String searchValue) { // TODO: 2/3/21 untested.
+    private boolean duplicateNumber(String searchValue) {
         String currentUserPhoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
         if (searchValue.equals(currentUserPhoneNumber)) {
             notifyNotHappening("You can't befriend yourself");

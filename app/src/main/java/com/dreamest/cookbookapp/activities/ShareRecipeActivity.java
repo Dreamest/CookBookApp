@@ -76,7 +76,6 @@ public class ShareRecipeActivity extends BaseActivity {
         ref.setValue(recipeToShare);
         Toast.makeText(this, R.string.recipe_shared, Toast.LENGTH_SHORT).show();
         finish();
-        // TODO: 2/5/21 assumption: Adding an onSuccess listener here for toast will work only if new value is added?
     }
 
     private void loadFriendsFromDatabase() {

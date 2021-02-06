@@ -1,16 +1,12 @@
 package com.dreamest.cookbookapp.logic;
 
-import android.util.Log;
-
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.StorageReference;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class User {
@@ -22,7 +18,7 @@ public class User {
     private HashMap<String, String> pendingFriends;
     private String displayName;
     private String phoneNumber;
-    private StorageReference profileImage;
+    private String imagePath;
 
     public static final int ADD = 1;
     public static final int REMOVE = 2;
@@ -33,14 +29,15 @@ public class User {
         myChats = new HashMap<>();
         pendingRecipes = new HashMap<>();
         pendingFriends = new HashMap<>();
+        imagePath = "";
     }
 
-    public StorageReference getProfileImage() {
-        return profileImage;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public User setProfileImage(StorageReference profileImage) {
-        this.profileImage = profileImage;
+    public User setImagePath(String imagePath) {
+        this.imagePath = imagePath;
         return this;
     }
 

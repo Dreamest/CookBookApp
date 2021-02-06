@@ -29,7 +29,7 @@
 
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/circularImageView"
-            android:src="@drawable/ic_man_avatar"
+            android:src="@drawable/ic_loading"
             />
 
         <TextView

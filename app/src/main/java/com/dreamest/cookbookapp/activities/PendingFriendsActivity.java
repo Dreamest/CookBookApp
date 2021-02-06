@@ -22,7 +22,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class PendingFriendsActivity extends BaseActivity {
-    // TODO: 2/4/21 untested. 
     private RecyclerView pending_friend_LST_recipes;
     private ArrayList<User> pendingFriends;
     private TextView pending_friend_TXT_no_pending;

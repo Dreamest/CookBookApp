@@ -250,7 +250,7 @@ public class MainActivity extends BaseActivity {
         startActivity(myIntent);
     }
 
-    private void loadCurrentUser() { // TODO: 2/5/21 might be smart to make static and move under User
+    private void loadCurrentUser() { // TODO: 2/5/21 might be smart to make static and move
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(uid);

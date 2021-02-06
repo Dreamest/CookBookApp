@@ -40,11 +40,10 @@ dependencies {
 
 
     // Firebase authentication, realtime database, storage
-    implementation platform('com.google.firebase:firebase-bom:26.4.0')
-    implementation 'com.google.firebase:firebase-auth'
-    implementation 'com.google.firebase:firebase-database'
-    implementation 'com.google.firebase:firebase-storage'
-    implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
+    implementation platform('com.google.firebase:firebase-bom:26.4.0') //BOM handles version control
+    implementation 'com.google.firebase:firebase-auth' //Auth for authenticating users
+    implementation 'com.google.firebase:firebase-database' //database for realtime data transfer
+    implementation 'com.google.firebase:firebase-storage' //storage for photos
 
 
     // dependencies for CountryCodePicker

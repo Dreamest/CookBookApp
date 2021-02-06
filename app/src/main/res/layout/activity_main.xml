@@ -25,8 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:background="@color/teal_100"
-        android:alpha="0.3"
+        android:background="@color/blue_calm"
         />
     <TextView
         android:id="@+id/main_TXT_no_recipes"

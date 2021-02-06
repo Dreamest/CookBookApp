@@ -82,7 +82,7 @@
 
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/roundedImageView"
-            android:src="@drawable/ic_no_image"
+            android:src="@drawable/ic_loading"
             />
 
         <TextView

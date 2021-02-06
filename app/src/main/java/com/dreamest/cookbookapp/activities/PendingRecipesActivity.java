@@ -21,7 +21,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class PendingRecipesActivity extends BaseActivity {
-    // TODO: 2/4/21 untested.
     private RecyclerView pending_recipe_LST_recipes;
     private ArrayList<Recipe> pendingRecipes;
     private TextView pending_recipe_TXT_no_pending;

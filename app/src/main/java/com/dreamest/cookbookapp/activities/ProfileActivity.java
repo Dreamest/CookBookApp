@@ -2,11 +2,9 @@ package com.dreamest.cookbookapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -18,20 +16,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
+import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.opensooq.supernova.gligar.GligarPicker;
-import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
-import java.io.IOException;
 
 public class ProfileActivity extends BaseActivity {
     private TextView profile_TXT_username;
@@ -57,12 +55,10 @@ public class ProfileActivity extends BaseActivity {
     private void updateViews() {
         user = (User) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.USER, new User(), User.class);
         profile_TXT_username.setText(user.getDisplayName());
-        Glide
-                .with(this)
-                .load(user.getProfileImage())
-                .centerCrop()
-                .into(profile_IMG_image)
-                .onLoadStarted(getDrawable(R.drawable.ic_no_image));
+        Log.d("dddd", "path = " + user.getImagePath());
+
+        FirebaseTools.downloadImage(this, user.getImagePath(), user.getUserID(),
+                UtilityPack.FILE_KEYS.JPG, profile_IMG_image, getDrawable(R.drawable.ic_loading), R.drawable.ic_man_avatar);
         profile_TXT_count_recipes.setText(user.getMyRecipes().size() + "");
         profile_TXT_count_friends.setText(user.getMyFriends().size() + "");
     }
@@ -113,7 +109,6 @@ public class ProfileActivity extends BaseActivity {
                 logout();
             }
         });
-
     }
 
     private void logout() {
@@ -150,10 +145,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void changePhoto() {
-        Toast.makeText(ProfileActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
         new GligarPicker().requestCode(UtilityPack.REQUEST_CODES.GILGAR).withActivity(this).limit(1).show();
-        // TODO: 2/6/21 image not stored on firebase yet
-
         user.updateFirebase();
     }
 
@@ -172,6 +164,9 @@ public class ProfileActivity extends BaseActivity {
 
             case UtilityPack.REQUEST_CODES.UCROP : {
                 UtilityPack.loadUCropResult(this, data, profile_IMG_image, R.drawable.ic_man_avatar);
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.PROFILE_IMAGES).child(user.getUserID());
+                FirebaseTools.uploadImage(this, storageReference, profile_IMG_image, false);
                 break;
             }
         }

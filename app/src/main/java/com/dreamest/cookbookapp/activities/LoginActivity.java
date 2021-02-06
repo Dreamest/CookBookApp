@@ -95,7 +95,7 @@ public class LoginActivity extends BaseActivity {
             signInWithPhoneAuthCredential(credential);
             changeState(LOGIN_STATE.LOADING);
         } else {
-            Toast.makeText(this, "Please enter a code", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.enter_code, Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -113,7 +113,7 @@ public class LoginActivity extends BaseActivity {
             PhoneAuthProvider.verifyPhoneNumber(options);
             changeState(LOGIN_STATE.LOADING);
         } else {
-            Toast.makeText(this, "Please enter a phone number", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.enter_phone_number, Toast.LENGTH_SHORT).show();
         }
     }
 

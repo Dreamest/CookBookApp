@@ -1,16 +1,12 @@
 package com.dreamest.cookbookapp.activities;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -19,12 +15,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Ingredient;
 import com.dreamest.cookbookapp.adapters.IngredientAdapterRemoveBTN;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.logic.User;
+import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.UtilityPack;
@@ -33,11 +29,11 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.opensooq.supernova.gligar.GligarPicker;
-import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -84,13 +80,13 @@ public class EditRecipeActivity extends BaseActivity {
         edit_EDT_title.setText(recipe.getTitle());
         edit_EDT_method.setText(recipe.getMethod());
         changeDifficulty(recipe.getDifficulty());
-        Glide        //Not working currently
+        if(!recipe.getImagePath().equals("")) {
+            FirebaseTools.downloadImage(this, recipe.getImagePath(), recipe.getRecipeID(), UtilityPack.FILE_KEYS.JPG,
+                    edit_IMG_image, getDrawable(R.drawable.ic_loading), R.drawable.ic_no_image);
+        } else {
+            edit_IMG_image.setImageResource(R.drawable.ic_camera);
+        }
 
-                .with(this)
-                .load(recipe.getImage())
-                .centerCrop()
-                .into(edit_IMG_image)
-                .onLoadStarted(ContextCompat.getDrawable(edit_IMG_image.getContext(), R.drawable.ic_no_image));
 
         edit_CTR_prepTime.setCurrentValue((double) recipe.getPrepTime());
         edit_CTR_prepTime.setDisplayingInteger(true);
@@ -108,9 +104,7 @@ public class EditRecipeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 HideUI.clearFocus(EditRecipeActivity.this, edit_EDT_method);
-                Toast.makeText(EditRecipeActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
                 setImage();
-                // TODO: 2/2/21 Image picker isn't working properly.
             }
         });
 
@@ -222,28 +216,36 @@ public class EditRecipeActivity extends BaseActivity {
         MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe);
         recipe.storeInFirebase();
         User.actionToCurrentUserDatabase(User.ADD, recipe.getRecipeID(), UtilityPack.KEYS.MY_RECIPES);
-        finish();
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.RECIPE_IMAGES).child(recipe.getRecipeID());
+        Toast.makeText(this, R.string.uploading, Toast.LENGTH_SHORT).show();
+        FirebaseTools.uploadImage(this, storageReference, edit_IMG_image, true);
+//        finish(); activity will finish when upload is done
     }
 
     private void updateRecipe() {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
+        if (recipe.getRecipeID().equals("")) {
+            recipe.setRecipeID(Recipe.CreateRecipeID(firebaseUser.getUid()));
+        }
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.RECIPE_IMAGES).child(recipe.getRecipeID());
+
         String pattern = "dd.MM.yyyy";
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         recipe.setDate(format.format(new Date()));
         recipe.setDifficulty(difficulty);
-//        recipe.setImage() //todo: Figure how to set the image
+        recipe.setImagePath(storageReference.getPath());
         recipe.setIngredients(ingredients);
         recipe.setMethod(edit_EDT_method.getText().toString());
-//        recipe.setOwner(firebaseUser.getDisplayName());
         recipe.setOwnerID(firebaseUser.getUid());
         recipe.setPrepTime(edit_CTR_prepTime.getCurrentValue().intValue());
         recipe.setDifficulty(difficulty);
         recipe.setTitle(edit_EDT_title.getText().toString());
-        if (recipe.getRecipeID().equals("")) {
-            recipe.setRecipeID(Recipe.CreateRecipeID(firebaseUser.getUid()));
-        }
+
     }
 
     private void addNewIngredient() {

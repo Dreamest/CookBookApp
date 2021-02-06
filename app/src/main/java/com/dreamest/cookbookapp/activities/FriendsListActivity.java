@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class FriendsListActivity extends BaseActivity {
-    // TODO: 2/2/21 This activity has not been tested with actual friends
     private RecyclerView friendslist_LST_friends;
     private ImageButton friendslist_BTN_add_friend;
     private TextView friends_TXT_no_friends;

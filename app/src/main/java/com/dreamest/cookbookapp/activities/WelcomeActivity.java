@@ -1,13 +1,10 @@
 package com.dreamest.cookbookapp.activities;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -15,22 +12,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.util.Util;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
+import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.opensooq.supernova.gligar.GligarPicker;
-import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
-import java.io.IOException;
 
 public class WelcomeActivity extends BaseActivity {
     private ImageView welcome_IMG_user_image;
@@ -81,23 +76,21 @@ public class WelcomeActivity extends BaseActivity {
         } else {
             userName = firebaseUser.getPhoneNumber();
         }
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest
-                .Builder()
-                .setDisplayName(userName)
-                .build();
-        firebaseUser.updateProfile(profileUpdates);
-        firebaseAuth.updateCurrentUser(firebaseUser);
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.PROFILE_IMAGES).child(firebaseUser.getUid());
 
         User user = new User()
                 .setUserID(firebaseUser.getUid())
                 .setDisplayName(userName)
-                .setPhoneNumber(firebaseUser.getPhoneNumber());
-//                .setProfileImage() 
-        // TODO: 2/2/21 add setProfileImage to the mix
+                .setPhoneNumber(firebaseUser.getPhoneNumber())
+                .setImagePath(storageReference.getPath());
         user.updateFirebase();
 
+        FirebaseTools.uploadImage(this, storageReference, welcome_IMG_user_image, false);
         moveToMainActivity();
     }
+
 
     private void moveToMainActivity() {
         Intent myIntent = new Intent(this, MainActivity.class);
@@ -106,10 +99,7 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void takePhoto() {
-        Toast.makeText(WelcomeActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
         new GligarPicker().requestCode(UtilityPack.REQUEST_CODES.GILGAR).withActivity(this).limit(1).show();
-        // TODO: 2/6/21 image not stored on firebase yet
-// If no picture taken, use a default one that will be stored in firebase storage
     }
 
     @Override

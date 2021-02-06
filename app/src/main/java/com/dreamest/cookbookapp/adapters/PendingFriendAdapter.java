@@ -11,9 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
+import com.dreamest.cookbookapp.utility.FirebaseTools;
+import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
@@ -41,12 +42,9 @@ public class PendingFriendAdapter extends RecyclerView.Adapter<PendingFriendAdap
         User user = mData.get(position);
         holder.pending_item_friend_TXT_displayName.setText(user.getDisplayName());
         holder.pending_item_friend_TXT_phoneNumber.setText(user.getPhoneNumber());
-        Glide
-                .with(mInflater.getContext())
-                .load(user.getProfileImage())
-                .centerCrop()
-                .into(holder.pending_item_friend_IMG_profile_image)
-                .onLoadStarted(ContextCompat.getDrawable(mInflater.getContext(), R.drawable.ic_man_avatar));
+
+        FirebaseTools.downloadImage(mInflater.getContext(), user.getImagePath(), user.getUserID(), UtilityPack.FILE_KEYS.JPG,
+                holder.pending_item_friend_IMG_profile_image, ContextCompat.getDrawable(mInflater.getContext(), R.drawable.ic_loading), R.drawable.ic_no_image);
         }
 
     // total number of rows

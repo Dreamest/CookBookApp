@@ -1,15 +1,10 @@
 package com.dreamest.cookbookapp.logic;
 
 import com.dreamest.cookbookapp.utility.UtilityPack;
-import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.StorageReference;
 
-import java.lang.reflect.Array;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Recipe {
     private String title;
@@ -17,7 +12,7 @@ public class Recipe {
 //    private String owner;
     private String ownerID;
     private String date;
-    private StorageReference image; // TODO: 1/27/21 change format? [Storage Referensce?]
+    private String imagePath;
     private ArrayList<Ingredient> ingredients;
     private String method;
     private int prepTime;
@@ -28,6 +23,7 @@ public class Recipe {
         recipeID = "";
         difficulty = 1;
         prepTime = 5;
+        imagePath = "";
     }
 
     public static String CreateRecipeID(String uid) {
@@ -70,12 +66,12 @@ public class Recipe {
         return this;
     }
 
-    public StorageReference getImage() {
-        return image;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public Recipe setImage(StorageReference image) {
-        this.image = image;
+    public Recipe setImagePath(String imagePath) {
+        this.imagePath = imagePath;
         return this;
     }
 

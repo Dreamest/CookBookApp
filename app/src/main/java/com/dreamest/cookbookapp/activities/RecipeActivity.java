@@ -1,6 +1,7 @@
 package com.dreamest.cookbookapp.activities;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,10 +12,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.IngredientAdapterCheckbox;
 import com.dreamest.cookbookapp.logic.Recipe;
+import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -108,12 +109,8 @@ public class RecipeActivity extends BaseActivity {
         });
         recipe_TXT_date.setText(recipe.getDate());
         recipe_TXT_method.setText(recipe.getMethod());
-        Glide
-                .with(this)
-                .load(recipe.getImage())
-                .centerCrop()
-                .into(recipe_IMG_image)
-                .onLoadStarted(getDrawable(R.drawable.ic_no_image));
+        FirebaseTools.downloadImage(this, recipe.getImagePath(), recipe.getRecipeID(), UtilityPack.FILE_KEYS.JPG,
+                recipe_IMG_image, ContextCompat.getDrawable(this, R.drawable.ic_loading), R.drawable.ic_no_image);
     }
 
     private void initAdapter() {

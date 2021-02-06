@@ -71,4 +71,7 @@
     <string name="prep_time_minutes">זמן הכנה(דקות):</string>
     <string name="your_cookbook">ספר הבישול שלך</string>
     <string name="welcome_">שלום!</string>
+    <string name="upload_failed">העלאת תמונה נכשלה</string>
+    <string name="upload_success">התמונה הועלתה בהצלחה</string>
+    <string name="uploading">מעלה לשרת...</string>
 </resources>

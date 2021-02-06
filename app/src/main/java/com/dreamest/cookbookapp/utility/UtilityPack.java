@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
-import com.dreamest.cookbookapp.activities.WelcomeActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.rilixtech.CountryCodePicker;
@@ -42,7 +41,7 @@ public class UtilityPack {
     public static void cropImage(Activity activity, File image, String resultPrefix) {
         try {
             UCrop
-                    .of(Uri.fromFile(image), Uri.fromFile(File.createTempFile(FirebaseAuth.getInstance().getCurrentUser().getUid(), UtilityPack.FILE_KEYS.img_POSTFIX)))
+                    .of(Uri.fromFile(image), Uri.fromFile(File.createTempFile(FirebaseAuth.getInstance().getCurrentUser().getUid(), UtilityPack.FILE_KEYS.JPG)))
                     .withAspectRatio(1, 1)
                     .start(activity, UtilityPack.REQUEST_CODES.UCROP);
         } catch (IOException e) {
@@ -82,12 +81,17 @@ public class UtilityPack {
         String INGREDIENTS = "ingredients";
     }
 
+    public interface STORAGE_KEYS {
+        String PROFILE_IMAGES = "profiles";
+        String RECIPE_IMAGES = "recipes";
+    }
+
     public interface REQUEST_CODES {
         int UCROP = 1111;
         int GILGAR = 1112;
     }
 
     public interface FILE_KEYS {
-        String img_POSTFIX = ".jpg";
+        String JPG = ".jpg";
     }
 }

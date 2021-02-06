@@ -12,9 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Recipe;
+import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -66,12 +66,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             }
         });
         holder.listRecipe_TXT_date.setText(recipe.getDate());
-        Glide
-                .with(mInflater.getContext())
-                .load(recipe.getImage())
-                .centerCrop()
-                .into(holder.listRecipe_IMG_image)
-                .onLoadStarted(ContextCompat.getDrawable(holder.listRecipe_IMG_image.getContext(), R.drawable.ic_no_image));
+        FirebaseTools.downloadImage(mInflater.getContext(), recipe.getImagePath(), recipe.getRecipeID(), UtilityPack.FILE_KEYS.JPG, holder.listRecipe_IMG_image,
+                ContextCompat.getDrawable(mInflater.getContext(), R.drawable.ic_loading), R.drawable.ic_no_image);
         holder.listRecipe_TXT_time.setText(recipe.getPrepTime() + "");
 
         for (int i = 0; i < recipe.getDifficulty(); i++) {

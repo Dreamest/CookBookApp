@@ -76,6 +76,11 @@
     <string name="prep_time_minutes">Prep time(minutes):</string>
     <string name="your_cookbook">Your cookbook</string>
     <string name="welcome_">Welcome</string>
+    <string name="upload_failed">Uploading image failed</string>
+    <string name="upload_success">Image uploaded successfully.</string>
+    <string name="uploading">Uploading...</string>
+    <string name="enter_code">Please enter a code</string>
+    <string name="enter_phone_number">Please enter a phone number</string>
 
 
 </resources>
