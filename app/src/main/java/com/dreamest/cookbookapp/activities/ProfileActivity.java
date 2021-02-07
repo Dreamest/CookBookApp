@@ -138,10 +138,15 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void confirmNameChange() {
-        user.setDisplayName(profile_EDT_change_name.getText().toString());
-        profile_TXT_username.setText(user.getDisplayName());
+        if(!profile_EDT_change_name.getText().toString().trim().equals("")) {
+            user.setDisplayName(profile_EDT_change_name.getText().toString());
+            profile_TXT_username.setText(user.getDisplayName());
 
-        user.updateFirebase();
+            user.updateFirebase();
+        } else {
+            Toast.makeText(this, R.string.no_name, Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void changePhoto() {

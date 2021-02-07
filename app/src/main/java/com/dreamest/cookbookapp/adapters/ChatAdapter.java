@@ -31,11 +31,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private ArrayList<String> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
+    private DatabaseReference chatRoot;
 
     // data is passed into the constructor
-    public ChatAdapter(Context context, ArrayList<String> data) {
+    public ChatAdapter(Context context, ArrayList<String> data, DatabaseReference chatRoot) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
+        this.chatRoot = chatRoot;
     }
 
     // inflates the row layout from xml when needed
@@ -47,10 +49,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String path = mData.get(position);
+        String key = mData.get(position);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(path);
+        DatabaseReference ref = chatRoot.child(key);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

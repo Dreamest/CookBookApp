@@ -83,4 +83,8 @@
     <string name="send_a_message">שלח הודעה</string>
     <string name="what_is_it_called">איך קוראים לזה?</string>
     <string name="how_do_you_make_it">איך מכינים את זה?</string>
+    <string name="cant_add_self">לא ניתן להוסיף את עצמך</string>
+    <string name="already_friend">המשתמש כבר ברשימת החברים</string>
+    <string name="already_pending">בקשת חברות כבר נשלחה</string>
+    <string name="no_name">אינך יכול להיות חסר שם</string>
 </resources>

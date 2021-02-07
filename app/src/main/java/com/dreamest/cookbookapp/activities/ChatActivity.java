@@ -1,4 +1,4 @@
-package com.dreamest.cookbookapp;
+package com.dreamest.cookbookapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -7,9 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.ChildEventListener;
@@ -36,39 +38,24 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         findViews();
+        initViews();
+    }
 
-        String cid = "abcdefg";
-
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("chats").child(cid);
-
-        ref.addChildEventListener(new ChildEventListener() {
+    private void initViews() {
+        chat_BTN_send.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                Log.d("dddd", "key = " + snapshot.getKey());
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onClick(View v) {
+                sendMessage();
             }
         });
+    }
+
+    private void sendMessage() {
+        String message = chat_EDT_input.getText().toString();
+        if(message.trim().equals("")) {
+            return;
+        }
+
     }
 
     private void findViews() {

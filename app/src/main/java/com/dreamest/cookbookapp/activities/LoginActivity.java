@@ -89,7 +89,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void codeEntered() {
-        if(!login_EDT_input.getText().toString().equals("")) {
+        if(!login_EDT_input.getText().toString().trim().equals("")) {
             String smsVerificationCode = login_EDT_input.getText().toString();
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, smsVerificationCode);
             signInWithPhoneAuthCredential(credential);
@@ -101,7 +101,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void startLoginProcess() {
-        if(!login_EDT_input.getText().toString().equals("")) {
+        if(!login_EDT_input.getText().toString().trim().equals("")) {
             phoneInput = UtilityPack.extractPhoneNumber(login_CCP_code, login_EDT_input);
             PhoneAuthOptions options =
                     PhoneAuthOptions.newBuilder(firebaseAuth)

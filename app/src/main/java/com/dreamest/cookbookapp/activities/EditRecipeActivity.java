@@ -75,7 +75,7 @@ public class EditRecipeActivity extends BaseActivity {
 
     private void loadRecipe() {
         recipe = (Recipe) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.RECIPE, new Recipe(), Recipe.class);
-        if(recipe.getRecipeID().equals("")) { //New recipe. Ensures it has an id for image loading
+        if(recipe.getRecipeID().trim().equals("")) { //New recipe. Ensures it has an id for image loading
             recipe.setRecipeID(Recipe.CreateRecipeID(FirebaseAuth.getInstance().getUid()));
         }
         ingredients = recipe.getIngredients();
@@ -83,7 +83,7 @@ public class EditRecipeActivity extends BaseActivity {
         edit_EDT_title.setText(recipe.getTitle());
         edit_EDT_method.setText(recipe.getMethod());
         changeDifficulty(recipe.getDifficulty());
-        if(!recipe.getImagePath().equals("")) {
+        if(!recipe.getImagePath().trim().equals("")) {
             FirebaseTools.downloadImage(this, recipe.getImagePath(), recipe.getRecipeID(), UtilityPack.FILE_KEYS.JPG,
                     edit_IMG_image, ContextCompat.getDrawable(this, R.drawable.ic_loading), R.drawable.ic_no_image);
         } else {
@@ -215,7 +215,7 @@ public class EditRecipeActivity extends BaseActivity {
     }
 
     private void submitRecipe() {
-        if(!edit_EDT_title.getText().toString().equals("")) {
+        if(!edit_EDT_title.getText().toString().trim().equals("")) {
             updateRecipe();
             MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe);
             recipe.storeInFirebase();
@@ -239,7 +239,7 @@ public class EditRecipeActivity extends BaseActivity {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
-        if (recipe.getRecipeID().equals("")) {
+        if (recipe.getRecipeID().trim().equals("")) {
             recipe.setRecipeID(Recipe.CreateRecipeID(firebaseUser.getUid()));
         }
         FirebaseStorage storage = FirebaseStorage.getInstance();

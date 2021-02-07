@@ -100,7 +100,7 @@ public class AddFriendActivity extends BaseActivity {
 
     private void searchByNumber() {
         String phoneNumber = UtilityPack.extractPhoneNumber(add_friend_CCP_code_picker, add_friend_EDT_input);
-        if (!phoneNumber.equals("")) {
+        if (!phoneNumber.trim().equals("")) {
             searchInFirebase(phoneNumber);
         }
     }
@@ -138,11 +138,11 @@ public class AddFriendActivity extends BaseActivity {
     private boolean duplicateNumber(String searchValue) {
         String currentUserPhoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
         if (searchValue.equals(currentUserPhoneNumber)) {
-            notifyNotHappening("You can't befriend yourself");
+            notifyNotHappening(getString(R.string.cant_add_self));
             return true;
         } else {
-            return userInList(currentFriends, searchValue, "User is already a friend") ||
-                    userInList(pendingFriends, searchValue, "User is pending");
+            return userInList(currentFriends, searchValue, getString(R.string.already_friend)) ||
+                    userInList(pendingFriends, searchValue, getString(R.string.already_pending));
         }
     }
 

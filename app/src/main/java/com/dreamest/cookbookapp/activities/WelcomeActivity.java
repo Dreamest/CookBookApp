@@ -72,7 +72,7 @@ public class WelcomeActivity extends BaseActivity {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         String userName;
-        if(!welcome_EDT_name.getText().toString().equals("")) {
+        if(!welcome_EDT_name.getText().toString().trim().equals("")) {
             userName = welcome_EDT_name.getText().toString();
         } else {
             userName = firebaseUser.getPhoneNumber();

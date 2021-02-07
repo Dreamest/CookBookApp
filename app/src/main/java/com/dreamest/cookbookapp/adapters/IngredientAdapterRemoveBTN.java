@@ -49,7 +49,7 @@ public class IngredientAdapterRemoveBTN extends RecyclerView.Adapter<IngredientA
 
         holder.ingredient_TXT_item.setText(ingredient.getItem());
 
-        if(!ingredient.getUnits().equals("")) {
+        if(!ingredient.getUnits().trim().equals("")) {
             holder.ingredient_TXT_units.setText(ingredient.getUnits());
             holder.ingredient_TXT_units.setVisibility(View.VISIBLE);
         } else
