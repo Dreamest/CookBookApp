@@ -60,6 +60,7 @@ public class UtilityPack {
     public interface KEYS {
         String USERS = "users";
         String RECIPES = "recipes";
+        String CHATS = "chats";
         String MY_RECIPES = "myRecipes";
         String MY_FRIENDS = "myFriends";
         String MY_CHATS = "myChats";

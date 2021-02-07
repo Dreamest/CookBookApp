@@ -46,7 +46,6 @@
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="5dp"
         android:background="@color/soft_grey"
 
         android:ems="15"
@@ -84,7 +83,6 @@
 
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:paddingTop="5dp"
       android:background="@color/soft_grey"
 
       android:ems="15"
@@ -121,7 +119,6 @@
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="5dp"
         android:background="@color/soft_grey"
 
         android:ems="15"

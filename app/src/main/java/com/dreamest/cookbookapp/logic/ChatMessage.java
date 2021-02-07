@@ -1,20 +1,29 @@
 package com.dreamest.cookbookapp.logic;
 
 public class ChatMessage {
-    private boolean isSentByCurrent;
     private String text;
+    private String senderID;
+    private String senderName;
     private long timestamp;
-    private boolean isSeen;
 
     public ChatMessage() {
     }
 
-    public boolean isSentByCurrent() {
-        return isSentByCurrent;
+    public String getSenderName() {
+        return senderName;
     }
 
-    public ChatMessage setSentByCurrent(boolean sentByCurrent) {
-        isSentByCurrent = sentByCurrent;
+    public ChatMessage setSenderName(String senderName) {
+        this.senderName = senderName;
+        return this;
+    }
+
+    public String getSenderID() {
+        return senderID;
+    }
+
+    public ChatMessage setSenderID(String senderID) {
+        this.senderID = senderID;
         return this;
     }
 
@@ -33,15 +42,6 @@ public class ChatMessage {
 
     public ChatMessage setTimestamp(long timestamp) {
         this.timestamp = timestamp;
-        return this;
-    }
-
-    public boolean isSeen() {
-        return isSeen;
-    }
-
-    public ChatMessage setSeen(boolean seen) {
-        isSeen = seen;
         return this;
     }
 }

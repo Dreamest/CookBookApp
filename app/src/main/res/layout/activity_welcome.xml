@@ -61,7 +61,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:paddingTop="5dp"
             android:background="@color/soft_grey"
             android:imeOptions="actionDone"
             android:inputType="text"

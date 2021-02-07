@@ -52,7 +52,6 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
                 android:background="@color/soft_grey"
                 android:hint="@string/what_is_it_called"
 
@@ -130,7 +129,6 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
                 android:background="@color/soft_grey"
 
                 android:hint="@string/how_do_you_make_it"

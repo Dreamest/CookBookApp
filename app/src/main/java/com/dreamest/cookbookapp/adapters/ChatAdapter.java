@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.ChatMessage;
+import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,13 +33,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private ArrayList<String> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
-    private DatabaseReference chatRoot;
+    private String chatID;
 
     // data is passed into the constructor
-    public ChatAdapter(Context context, ArrayList<String> data, DatabaseReference chatRoot) {
+    public ChatAdapter(Context context, ArrayList<String> data, String chatID) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
-        this.chatRoot = chatRoot;
+        this.chatID = chatID;
     }
 
     // inflates the row layout from xml when needed
@@ -51,7 +53,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String key = mData.get(position);
 
-        DatabaseReference ref = chatRoot.child(key);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(UtilityPack.KEYS.CHATS).child(chatID);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -64,17 +66,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
             }
         });
-
     }
 
     private void visualizeMessage(ChatMessage message, @NonNull ViewHolder holder) {
-        if(message.isSeen()) {
-            holder.message_item_TXT_isSeen.setVisibility(View.VISIBLE);
-        } else {
-            holder.message_item_TXT_isSeen.setVisibility(View.GONE);
-        }
-
         holder.message_item_TXT_message.setText(message.getText());
+        holder.message_item_TXT_sender.setText(message.getSenderName());
 
         Timestamp stamp = new Timestamp(message.getTimestamp());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm", Locale.getDefault());
@@ -83,7 +79,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         holder.message_item_TXT_timestamp.setText(timestamp);
 
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.message_item_LAY_master.getLayoutParams();
-        if(message.isSentByCurrent()) {
+        if(message.getSenderID().equals(FirebaseAuth.getInstance().getUid())) { // i.e current user is the sender
             holder.message_item_LAY_container.setBackgroundColor(mInflater.getContext().getColor(R.color.my_message));
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         } else {
@@ -120,7 +116,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         private RelativeLayout message_item_LAY_container; //For color
         private TextView message_item_TXT_message;
         private TextView message_item_TXT_timestamp;
-        private TextView message_item_TXT_isSeen;
+        private TextView message_item_TXT_sender;
 
 
         ViewHolder(View itemView) {
@@ -142,8 +138,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             message_item_LAY_master = itemView.findViewById(R.id.message_item_LAY_master);
             message_item_TXT_message = itemView.findViewById(R.id.message_item_TXT_message);
             message_item_TXT_timestamp = itemView.findViewById(R.id.message_item_TXT_timestamp);
-            message_item_TXT_isSeen = itemView.findViewById(R.id.message_item_TXT_isSeen);
             message_item_LAY_container = itemView.findViewById(R.id.message_item_LAY_container);
+            message_item_TXT_sender = itemView.findViewById(R.id.message_item_TXT_sender);
 
         }
     }

@@ -222,7 +222,10 @@ public class EditRecipeActivity extends BaseActivity {
             User.actionToCurrentUserDatabase(User.ADD, recipe.getRecipeID(), UtilityPack.KEYS.MY_RECIPES);
 
             FirebaseStorage storage = FirebaseStorage.getInstance();
-            StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.RECIPE_IMAGES).child(recipe.getRecipeID());
+            StorageReference storageReference = storage
+                    .getReference(UtilityPack.STORAGE_KEYS.RECIPE_IMAGES)
+                    .child(recipe.getOwnerID())
+                    .child(recipe.getRecipeID());
             Toast.makeText(this, R.string.uploading, Toast.LENGTH_SHORT).show();
             if(imageChanged) {
                 FirebaseTools.uploadImage(this, storageReference, edit_IMG_image, true);
