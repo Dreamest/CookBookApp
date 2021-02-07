@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.opensooq.supernova.gligar.GligarPicker;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -50,10 +52,13 @@ public class EditRecipeActivity extends BaseActivity {
     private ImageView[] stars;
     private HorizontalCounter edit_CTR_prepTime;
     private ScrollView edit_LAY_scroll;
+    private ProgressBar edit_PROGBAR_spinner;
+
     private Recipe recipe;
     private ArrayList<Ingredient> ingredients;
     private int difficulty;
     private boolean imageChanged;
+    private String tempPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,7 +233,8 @@ public class EditRecipeActivity extends BaseActivity {
                     .child(recipe.getRecipeID());
             Toast.makeText(this, R.string.uploading, Toast.LENGTH_SHORT).show();
             if(imageChanged) {
-                FirebaseTools.uploadImage(this, storageReference, edit_IMG_image, true);
+                FirebaseTools.uploadImage(this, storageReference, tempPath, true);
+                playLoading();
             } else {
                 finish();
             }
@@ -236,6 +242,11 @@ public class EditRecipeActivity extends BaseActivity {
         } else {
             Toast.makeText(this, R.string.warn_no_title, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void playLoading() {
+        edit_BTN_submit.setVisibility(View.GONE);
+        edit_PROGBAR_spinner.setVisibility(View.VISIBLE);
     }
 
     private void updateRecipe() {
@@ -246,7 +257,7 @@ public class EditRecipeActivity extends BaseActivity {
             recipe.setRecipeID(Recipe.CreateRecipeID(firebaseUser.getUid()));
         }
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.RECIPE_IMAGES).child(recipe.getRecipeID());
+        StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.RECIPE_IMAGES).child(recipe.getOwnerID()).child(recipe.getRecipeID());
 
         String pattern = "dd.MM.yyyy";
         SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.getDefault());
@@ -289,6 +300,7 @@ public class EditRecipeActivity extends BaseActivity {
         stars[4].setTag(5);
         edit_CTR_prepTime = findViewById(R.id.edit_CTR_prepTime);
         edit_LAY_scroll = findViewById(R.id.edit_LAY_scroll);
+        edit_PROGBAR_spinner = findViewById(R.id.edit_PROGBAR_spinner);
     }
 
     @Override
@@ -305,7 +317,8 @@ public class EditRecipeActivity extends BaseActivity {
             }
 
             case UtilityPack.REQUEST_CODES.UCROP : {
-                UtilityPack.loadUCropResult(this, data, edit_IMG_image, R.drawable.ic_no_image);
+                tempPath = UCrop.getOutput(data).getPath();
+                UtilityPack.loadUCropResult(this, tempPath, edit_IMG_image, R.drawable.ic_no_image);
                 imageChanged = true;
                 break;
             }

@@ -263,7 +263,6 @@
             android:layout_below="@+id/edit_CTR_prepTime"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
-
             android:layout_marginBottom="30dp"
             android:backgroundTint="@color/teal_200"
             android:text="@string/submit"
@@ -272,6 +271,18 @@
             app:cornerRadius="10dp"
             app:strokeColor="@color/black"
             app:strokeWidth="2dp" />
+
+        <ProgressBar
+            android:id="@+id/edit_PROGBAR_spinner"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_below="@+id/edit_CTR_prepTime"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            />
     </RelativeLayout>
 
 </ScrollView>

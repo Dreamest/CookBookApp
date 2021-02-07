@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.opensooq.supernova.gligar.GligarPicker;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 
@@ -32,6 +33,7 @@ public class WelcomeActivity extends BaseActivity {
     private TextInputEditText welcome_EDT_name;
     private MaterialButton welcome_BTN_submit;
     private boolean imageChanged;
+    private String tempPath;
 
 
     @Override
@@ -89,7 +91,7 @@ public class WelcomeActivity extends BaseActivity {
         user.updateFirebase();
 
         if(imageChanged) {
-            FirebaseTools.uploadImage(this, storageReference, welcome_IMG_user_image, false);
+            FirebaseTools.uploadImage(this, storageReference, tempPath, false);
         }
         moveToMainActivity();
     }
@@ -119,7 +121,8 @@ public class WelcomeActivity extends BaseActivity {
             }
 
             case UtilityPack.REQUEST_CODES.UCROP : {
-                UtilityPack.loadUCropResult(this, data, welcome_IMG_user_image, R.drawable.ic_man_avatar);
+                tempPath = UCrop.getOutput(data).getPath();
+                UtilityPack.loadUCropResult(this, tempPath, welcome_IMG_user_image, R.drawable.ic_man_avatar);
                 imageChanged = true;
                 break;
             }

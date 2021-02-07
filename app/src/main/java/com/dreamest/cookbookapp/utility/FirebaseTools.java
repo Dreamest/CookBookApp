@@ -1,7 +1,9 @@
 package com.dreamest.cookbookapp.utility;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -55,10 +57,11 @@ public class FirebaseTools {
         }
     }
 
-    public static void uploadImage(AppCompatActivity activity, StorageReference storageReference, ImageView imageView, boolean closeOnFinish) {
-        imageView.setDrawingCacheEnabled(true);
-        imageView.buildDrawingCache();
-        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+    public static void uploadImage(AppCompatActivity activity, StorageReference storageReference, String path, boolean closeOnFinish) {
+//        imageView.setDrawingCacheEnabled(true);
+//        imageView.buildDrawingCache();
+//        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        Bitmap bitmap = BitmapFactory.decodeFile(path);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();

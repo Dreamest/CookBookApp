@@ -1,7 +1,6 @@
 package com.dreamest.cookbookapp.utility;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.net.Uri;
 import android.widget.ImageView;
 
@@ -49,10 +48,10 @@ public class UtilityPack {
         }
     }
 
-    public static void loadUCropResult(Activity activity, Intent data, ImageView imageView, int defaultIntDrawable) {
+    public static void loadUCropResult(Activity activity, String path, ImageView imageView, int defaultIntDrawable) {
         Glide
                 .with(activity)
-                .load(UCrop.getOutput(data).getPath())
+                .load(path)
                 .into(imageView)
                 .onLoadStarted(ContextCompat.getDrawable(activity, defaultIntDrawable));
     }

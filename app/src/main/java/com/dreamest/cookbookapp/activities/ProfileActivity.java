@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.opensooq.supernova.gligar.GligarPicker;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 
@@ -96,12 +97,6 @@ public class ProfileActivity extends BaseActivity {
             }
         });
 
-        //Swipes on the image don't work otherwise
-        profile_IMG_image.setOnTouchListener(new OnSwipeTouchListener(this){
-            public void onSwipeRight() {
-                finish();
-            }
-        });
 
         profile_BTN_sign_out.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,10 +163,11 @@ public class ProfileActivity extends BaseActivity {
             }
 
             case UtilityPack.REQUEST_CODES.UCROP : {
-                UtilityPack.loadUCropResult(this, data, profile_IMG_image, R.drawable.ic_man_avatar);
+                String path = UCrop.getOutput(data).getPath();
+                UtilityPack.loadUCropResult(this, path, profile_IMG_image, R.drawable.ic_man_avatar);
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.PROFILE_IMAGES).child(user.getUserID());
-                FirebaseTools.uploadImage(this, storageReference, profile_IMG_image, false);
+                FirebaseTools.uploadImage(this, storageReference, path, false);
                 break;
             }
         }
