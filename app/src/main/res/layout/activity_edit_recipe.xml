@@ -96,7 +96,8 @@
             android:textColor="@color/black"
             app:cornerRadius="10dp"
             app:strokeColor="@color/black"
-            app:strokeWidth="2dp" />
+            app:strokeWidth="2dp"
+            />
 
         <TextView
             android:id="@+id/edit_TXT_method"

@@ -5,7 +5,14 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activities.MainActivity">
+    <ImageView
+        android:id="@+id/main_IMG_background"
 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:background="@color/blue_calm"
+        />
     <TextView
         android:id="@+id/main_TXT_title"
         android:layout_width="wrap_content"
@@ -19,14 +26,7 @@
         android:text="@string/your_cookbook"
         />
 
-    <ImageView
-        android:id="@+id/main_IMG_background"
 
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:background="@color/blue_calm"
-        />
     <TextView
         android:id="@+id/main_TXT_no_recipes"
 

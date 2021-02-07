@@ -77,4 +77,8 @@
     <string name="enter_code">אנא הזן קוד</string>
     <string name="enter_phone_number">אנא הזמן מספר טלפון</string>
     <string name="warn_no_title">המתכון חייב לכלול כותרת</string>
+    <string name="hello_world">שלום עולם</string>
+    <string name="seen">נראה</string>
+    <string name="send">שלח</string>
+    <string name="send_a_message">שלח הודעה</string>
 </resources>

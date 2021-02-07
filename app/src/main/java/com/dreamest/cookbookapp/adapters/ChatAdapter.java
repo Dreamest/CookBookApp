@@ -1,0 +1,149 @@
+package com.dreamest.cookbookapp.adapters;
+
+import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.dreamest.cookbookapp.R;
+import com.dreamest.cookbookapp.logic.ChatMessage;
+import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.TimeZone;
+
+public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
+
+    private ArrayList<String> mData;
+    private LayoutInflater mInflater;
+    private ItemClickListener mClickListener;
+
+    // data is passed into the constructor
+    public ChatAdapter(Context context, ArrayList<String> data) {
+        this.mInflater = LayoutInflater.from(context);
+        this.mData = data;
+    }
+
+    // inflates the row layout from xml when needed
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = mInflater.inflate(R.layout.friend_list_item, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        String path = mData.get(position);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference(path);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ChatMessage message = snapshot.getValue(ChatMessage.class);
+                visualizeMessage(message, holder);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private void visualizeMessage(ChatMessage message, @NonNull ViewHolder holder) {
+        if(message.isSeen()) {
+            holder.message_item_TXT_isSeen.setVisibility(View.VISIBLE);
+        } else {
+            holder.message_item_TXT_isSeen.setVisibility(View.GONE);
+        }
+
+        holder.message_item_TXT_message.setText(message.getText());
+
+        Timestamp stamp = new Timestamp(message.getTimestamp());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm", Locale.getDefault());
+//        simpleDateFormat.setTimeZone(TimeZone.getDefault()); test with and without
+        String timestamp = simpleDateFormat.format(stamp);
+        holder.message_item_TXT_timestamp.setText(timestamp);
+
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.message_item_LAY_master.getLayoutParams();
+        if(message.isSentByCurrent()) {
+            holder.message_item_LAY_container.setBackgroundColor(mInflater.getContext().getColor(R.color.my_message));
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        } else {
+            holder.message_item_LAY_container.setBackgroundColor(mInflater.getContext().getColor(R.color.other_message));
+            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        }
+        holder.message_item_LAY_master.setLayoutParams(params);
+    }
+
+    // total number of rows
+    @Override
+    public int getItemCount() {
+        return mData.size();
+    }
+
+    // convenience method for getting data at click position
+    String getItem(int id) {
+        return mData.get(id);
+    }
+
+    // allows clicks events to be caught
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.mClickListener = itemClickListener;
+    }
+
+    // parent activity will implement this method to respond to click events
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    // stores and recycles views as they are scrolled off screen
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private RelativeLayout message_item_LAY_master; //For positioning
+        private RelativeLayout message_item_LAY_container; //For color
+        private TextView message_item_TXT_message;
+        private TextView message_item_TXT_timestamp;
+        private TextView message_item_TXT_isSeen;
+
+
+        ViewHolder(View itemView) {
+            super(itemView);
+            findViews(itemView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mClickListener != null) {
+                        Log.d("dddd", "inside recipeAdapter " + getAdapterPosition());
+                        mClickListener.onItemClick(v, getAdapterPosition());
+                    }
+                }
+            });
+        }
+
+        public void findViews(View itemView) {
+            message_item_LAY_master = itemView.findViewById(R.id.message_item_LAY_master);
+            message_item_TXT_message = itemView.findViewById(R.id.message_item_TXT_message);
+            message_item_TXT_timestamp = itemView.findViewById(R.id.message_item_TXT_timestamp);
+            message_item_TXT_isSeen = itemView.findViewById(R.id.message_item_TXT_isSeen);
+            message_item_LAY_container = itemView.findViewById(R.id.message_item_LAY_container);
+
+        }
+    }
+}

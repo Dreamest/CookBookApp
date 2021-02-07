@@ -1,6 +1,7 @@
 package com.dreamest.cookbookapp.activities;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,6 +38,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class EditRecipeActivity extends BaseActivity {
     private TextInputEditText edit_EDT_title;
@@ -82,7 +84,7 @@ public class EditRecipeActivity extends BaseActivity {
         changeDifficulty(recipe.getDifficulty());
         if(!recipe.getImagePath().equals("")) {
             FirebaseTools.downloadImage(this, recipe.getImagePath(), recipe.getRecipeID(), UtilityPack.FILE_KEYS.JPG,
-                    edit_IMG_image, getDrawable(R.drawable.ic_loading), R.drawable.ic_no_image);
+                    edit_IMG_image, ContextCompat.getDrawable(this, R.drawable.ic_loading), R.drawable.ic_no_image);
         } else {
             edit_IMG_image.setImageResource(R.drawable.ic_camera);
         }
@@ -226,7 +228,6 @@ public class EditRecipeActivity extends BaseActivity {
         } else {
             Toast.makeText(this, R.string.warn_no_title, Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private void updateRecipe() {
@@ -240,7 +241,7 @@ public class EditRecipeActivity extends BaseActivity {
         StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.RECIPE_IMAGES).child(recipe.getRecipeID());
 
         String pattern = "dd.MM.yyyy";
-        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.getDefault());
         recipe.setDate(format.format(new Date()));
         recipe.setDifficulty(difficulty);
         recipe.setImagePath(storageReference.getPath());

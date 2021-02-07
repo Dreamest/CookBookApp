@@ -19,6 +19,9 @@
 
     <color name="purple_300">#F57047FF</color>
 
+    <color name="my_message">#A7C5F1</color>
+    <color name="other_message">#9EA2A3</color>
+
 
     <color name="white">#FFFFFFFF</color>
 </resources>

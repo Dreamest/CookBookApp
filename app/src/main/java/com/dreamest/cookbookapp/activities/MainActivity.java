@@ -101,7 +101,7 @@ public class MainActivity extends BaseActivity {
                     Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
                     while(iterator.hasNext()) {
                         DataSnapshot recipeSnapshot = iterator.next();
-                            loadRecipe(recipeSnapshot, database, MY_RECIPES, !iterator.hasNext());
+                        loadRecipe(recipeSnapshot, database, MY_RECIPES, !iterator.hasNext());
                     }
 
                 } else { //No recipes
