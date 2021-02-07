@@ -53,6 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/welcome_IMG_user_image"
         android:layout_centerHorizontal="true"
+
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/welcome_EDT_name"
@@ -60,7 +61,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-
+            android:paddingTop="5dp"
+            android:background="@color/soft_grey"
             android:imeOptions="actionDone"
             android:inputType="text"
             android:ems="12"

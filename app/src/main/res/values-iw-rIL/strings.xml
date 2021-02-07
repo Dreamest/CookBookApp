@@ -81,4 +81,6 @@
     <string name="seen">נראה</string>
     <string name="send">שלח</string>
     <string name="send_a_message">שלח הודעה</string>
+    <string name="what_is_it_called">איך קוראים לזה?</string>
+    <string name="how_do_you_make_it">איך מכינים את זה?</string>
 </resources>

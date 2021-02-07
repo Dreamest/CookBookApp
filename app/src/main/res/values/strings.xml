@@ -87,6 +87,8 @@
     <string name="seen">seen</string>
     <string name="send">Send</string>
     <string name="send_a_message">Send a message</string>
+    <string name="what_is_it_called">What is it called?</string>
+    <string name="how_do_you_make_it">How do you make it?</string>
 
 
 </resources>
