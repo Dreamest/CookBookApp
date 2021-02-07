@@ -74,4 +74,7 @@
     <string name="upload_failed">העלאת תמונה נכשלה</string>
     <string name="upload_success">התמונה הועלתה בהצלחה</string>
     <string name="uploading">מעלה לשרת...</string>
+    <string name="enter_code">אנא הזן קוד</string>
+    <string name="enter_phone_number">אנא הזמן מספר טלפון</string>
+    <string name="warn_no_title">המתכון חייב לכלול כותרת</string>
 </resources>

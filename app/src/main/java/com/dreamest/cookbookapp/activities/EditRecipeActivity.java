@@ -212,16 +212,21 @@ public class EditRecipeActivity extends BaseActivity {
     }
 
     private void submitRecipe() {
-        updateRecipe();
-        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe);
-        recipe.storeInFirebase();
-        User.actionToCurrentUserDatabase(User.ADD, recipe.getRecipeID(), UtilityPack.KEYS.MY_RECIPES);
+        if(!edit_EDT_title.getText().toString().equals("")) {
+            updateRecipe();
+            MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe);
+            recipe.storeInFirebase();
+            User.actionToCurrentUserDatabase(User.ADD, recipe.getRecipeID(), UtilityPack.KEYS.MY_RECIPES);
 
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.RECIPE_IMAGES).child(recipe.getRecipeID());
-        Toast.makeText(this, R.string.uploading, Toast.LENGTH_SHORT).show();
-        FirebaseTools.uploadImage(this, storageReference, edit_IMG_image, true);
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.RECIPE_IMAGES).child(recipe.getRecipeID());
+            Toast.makeText(this, R.string.uploading, Toast.LENGTH_SHORT).show();
+            FirebaseTools.uploadImage(this, storageReference, edit_IMG_image, true);
 //        finish(); activity will finish when upload is done
+        } else {
+            Toast.makeText(this, R.string.warn_no_title, Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void updateRecipe() {

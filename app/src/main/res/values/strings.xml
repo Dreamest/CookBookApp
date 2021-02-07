@@ -81,6 +81,7 @@
     <string name="uploading">Uploading...</string>
     <string name="enter_code">Please enter a code</string>
     <string name="enter_phone_number">Please enter a phone number</string>
+    <string name="warn_no_title">Recipe must at least have a title</string>
 
 
 </resources>
