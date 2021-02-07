@@ -72,8 +72,8 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/listRecipe_IMG_image"
 
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:layout_below="@id/listRecipe_TXT_owner"
             android:layout_centerHorizontal="true"
 

@@ -220,10 +220,10 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        Glide.with(this)
-                .load(UtilityPack.randomBackground())
-                .centerCrop()
-                .into(main_IMG_background);
+//        Glide.with(this)
+//                .load(UtilityPack.randomBackground())
+//                .centerCrop()
+//                .into(main_IMG_background);
 
         main_LST_recipes.setOnTouchListener(new OnSwipeTouchListener(this) {
             public void onSwipeRight() {

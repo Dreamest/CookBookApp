@@ -53,6 +53,7 @@ public class EditRecipeActivity extends BaseActivity {
     private Recipe recipe;
     private ArrayList<Ingredient> ingredients;
     private int difficulty;
+    private boolean imageChanged;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,7 +224,11 @@ public class EditRecipeActivity extends BaseActivity {
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.RECIPE_IMAGES).child(recipe.getRecipeID());
             Toast.makeText(this, R.string.uploading, Toast.LENGTH_SHORT).show();
-            FirebaseTools.uploadImage(this, storageReference, edit_IMG_image, true);
+            if(imageChanged) {
+                FirebaseTools.uploadImage(this, storageReference, edit_IMG_image, true);
+            } else {
+                finish();
+            }
 //        finish(); activity will finish when upload is done
         } else {
             Toast.makeText(this, R.string.warn_no_title, Toast.LENGTH_SHORT).show();
@@ -298,6 +303,7 @@ public class EditRecipeActivity extends BaseActivity {
 
             case UtilityPack.REQUEST_CODES.UCROP : {
                 UtilityPack.loadUCropResult(this, data, edit_IMG_image, R.drawable.ic_no_image);
+                imageChanged = true;
                 break;
             }
         }

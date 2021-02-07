@@ -31,6 +31,7 @@ public class WelcomeActivity extends BaseActivity {
     private ImageView welcome_IMG_user_image;
     private TextInputEditText welcome_EDT_name;
     private MaterialButton welcome_BTN_submit;
+    private boolean imageChanged;
 
 
     @Override
@@ -87,7 +88,9 @@ public class WelcomeActivity extends BaseActivity {
                 .setImagePath(storageReference.getPath());
         user.updateFirebase();
 
-        FirebaseTools.uploadImage(this, storageReference, welcome_IMG_user_image, false);
+        if(imageChanged) {
+            FirebaseTools.uploadImage(this, storageReference, welcome_IMG_user_image, false);
+        }
         moveToMainActivity();
     }
 
@@ -117,6 +120,7 @@ public class WelcomeActivity extends BaseActivity {
 
             case UtilityPack.REQUEST_CODES.UCROP : {
                 UtilityPack.loadUCropResult(this, data, welcome_IMG_user_image, R.drawable.ic_man_avatar);
+                imageChanged = true;
                 break;
             }
         }
