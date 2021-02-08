@@ -1,7 +1,6 @@
-package com.dreamest.cookbookapp.adapters;
+package com.dreamest.cookbookapp.adapters.old_and_unused;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,9 +68,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ShapeableImageView friend_IMG_profile;
-        TextView friend_TXT_name;
-
+        private ShapeableImageView friend_IMG_profile;
+        private TextView friend_TXT_name;
 
         ViewHolder(View itemView) {
             super(itemView);

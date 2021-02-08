@@ -44,17 +44,19 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth' //Auth for authenticating users
     implementation 'com.google.firebase:firebase-database' //database for realtime data transfer
     implementation 'com.google.firebase:firebase-storage' //storage for photos
+    implementation 'com.firebaseui:firebase-ui-database:7.1.1' //for Firebase recyclerView
+
 
 
     // dependencies for CountryCodePicker
     implementation 'io.michaelrocks:libphonenumber-android:8.8.5'
     implementation 'com.github.joielechong:countrycodepicker:2.1.5'
 
-    // dependencies for Glide
+    // Glide - Load images safely
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
-    // Gson
+    // Gson - convert objects to Json
     implementation 'com.google.code.gson:gson:2.8.6'
 
     // Gligar - Use camera and select photos from gallery

@@ -89,21 +89,24 @@ public class FirebaseTools {
 
     /**
      * Creates a unique chat key based on two user IDs regardless if who calls this and adds the key to both users
-     * @param uid1 id of user 1
-     * @param uid2 id of user 2
+     * @param myID id of current user
+     * @param friendID id of other user
      * @return chatKKey
      */
-    public static String createChatKey(String uid1, String uid2) {
-        String chatKey = uid1+uid2;
-        if(uid2.compareTo(uid1) > 0) {
-            chatKey = uid2+uid1;
+    public static String createChatKey(String myID, String friendID) {
+        String chatKey = myID+friendID;
+        if(friendID.compareTo(myID) > 0) {
+            chatKey = friendID+myID;
         }
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS);
 
-        // When this function is called we can already
-        ref.child(uid1).child(UtilityPack.KEYS.MY_CHATS).child(chatKey).setValue(String.valueOf(System.currentTimeMillis()));
-        ref.child(uid2).child(UtilityPack.KEYS.MY_CHATS).child(chatKey).setValue(String.valueOf(System.currentTimeMillis()));
+        // When this function is called we can already update the current user's last seen
+        ref.child(myID).child(UtilityPack.KEYS.MY_CHATS).child(chatKey).setValue(String.valueOf(System.currentTimeMillis()));
+        if(!ref.child(friendID).child(UtilityPack.KEYS.MY_CHATS).child(chatKey).getKey().equals(chatKey)) {
+            ref.child(friendID).child(UtilityPack.KEYS.MY_CHATS).child(chatKey).setValue(String.valueOf(System.currentTimeMillis()));
+
+        }
 
         return chatKey;
     }

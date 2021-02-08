@@ -94,23 +94,6 @@ public class MySharedPreferences {
         return gson.fromJson(objectJson, objectType);
     }
 
-//    public void putListObject(String key, List listObject) {
-//        List<String> jsonList = new ArrayList<>();
-//        for(Object o: listObject) {
-//            jsonList.add(gson.toJson(o));
-//        }
-//        putString(key, gson.toJson(jsonList));
-//
-//    }
-//
-//    public Object getListObject(String key, Object defaultValue, Object defaultElementValue) {
-//        String objectJson = getString(key, KEYS.NO_OBJECT);
-//        if(objectJson.equals(KEYS.NO_OBJECT)) {
-//            return defaultValue;
-//        }
-//
-//    }
-
     public interface KEYS {
         String MY_SP = "MY_SP";
         String NO_OBJECT = "NO_OBJECT";
@@ -118,6 +101,7 @@ public class MySharedPreferences {
         String USER = "USER";
         String INGREDIENT = "INGREDIENT";
         String UPDATED_INGREDIENT = "UPDATED_INGREDIENT";
+        String USER_ID = "USER_ID";
         String LOGOUT = "LOGOUT";
         boolean LOGOUT_SIGNAL = true;
         boolean STAY_LOGGED = false;

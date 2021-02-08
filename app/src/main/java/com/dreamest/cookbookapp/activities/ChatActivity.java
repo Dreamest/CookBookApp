@@ -54,9 +54,6 @@ public class ChatActivity extends BaseActivity {
         loadUsers();
         findViews();
         initViews();
-
-//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
     }
 
     private void readMessages() {
@@ -152,14 +149,15 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void loadUsers() {
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(uid);
+        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                currentUser = snapshot.getValue(User.class);
-                friend = (User) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.USER, new User(), User.class);
+                String myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                currentUser = snapshot.child(myID).getValue(User.class);
+                String friendID = MySharedPreferences.getMsp().getString(MySharedPreferences.KEYS.USER_ID, null);
+                friend = snapshot.child(friendID).getValue(User.class);
                 chatKey = FirebaseTools.createChatKey(currentUser.getUserID(), friend.getUserID());
                 chat_TXT_other_person.setText(friend.getDisplayName());
                 readMessages();

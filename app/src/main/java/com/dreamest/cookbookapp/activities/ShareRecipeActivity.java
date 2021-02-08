@@ -1,37 +1,28 @@
 package com.dreamest.cookbookapp.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamest.cookbookapp.R;
-import com.dreamest.cookbookapp.adapters.FriendAdapter;
-import com.dreamest.cookbookapp.logic.User;
-import com.dreamest.cookbookapp.utility.MySharedPreferences;
+import com.dreamest.cookbookapp.adapters.FriendFirebaseAdapter;
 import com.dreamest.cookbookapp.utility.UtilityPack;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 
 public class ShareRecipeActivity extends BaseActivity {
     private RecyclerView share_LST_friends;
     private TextView share_TXT_no_friends;
     private String recipeToShare;
-    private ArrayList<User> friendslist;
-    private User currentUser;
+    private FriendFirebaseAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +30,19 @@ public class ShareRecipeActivity extends BaseActivity {
         setContentView(R.layout.activity_share_recipe);
         recipeToShare = getIntent().getStringExtra(UtilityPack.KEYS.RECIPE_ID);
         findViews();
+        initFirebaseAdapter();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        friendslist = new ArrayList<>();
-        loadCurrentUser();
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
     private void findViews() {
@@ -53,21 +50,30 @@ public class ShareRecipeActivity extends BaseActivity {
         share_LST_friends = findViewById(R.id.share_LST_friends);
     }
 
-    private void initAdapter () {
+    private void initFirebaseAdapter() {
         share_LST_friends.setLayoutManager(new LinearLayoutManager(this));
-        FriendAdapter friendAdapter = new FriendAdapter(this, friendslist);
 
-        friendAdapter.setClickListener(new FriendAdapter.ItemClickListener() {
+        DatabaseReference friendslistRoot = FirebaseDatabase.getInstance()
+                .getReference(UtilityPack.KEYS.USERS)
+                .child(FirebaseAuth.getInstance().getUid())
+                .child(UtilityPack.KEYS.MY_FRIENDS);
+
+        FirebaseRecyclerOptions<String> options
+                = new FirebaseRecyclerOptions.Builder<String>()
+                .setQuery(friendslistRoot, String.class)
+                .build();
+        adapter = new FriendFirebaseAdapter(options);
+
+        adapter.setClickListener(new FriendFirebaseAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                shareWith(position);
+                shareWith(adapter.getItem(position));
             }
         });
-        share_LST_friends.setAdapter(friendAdapter);
+        share_LST_friends.setAdapter(adapter);
     }
 
-    private void shareWith(int position) {
-        String friendUID = friendslist.get(position).getUserID();
+    private void shareWith(String friendUID) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database
                 .getReference(UtilityPack.KEYS.USERS)
@@ -78,71 +84,4 @@ public class ShareRecipeActivity extends BaseActivity {
         finish();
     }
 
-    private void loadFriendsFromDatabase() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database
-                .getReference(UtilityPack.KEYS.USERS)
-                .child(currentUser.getUserID())
-                .child(UtilityPack.KEYS.MY_FRIENDS);
-
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
-                    share_TXT_no_friends.setVisibility(View.GONE);
-                    Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
-                    while(iterator.hasNext()) {
-                        DataSnapshot friendSnapshot = iterator.next();
-                        loadFriend(friendSnapshot, database, !iterator.hasNext());
-                    }
-                } else {
-                    share_TXT_no_friends.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("dddd", "Failed to read value.", error.toException());
-            }
-        });
-    }
-
-    private void loadFriend(DataSnapshot id, FirebaseDatabase database, boolean last) {
-        DatabaseReference friendRef = database.getReference(UtilityPack.KEYS.USERS)
-                .child(id.getValue(String.class));
-        friendRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User friend = snapshot.getValue(User.class);
-                Log.d("dddd", "The name is: " + friend.getDisplayName() );
-                friendslist.add(friend);
-                if(last) {
-                    initAdapter();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("dddd", "Failed to read value.", error.toException());
-            }
-        });
-    }
-
-    private void loadCurrentUser() {
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(uid);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                currentUser = snapshot.getValue(User.class);
-                loadFriendsFromDatabase();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("dddd", "Failed to read value.", error.toException());
-            }
-        });
-    }
 }

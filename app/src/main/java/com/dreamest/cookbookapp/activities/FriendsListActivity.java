@@ -14,11 +14,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dreamest.cookbookapp.R;
-import com.dreamest.cookbookapp.adapters.FriendAdapter;
+import com.dreamest.cookbookapp.adapters.FriendFirebaseAdapter;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
 import com.dreamest.cookbookapp.utility.UtilityPack;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -29,7 +30,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class FriendsListActivity extends BaseActivity {
     private RecyclerView friendslist_LST_friends;
@@ -37,13 +37,11 @@ public class FriendsListActivity extends BaseActivity {
     private TextView friends_TXT_no_friends;
     private RelativeLayout friendslist_LAY_master;
     private MaterialButton friendslist_BTN_pending;
-    private ArrayList<User> friendslist;
-    private User currentUser;
     private ArrayList<User> pendingFriends;
-
-
-    private final int PENDING_FRIENDS = 1235;
-    private final int MY_FRIENDS = 3456;
+    private ArrayList<User> friendslist;
+    private FriendFirebaseAdapter adapter;
+    private final int PENDING_FRIENDS = 1;
+    private final int FRIENDSLIST = 2;
 
 
     @Override
@@ -53,21 +51,70 @@ public class FriendsListActivity extends BaseActivity {
 
         findViews();
         initViews();
+        initFirebaseAdapter();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() { // TODO: 2/8/21 test
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                if (adapter.getItemCount() > 0) {
+                    friends_TXT_no_friends.setVisibility(View.GONE);
+                } else {
+                    friends_TXT_no_friends.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        adapter.notifyItemRangeRemoved(0, adapter.getItemCount());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         pendingFriends = new ArrayList<>();
-        friendslist = new ArrayList<>();
-        loadCurrentUser();
+        loadPendingFriends();
+    }
+
+    private void initFirebaseAdapter() {
+        friendslist_LST_friends.setLayoutManager(new LinearLayoutManager(this));
+
+        DatabaseReference friendslistRoot = FirebaseDatabase.getInstance()
+                .getReference(UtilityPack.KEYS.USERS)
+                .child(FirebaseAuth.getInstance().getUid())
+                .child(UtilityPack.KEYS.MY_FRIENDS);
+
+        FirebaseRecyclerOptions<String> options
+                = new FirebaseRecyclerOptions.Builder<String>()
+                .setQuery(friendslistRoot, String.class)
+                .build();
+        adapter = new FriendFirebaseAdapter(options);
+
+        adapter.setClickListener(new FriendFirebaseAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                openChatWith(adapter.getItem(position));
+            }
+        });
+        friendslist_LST_friends.setAdapter(adapter);
     }
 
     private void loadPendingFriends() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
-                .child(currentUser.getUserID())
+                .child(FirebaseAuth.getInstance().getUid())
                 .child(UtilityPack.KEYS.PENDING_FRIENDS);
+
         ref.addChildEventListener(new ChildEventListener() { //using ChildListener so in case a pending request happens, we'll be notified.
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -106,36 +153,6 @@ public class FriendsListActivity extends BaseActivity {
         }
     }
 
-    private void loadFriendsFromDatabase() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database
-                .getReference(UtilityPack.KEYS.USERS)
-                .child(currentUser.getUserID())
-                .child(UtilityPack.KEYS.MY_FRIENDS);
-
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    friends_TXT_no_friends.setVisibility(View.GONE);
-                    Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
-                    while(iterator.hasNext()) {
-                        DataSnapshot friendSnapshot = iterator.next();
-                        loadFriend(friendSnapshot, database, MY_FRIENDS, !iterator.hasNext());
-                    }
-                } else {
-                    friends_TXT_no_friends.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("dddd", "Failed to read value.", error.toException());
-            }
-        });
-    }
-
-
     private void loadFriend(DataSnapshot id, FirebaseDatabase database, int loadTo, boolean last) {
         DatabaseReference friendRef = database.getReference(UtilityPack.KEYS.USERS)
                 .child(id.getValue(String.class));
@@ -143,10 +160,13 @@ public class FriendsListActivity extends BaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User friend = snapshot.getValue(User.class);
-                if (loadTo == MY_FRIENDS) {
+                if (loadTo == FRIENDSLIST) {
                     friendslist.add(friend);
                     if(last) {
-                        initAdapter();
+                        Intent myIntent = new Intent(FriendsListActivity.this, AddFriendActivity.class);
+                        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.FRIENDSLIST_ARRAY, friendslist);
+                        MySharedPreferences.getMsp().putObject(UtilityPack.KEYS.PENDING_FRIENDS, pendingFriends);
+                        startActivity(myIntent);
                     }
                 } else if (loadTo == PENDING_FRIENDS) {
                     pendingFriends.add(friend);
@@ -163,25 +183,6 @@ public class FriendsListActivity extends BaseActivity {
         });
     }
 
-    private void loadCurrentUser() {
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(uid);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                currentUser = snapshot.getValue(User.class);
-                loadFriendsFromDatabase();
-                loadPendingFriends();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("dddd", "Failed to read value.", error.toException());
-            }
-        });
-    }
-
     private void initViews() {
         friendslist_BTN_add_friend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,8 +190,6 @@ public class FriendsListActivity extends BaseActivity {
                 addNewFriend();
             }
         });
-
-
         friendslist_LST_friends.setOnTouchListener(new OnSwipeTouchListener(this) {
             public void onSwipeLeft() {
                 finish();
@@ -219,10 +218,25 @@ public class FriendsListActivity extends BaseActivity {
     }
 
     private void addNewFriend() {
-        Intent myIntent = new Intent(this, AddFriendActivity.class);
-        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.FRIENDSLIST_ARRAY, friendslist);
-        MySharedPreferences.getMsp().putObject(UtilityPack.KEYS.PENDING_FRIENDS, pendingFriends);
-        startActivity(myIntent);
+        friendslist = new ArrayList<>();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database
+                .getReference(UtilityPack.KEYS.USERS)
+                .child(FirebaseAuth.getInstance().getUid())
+                .child(UtilityPack.KEYS.MY_FRIENDS);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot friend : snapshot.getChildren()) {
+                    loadFriend(friend, database, FRIENDSLIST, true);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void findViews() {
@@ -233,24 +247,10 @@ public class FriendsListActivity extends BaseActivity {
         friendslist_BTN_pending = findViewById(R.id.friendslist_BTN_pending);
     }
 
-    private void initAdapter() {
-        friendslist_LST_friends.setLayoutManager(new LinearLayoutManager(this));
-        FriendAdapter friendAdapter = new FriendAdapter(this, friendslist);
 
-        friendAdapter.setClickListener(new FriendAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                openChatWith(position);
-            }
-        });
-        friendslist_LST_friends.setAdapter(friendAdapter);
-    }
-
-    private void openChatWith(int position) {
-//        Toast.makeText(FriendsListActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
-        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.USER, friendslist.get(position));
+    private void openChatWith(String friendID) {
+        MySharedPreferences.getMsp().putString(MySharedPreferences.KEYS.USER_ID, friendID);
         Intent myIntent = new Intent(this, ChatActivity.class);
         startActivity(myIntent);
-        // TODO: 2/2/21 implement
     }
 }
