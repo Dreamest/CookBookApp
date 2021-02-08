@@ -213,7 +213,6 @@ public class FriendsListActivity extends BaseActivity {
 
     private void pendingFriends() {
         Intent myIntent = new Intent(this, PendingFriendsActivity.class);
-        MySharedPreferences.getMsp().putObject(UtilityPack.KEYS.PENDING_FRIENDS, pendingFriends);
         startActivity(myIntent);
     }
 

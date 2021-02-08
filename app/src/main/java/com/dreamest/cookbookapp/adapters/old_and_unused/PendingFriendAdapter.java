@@ -1,4 +1,4 @@
-package com.dreamest.cookbookapp.adapters;
+package com.dreamest.cookbookapp.adapters.old_and_unused;
 
 import android.content.Context;
 import android.view.LayoutInflater;

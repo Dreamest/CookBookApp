@@ -19,22 +19,6 @@
         android:textSize="45sp"
         />
 
-    <TextView
-        android:id="@+id/pending_friend_TXT_no_pending"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:gravity="center"
-
-        android:lines="2"
-        android:text="@string/no_friend_requests"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="40sp"
-        />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/pending_friend_LST_recipes"
 
