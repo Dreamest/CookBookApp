@@ -34,7 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends BaseActivity {
     private TextView chat_TXT_other_person;
     private RecyclerView chat_LST_messages;
     private MaterialButton chat_BTN_send;
@@ -55,7 +55,7 @@ public class ChatActivity extends AppCompatActivity {
         findViews();
         initViews();
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
     }
 

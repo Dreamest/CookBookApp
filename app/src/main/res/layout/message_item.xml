@@ -2,21 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
 
     <RelativeLayout
         android:id="@+id/message_item_LAY_master"
         android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
-            android:elevation="20dp"
             app:cardCornerRadius="10dp"
-            app:cardElevation="20dp">
+            app:cardElevation="5dp"
+            android:elevation="5dp"
+            >
 
             <RelativeLayout
                 android:id="@+id/message_item_LAY_container"
@@ -35,7 +37,7 @@
                     android:layout_height="wrap_content"
 
                     android:text="@string/owner_name"
-                    android:textSize="15sp"
+                    android:textSize="10sp"
                     />
 
                 <TextView
@@ -45,7 +47,7 @@
                     android:layout_below="@id/message_item_TXT_sender"
                     android:layout_alignStart="@id/message_item_TXT_sender"
                     android:text="@string/hello_world"
-                    android:textSize="30sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/message_item_TXT_timestamp"
@@ -56,7 +58,7 @@
                     android:layout_marginTop="3dp"
 
                     android:text="@string/_15_34"
-                    android:textSize="15sp" />
+                    android:textSize="10sp" />
 
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>

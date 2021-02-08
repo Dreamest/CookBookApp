@@ -1,6 +1,7 @@
 package com.dreamest.cookbookapp;
 
 import android.app.Application;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -15,8 +16,5 @@ public class App extends Application {
 
         //Disables dark mode
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-
-
-
     }
 }

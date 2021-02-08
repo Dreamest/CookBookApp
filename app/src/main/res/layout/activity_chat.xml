@@ -17,17 +17,17 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:background="@color/purple_500"
-        android:layout_weight="10"
+        android:layout_weight="8"
 
         android:text="@string/owner_name"
-        android:textSize="50sp"
+        android:textSize="30sp"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chat_LST_messages"
 
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="80"
+        android:layout_weight="82"
 
         tools:listitem="@layout/message_item"
         />
