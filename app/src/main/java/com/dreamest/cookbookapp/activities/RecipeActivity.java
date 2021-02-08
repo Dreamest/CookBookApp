@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.dreamest.cookbookapp.R;
-import com.dreamest.cookbookapp.adapters.IngredientAdapterCheckbox;
+import com.dreamest.cookbookapp.adapters.IngredientAdapter;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
@@ -115,12 +115,16 @@ public class RecipeActivity extends BaseActivity {
 
     private void initAdapter() {
         recipe_LST_ingredients.setLayoutManager(new LinearLayoutManager(this));
-        IngredientAdapterCheckbox ingredientAdapter = new IngredientAdapterCheckbox(this, recipe.getIngredients());
+        IngredientAdapter ingredientAdapter = new IngredientAdapter(this, recipe.getIngredients(), IngredientAdapter.CHECKBOX);
 
-        ingredientAdapter.setClickListener(new IngredientAdapterCheckbox.ItemClickListener() {
+        ingredientAdapter.setClickListener(new IngredientAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                //handled inside
+            }
 
+            @Override
+            public void onRemoveClick(int position) {
             }
         });
         recipe_LST_ingredients.setAdapter(ingredientAdapter);

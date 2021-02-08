@@ -56,7 +56,6 @@ public class ChatActivity extends AppCompatActivity {
         loadUsers();
         findViews();
         initViews();
-        readMessages();
     }
 
     private void readMessages() {
@@ -64,12 +63,15 @@ public class ChatActivity extends AppCompatActivity {
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Log.d("dddd", "OnChildAdded");
                 timestamps.add(snapshot.getKey());
                 initAdapter();
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Log.d("dddd", "onChildChanged");
+
                 Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
                 while(iterator.hasNext()) {
                     String timestamp = iterator.next().getKey();
@@ -165,6 +167,7 @@ public class ChatActivity extends AppCompatActivity {
                 currentUser = snapshot.getValue(User.class);
                 friend = (User) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.USER, new User(), User.class);
                 chatKey = FirebaseTools.createChatKey(currentUser.getUserID(), friend.getUserID());
+                readMessages();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

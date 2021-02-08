@@ -12,29 +12,32 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Ingredient;
-import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
 /**
- * Adapter for ingredient list that shows the remove button element
+ * Adapter for ingredient list that shows the checkbox element
  */
-public class IngredientAdapterRemoveBTN extends RecyclerView.Adapter<IngredientAdapterRemoveBTN.MyViewHolder>  {
+public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.MyViewHolder>  {
     private ArrayList<Ingredient> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
+    private int mode;
+    public static final int REMOVE_BUTTON = 1;
+    public static final int CHECKBOX = 2;
 
     // data is passed into the constructor
-    public IngredientAdapterRemoveBTN(Context context, ArrayList<Ingredient> data) {
+    public IngredientAdapter(Context context, ArrayList<Ingredient> data, int mode) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
+        this.mode = mode;
     }
 
     // inflates the row layout from xml when needed
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.ingredient_list_item, parent, false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(view, mode);
     }
 
     // binds the data to the TextView in each row
@@ -71,11 +74,12 @@ public class IngredientAdapterRemoveBTN extends RecyclerView.Adapter<IngredientA
     public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
-
-
+    
+    
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
+        void onItemClick(View view, int position);
         void onRemoveClick(int position);
     }
 
@@ -86,20 +90,36 @@ public class IngredientAdapterRemoveBTN extends RecyclerView.Adapter<IngredientA
         private TextView ingredient_TXT_amount;
         private ImageView ingredient_IMG_check;
         private ImageButton ingredient_BTN_remove;
+        private int mode;
 
 
-        MyViewHolder(View itemView) {
+        MyViewHolder(View itemView, int mode) {
             super(itemView);
+            this.mode = mode;
             findViews(itemView);
+            if(mode == IngredientAdapter.CHECKBOX) {
+                setImage(ingredient_IMG_check, R.drawable.checkbox_inactive);
 
-            ingredient_BTN_remove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(mClickListener != null) {
-                        mClickListener.onRemoveClick(getAdapterPosition());
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mClickListener != null) {
+                            mClickListener.onItemClick(v, getAdapterPosition());
+                            changeBoxStatus(v);
+                        }
                     }
-                }
-            });
+                });
+            }
+            if(mode == IngredientAdapter.REMOVE_BUTTON) {
+                ingredient_BTN_remove.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(mClickListener != null) {
+                            mClickListener.onRemoveClick(getAdapterPosition());
+                        }
+                    }
+                });
+            }
         }
 
         private void setImage(ImageView img, int drawable) {
@@ -113,11 +133,21 @@ public class IngredientAdapterRemoveBTN extends RecyclerView.Adapter<IngredientA
             ingredient_TXT_amount = itemView.findViewById(R.id.ingredient_TXT_amount);
             ingredient_IMG_check = itemView.findViewById(R.id.ingredient_IMG_check);
             ingredient_BTN_remove = itemView.findViewById(R.id.ingredient_BTN_remove);
-            ingredient_IMG_check.setVisibility(View.GONE);
+            if(mode == IngredientAdapter.CHECKBOX) {
+                ingredient_BTN_remove.setVisibility(View.GONE);
+            } else if (mode == IngredientAdapter.REMOVE_BUTTON) {
+                ingredient_IMG_check.setVisibility(View.GONE);
+            }
+        }
+
+        private void changeBoxStatus(View v) {
+            if(ingredient_IMG_check.getTag().equals(R.drawable.checkbox_active)) {
+                setImage(ingredient_IMG_check, R.drawable.checkbox_inactive);
+            } else if(ingredient_IMG_check.getTag().equals(R.drawable.checkbox_inactive)) {
+                setImage(ingredient_IMG_check, R.drawable.checkbox_active);
+            }
         }
     }
-
-
 }
 
 

@@ -18,8 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamest.cookbookapp.R;
+import com.dreamest.cookbookapp.adapters.IngredientAdapter;
 import com.dreamest.cookbookapp.logic.Ingredient;
-import com.dreamest.cookbookapp.adapters.IngredientAdapterRemoveBTN;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
@@ -182,9 +182,13 @@ public class EditRecipeActivity extends BaseActivity {
 
     private void loadIngredientsAdapter() {
         edit_LST_ingredients.setLayoutManager(new LinearLayoutManager(this));
-        IngredientAdapterRemoveBTN ingredientAdapter = new IngredientAdapterRemoveBTN(this, ingredients);
+        IngredientAdapter ingredientAdapter = new IngredientAdapter(this, ingredients, IngredientAdapter.REMOVE_BUTTON);
 
-        ingredientAdapter.setClickListener(new IngredientAdapterRemoveBTN.ItemClickListener() {
+        ingredientAdapter.setClickListener(new IngredientAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+            }
+
             @Override
             public void onRemoveClick(int position) {
                 HideUI.clearFocus(EditRecipeActivity.this, edit_EDT_method);
@@ -195,7 +199,7 @@ public class EditRecipeActivity extends BaseActivity {
         updateAdapter(ingredientAdapter);
     }
 
-    private void updateAdapter(IngredientAdapterRemoveBTN ingredientAdapter) {
+    private void updateAdapter(IngredientAdapter ingredientAdapter) {
         edit_LST_ingredients.setAdapter(ingredientAdapter);
         updateAddButton();
     }
@@ -257,7 +261,7 @@ public class EditRecipeActivity extends BaseActivity {
             recipe.setRecipeID(Recipe.CreateRecipeID(firebaseUser.getUid()));
         }
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.RECIPE_IMAGES).child(recipe.getOwnerID()).child(recipe.getRecipeID());
+        StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.RECIPE_IMAGES).child(firebaseUser.getUid()).child(recipe.getRecipeID());
 
         String pattern = "dd.MM.yyyy";
         SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.getDefault());

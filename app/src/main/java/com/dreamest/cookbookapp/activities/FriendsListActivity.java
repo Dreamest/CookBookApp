@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamest.cookbookapp.R;
+import com.dreamest.cookbookapp.adapters.ChatAdapter;
 import com.dreamest.cookbookapp.adapters.FriendAdapter;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
@@ -248,7 +249,10 @@ public class FriendsListActivity extends BaseActivity {
     }
 
     private void openChatWith(int position) {
-        Toast.makeText(FriendsListActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(FriendsListActivity.this, R.string.not_implemented, Toast.LENGTH_SHORT).show();
+        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.USER, friendslist.get(position));
+        Intent myIntent = new Intent(this, ChatActivity.class);
+        startActivity(myIntent);
         // TODO: 2/2/21 implement
     }
 }
