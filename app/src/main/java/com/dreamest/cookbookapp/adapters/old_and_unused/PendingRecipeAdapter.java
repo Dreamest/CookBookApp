@@ -1,4 +1,4 @@
-package com.dreamest.cookbookapp.adapters;
+package com.dreamest.cookbookapp.adapters.old_and_unused;
 
 import android.content.Context;
 import android.util.Log;
@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class PendingRecipeAdapter extends RecyclerView.Adapter<PendingRecipeAdapter.ViewHolder> {
+    // TODO: 2/9/21 test new adapter
     private ArrayList<Recipe> mData;
     private LayoutInflater mInflater;
     private PendingRecipeAdapter.ItemClickListener mClickListener;

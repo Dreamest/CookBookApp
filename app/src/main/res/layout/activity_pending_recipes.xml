@@ -19,21 +19,6 @@
         android:textSize="45sp"
         />
 
-    <TextView
-        android:id="@+id/pending_recipe_TXT_no_pending"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-
-        android:lines="2"
-        android:text="@string/no_pending_recipes"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="40sp"
-        />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/pending_recipe_LST_recipes"
 

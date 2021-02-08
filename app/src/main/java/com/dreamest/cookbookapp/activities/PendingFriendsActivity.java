@@ -27,7 +27,18 @@ public class PendingFriendsActivity extends BaseActivity {
         setContentView(R.layout.activity_pending_friends);
         findViews();
         initAdapter();
-//        initAdapter();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
     private void initAdapter() {

@@ -4,78 +4,87 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamest.cookbookapp.R;
-import com.dreamest.cookbookapp.adapters.PendingRecipeAdapter;
-import com.dreamest.cookbookapp.logic.Recipe;
-import com.dreamest.cookbookapp.logic.User;
-import com.dreamest.cookbookapp.utility.MySharedPreferences;
-import com.dreamest.cookbookapp.utility.UtilityPack;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
+import com.dreamest.cookbookapp.adapters.PendingRecipeFirebaseAdapter;
+import com.dreamest.cookbookapp.logic.User;
+import com.dreamest.cookbookapp.utility.UtilityPack;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 
 public class PendingRecipesActivity extends BaseActivity {
     private RecyclerView pending_recipe_LST_recipes;
-    private ArrayList<Recipe> pendingRecipes;
-    private TextView pending_recipe_TXT_no_pending;
+    private PendingRecipeFirebaseAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending_recipes);
-        Type listType = new TypeToken<ArrayList<Recipe>>(){}.getType();
-        pendingRecipes = (ArrayList<Recipe>) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.MY_RECIPES_ARRAY, new ArrayList<Recipe>(), listType);
-        showNoPending();
         findViews();
         initAdapter();
     }
 
-    private void showNoPending() {
-        if(pendingRecipes.size() == 0) {
-            pending_recipe_TXT_no_pending.setVisibility(View.VISIBLE);
-        }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
     private void initAdapter() {
         pending_recipe_LST_recipes.setLayoutManager(new LinearLayoutManager(this));
-        PendingRecipeAdapter pendingRecipeAdapter = new PendingRecipeAdapter(this, pendingRecipes);
 
-        pendingRecipeAdapter.setClickListener(new PendingRecipeAdapter.ItemClickListener() {
+        DatabaseReference pendingRecipesRoot = FirebaseDatabase.getInstance()
+                .getReference(UtilityPack.KEYS.USERS)
+                .child(FirebaseAuth.getInstance().getUid())
+                .child(UtilityPack.KEYS.PENDING_RECIPES);
+
+        FirebaseRecyclerOptions<String> options
+                = new FirebaseRecyclerOptions.Builder<String>()
+                .setQuery(pendingRecipesRoot, String.class)
+                .build();
+        adapter = new PendingRecipeFirebaseAdapter(options);
+
+        adapter.setClickListener(new PendingRecipeFirebaseAdapter.ItemClickListener() {
             @Override
             public void onAddClick(int position) {
-                Recipe recipe = pendingRecipes.get(position);
-                User.actionToCurrentUserDatabase(User.ADD, recipe.getRecipeID(), UtilityPack.KEYS.MY_RECIPES);
-                User.actionToCurrentUserDatabase(User.REMOVE, recipe.getRecipeID(), UtilityPack.KEYS.PENDING_RECIPES);
-                pendingRecipes.remove(position);
-                Toast.makeText(PendingRecipesActivity.this, R.string.recipe_added, Toast.LENGTH_SHORT).show();
-                showNoPending();
-                pending_recipe_LST_recipes.setAdapter(pendingRecipeAdapter);
-
+                String recipeID = adapter.getItem(position);
+                addRecipe(recipeID);
             }
 
             @Override
             public void onRemoveClick(int position) {
-                Recipe recipe = pendingRecipes.get(position);
-                pendingRecipes.remove(position);
-                User.actionToCurrentUserDatabase(User.REMOVE, recipe.getRecipeID(), UtilityPack.KEYS.PENDING_RECIPES);
-                Toast.makeText(PendingRecipesActivity.this, R.string.recipe_ignored, Toast.LENGTH_SHORT).show();
-                showNoPending();
-                pending_recipe_LST_recipes.setAdapter(pendingRecipeAdapter);
-
+                String recipeID = adapter.getItem(position);
+                ignoreRecipe(recipeID);
             }
         });
-        pending_recipe_LST_recipes.setAdapter(pendingRecipeAdapter);
+
+        pending_recipe_LST_recipes.setAdapter(adapter);
+    }
+
+    private void ignoreRecipe(String recipeID) {
+        User.actionToCurrentUserDatabase(User.REMOVE, recipeID, UtilityPack.KEYS.PENDING_RECIPES);
+        Toast.makeText(PendingRecipesActivity.this, R.string.recipe_ignored, Toast.LENGTH_SHORT).show();
+    }
+
+    private void addRecipe(String recipeID) {
+        User.actionToCurrentUserDatabase(User.ADD, recipeID, UtilityPack.KEYS.MY_RECIPES);
+        User.actionToCurrentUserDatabase(User.REMOVE, recipeID, UtilityPack.KEYS.PENDING_RECIPES);
+        Toast.makeText(PendingRecipesActivity.this, R.string.recipe_added, Toast.LENGTH_SHORT).show();
     }
 
     private void findViews() {
         pending_recipe_LST_recipes = findViewById(R.id.pending_recipe_LST_recipes);
-        pending_recipe_TXT_no_pending = findViewById(R.id.pending_recipe_TXT_no_pending);
     }
 
 }
