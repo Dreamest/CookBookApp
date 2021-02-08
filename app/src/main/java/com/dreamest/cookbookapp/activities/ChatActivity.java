@@ -10,36 +10,36 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dreamest.cookbookapp.R;
-import com.dreamest.cookbookapp.adapters.ChatAdapter;
+import com.dreamest.cookbookapp.adapters.ChatFirebaseAdapter;
 import com.dreamest.cookbookapp.logic.ChatMessage;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.UtilityPack;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 
 public class ChatActivity extends BaseActivity {
     private TextView chat_TXT_other_person;
     private RecyclerView chat_LST_messages;
     private MaterialButton chat_BTN_send;
     private EditText chat_EDT_input;
-    private ArrayList<String> timestamps;
+    private ProgressBar chat_PROGBAR_spinner;
+
+    private ChatFirebaseAdapter adapter;
     private String chatKey;
     private User currentUser;
     private User friend;
@@ -50,56 +50,44 @@ public class ChatActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        timestamps = new ArrayList<>();
-        loadUsers();
+        String friendID = MySharedPreferences.getMsp().getString(MySharedPreferences.KEYS.USER_ID, null);
+        chatKey = FirebaseTools.createChatKey(FirebaseAuth.getInstance().getUid(), friendID);
+        loadUsers(friendID);
         findViews();
         initViews();
+        initAdapter();
+        chat_LST_messages.setVisibility(View.GONE);
+        chat_PROGBAR_spinner.setVisibility(View.VISIBLE);
     }
 
-    private void readMessages() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(UtilityPack.KEYS.CHATS).child(chatKey);
-        ref.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                timestamps.add(snapshot.getKey());
-                initAdapter();
-            }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
     private void initAdapter() {
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setStackFromEnd(true); //ensures we stay at the bottom on updates
+        linearLayoutManager.setStackFromEnd(true);
+
         chat_LST_messages.setLayoutManager(linearLayoutManager);
 
-        ChatAdapter chatAdapter = new ChatAdapter(this, timestamps, chatKey);
+        DatabaseReference chatRoot = FirebaseDatabase.getInstance()
+                .getReference(UtilityPack.KEYS.CHATS)
+                .child(chatKey);
 
-        chatAdapter.setClickListener(new ChatAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-            }
-        });
-        chat_LST_messages.setAdapter(chatAdapter);
+        FirebaseRecyclerOptions<ChatMessage> options = new FirebaseRecyclerOptions.Builder<ChatMessage>()
+                .setQuery(chatRoot, ChatMessage.class)
+                .build();
+        adapter = new ChatFirebaseAdapter(options);
+
+        chat_LST_messages.setAdapter(adapter);
     }
 
     private void initViews() {
@@ -128,7 +116,7 @@ public class ChatActivity extends BaseActivity {
         chat_EDT_input.setText("");
         long timestamp = System.currentTimeMillis();
         ChatMessage chatMessage= new ChatMessage()
-                .setSenderID(currentUser.getUserID())
+                .setSenderID(FirebaseAuth.getInstance().getUid())
                 .setSenderName(currentUser.getDisplayName())
                 .setText(message)
                 .setTimestamp(timestamp);
@@ -139,6 +127,7 @@ public class ChatActivity extends BaseActivity {
                 .child(chatKey)
                 .child(String.valueOf(timestamp));
         ref.setValue(chatMessage);
+        chat_LST_messages.smoothScrollToPosition(adapter.getItemCount());
     }
 
     private void findViews() {
@@ -146,9 +135,10 @@ public class ChatActivity extends BaseActivity {
         chat_LST_messages = findViewById(R.id.chat_LST_messages);
         chat_BTN_send = findViewById(R.id.chat_BTN_send);
         chat_EDT_input = findViewById(R.id.chat_EDT_input);
+        chat_PROGBAR_spinner = findViewById(R.id.chat_PROGBAR_spinner);
     }
 
-    private void loadUsers() {
+    private void loadUsers(String friendID) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -156,11 +146,11 @@ public class ChatActivity extends BaseActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 currentUser = snapshot.child(myID).getValue(User.class);
-                String friendID = MySharedPreferences.getMsp().getString(MySharedPreferences.KEYS.USER_ID, null);
                 friend = snapshot.child(friendID).getValue(User.class);
-                chatKey = FirebaseTools.createChatKey(currentUser.getUserID(), friend.getUserID());
                 chat_TXT_other_person.setText(friend.getDisplayName());
-                readMessages();
+                chat_PROGBAR_spinner.setVisibility(View.GONE);
+                chat_LST_messages.setVisibility(View.VISIBLE);
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

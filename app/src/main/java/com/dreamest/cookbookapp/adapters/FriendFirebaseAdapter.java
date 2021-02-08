@@ -28,7 +28,6 @@ import com.google.firebase.database.ValueEventListener;
 public class FriendFirebaseAdapter extends FirebaseRecyclerAdapter<String, FriendFirebaseAdapter.ViewHolder> {
     private LayoutInflater mInflater;
     private FriendFirebaseAdapter.ItemClickListener mClickListener;
-    private User user;
 
     /**
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
@@ -50,7 +49,7 @@ public class FriendFirebaseAdapter extends FirebaseRecyclerAdapter<String, Frien
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                user = snapshot.getValue(User.class);
+                User user = snapshot.getValue(User.class);
                 holder.friend_TXT_name.setText(user.getDisplayName());
                 FirebaseTools.downloadImage(mInflater.getContext(), user.getImagePath(), user.getUserID(), UtilityPack.FILE_KEYS.JPG,
                         holder.friend_IMG_profile, ContextCompat.getDrawable(mInflater.getContext(), R.drawable.ic_loading), R.drawable.ic_no_image);

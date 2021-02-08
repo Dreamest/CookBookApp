@@ -51,7 +51,7 @@ public class FriendsListActivity extends BaseActivity {
 
         findViews();
         initViews();
-        initFirebaseAdapter();
+        initAdapter();
     }
 
     @Override
@@ -86,7 +86,7 @@ public class FriendsListActivity extends BaseActivity {
         loadPendingFriends();
     }
 
-    private void initFirebaseAdapter() {
+    private void initAdapter() {
         friendslist_LST_friends.setLayoutManager(new LinearLayoutManager(this));
 
         DatabaseReference friendslistRoot = FirebaseDatabase.getInstance()
