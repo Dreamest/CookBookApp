@@ -12,10 +12,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dreamest.cookbookapp.R;
-import com.dreamest.cookbookapp.adapters.ChatAdapter;
 import com.dreamest.cookbookapp.adapters.FriendAdapter;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;

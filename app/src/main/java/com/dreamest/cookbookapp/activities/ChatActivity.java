@@ -10,17 +10,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.ChatAdapter;
-import com.dreamest.cookbookapp.adapters.RecipeAdapter;
 import com.dreamest.cookbookapp.logic.ChatMessage;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
-import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.button.MaterialButton;
@@ -33,7 +32,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 
 public class ChatActivity extends AppCompatActivity {
@@ -56,6 +54,9 @@ public class ChatActivity extends AppCompatActivity {
         loadUsers();
         findViews();
         initViews();
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
     }
 
     private void readMessages() {
@@ -63,23 +64,12 @@ public class ChatActivity extends AppCompatActivity {
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                Log.d("dddd", "OnChildAdded");
                 timestamps.add(snapshot.getKey());
                 initAdapter();
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                Log.d("dddd", "onChildChanged");
-
-                Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
-                while(iterator.hasNext()) {
-                    String timestamp = iterator.next().getKey();
-                    if(!iterator.hasNext()) {
-                        initAdapter();
-                    }
-                }
-
             }
 
             @Override
@@ -100,7 +90,11 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void initAdapter() {
-        chat_LST_messages.setLayoutManager(new LinearLayoutManager(this));
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setStackFromEnd(true); //ensures we stay at the bottom on updates
+        chat_LST_messages.setLayoutManager(linearLayoutManager);
+
         ChatAdapter chatAdapter = new ChatAdapter(this, timestamps, chatKey);
 
         chatAdapter.setClickListener(new ChatAdapter.ItemClickListener() {
@@ -167,6 +161,7 @@ public class ChatActivity extends AppCompatActivity {
                 currentUser = snapshot.getValue(User.class);
                 friend = (User) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.USER, new User(), User.class);
                 chatKey = FirebaseTools.createChatKey(currentUser.getUserID(), friend.getUserID());
+                chat_TXT_other_person.setText(friend.getDisplayName());
                 readMessages();
             }
             @Override

@@ -81,7 +81,6 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     if (mClickListener != null) {
-                        Log.d("dddd", "inside recipeAdapter " + getAdapterPosition());
                         mClickListener.onItemClick(v, getAdapterPosition());
                     }
                 }

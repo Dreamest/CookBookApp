@@ -86,7 +86,7 @@
         android:layout_below="@id/main_BTN_pending"
         android:layout_marginTop="10dp"
 
-        tools:listitem="@layout/recipe_list_post"
+        tools:listitem="@layout/recipe_list_item"
         />
 
     <ImageButton

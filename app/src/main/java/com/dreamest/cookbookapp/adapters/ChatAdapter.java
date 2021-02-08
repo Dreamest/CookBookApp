@@ -1,7 +1,6 @@
 package com.dreamest.cookbookapp.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.ChatMessage;
 import com.dreamest.cookbookapp.utility.UtilityPack;
-import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,7 +24,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.TimeZone;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
@@ -45,7 +42,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     // inflates the row layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.friend_list_item, parent, false);
+        View view = mInflater.inflate(R.layout.message_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -53,7 +50,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String key = mData.get(position);
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(UtilityPack.KEYS.CHATS).child(chatID);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(UtilityPack.KEYS.CHATS).child(chatID).child(key);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -68,13 +65,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         });
     }
 
-    private void visualizeMessage(ChatMessage message, @NonNull ViewHolder holder) {
+    private void visualizeMessage(ChatMessage message, ViewHolder holder) {
         holder.message_item_TXT_message.setText(message.getText());
         holder.message_item_TXT_sender.setText(message.getSenderName());
 
         Timestamp stamp = new Timestamp(message.getTimestamp());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm", Locale.getDefault());
-//        simpleDateFormat.setTimeZone(TimeZone.getDefault()); test with and without
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String timestamp = simpleDateFormat.format(stamp);
         holder.message_item_TXT_timestamp.setText(timestamp);
 
@@ -88,6 +84,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
         holder.message_item_LAY_master.setLayoutParams(params);
     }
+
 
     // total number of rows
     @Override
@@ -112,11 +109,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private RelativeLayout message_item_LAY_master; //For positioning
-        private RelativeLayout message_item_LAY_container; //For color
+        private RelativeLayout message_item_LAY_master; //for positioning
+        private RelativeLayout message_item_LAY_container; //for color
+        private TextView message_item_TXT_sender;
         private TextView message_item_TXT_message;
         private TextView message_item_TXT_timestamp;
-        private TextView message_item_TXT_sender;
+
 
 
         ViewHolder(View itemView) {
@@ -127,7 +125,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     if (mClickListener != null) {
-                        Log.d("dddd", "inside recipeAdapter " + getAdapterPosition());
                         mClickListener.onItemClick(v, getAdapterPosition());
                     }
                 }
@@ -135,12 +132,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
 
         public void findViews(View itemView) {
-            message_item_LAY_master = itemView.findViewById(R.id.message_item_LAY_master);
+            message_item_TXT_sender = itemView.findViewById(R.id.message_item_TXT_sender);
             message_item_TXT_message = itemView.findViewById(R.id.message_item_TXT_message);
             message_item_TXT_timestamp = itemView.findViewById(R.id.message_item_TXT_timestamp);
+            message_item_LAY_master = itemView.findViewById(R.id.message_item_LAY_master);
             message_item_LAY_container = itemView.findViewById(R.id.message_item_LAY_container);
-            message_item_TXT_sender = itemView.findViewById(R.id.message_item_TXT_sender);
-
         }
     }
 }
