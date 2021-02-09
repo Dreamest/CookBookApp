@@ -20,11 +20,15 @@ import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.HideUI;
-import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.opensooq.supernova.gligar.GligarPicker;
@@ -39,7 +43,7 @@ public class ProfileActivity extends BaseActivity {
     private MaterialButton profile_BTN_confirm_name;
     private TextView profile_TXT_count_recipes;
     private TextView profile_TXT_count_friends;
-    private User user;
+    private User currentUser;
     private RelativeLayout profile_LAY_master;
     private MaterialButton profile_BTN_sign_out;
 
@@ -50,18 +54,30 @@ public class ProfileActivity extends BaseActivity {
         setContentView(R.layout.activity_profile);
         findViews();
         initViews();
-        updateViews();
+        loadUser();
     }
 
-    private void updateViews() {
-        user = (User) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.USER, new User(), User.class);
-        profile_TXT_username.setText(user.getDisplayName());
-        Log.d("dddd", "path = " + user.getImagePath());
+    private void loadUser() {
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference(UtilityPack.KEYS.USERS)
+                .child(FirebaseAuth.getInstance().getUid());
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                currentUser = snapshot.getValue(User.class);
+                profile_TXT_username.setText(currentUser.getDisplayName());
+                FirebaseTools.downloadImage(ProfileActivity.this, currentUser.getImagePath(), currentUser.getUserID(),
+                        UtilityPack.FILE_KEYS.JPG, profile_IMG_image, getDrawable(R.drawable.ic_loading), R.drawable.ic_man_avatar);
+                profile_TXT_count_recipes.setText(currentUser.getMyRecipes().size() + "");
+                profile_TXT_count_friends.setText(currentUser.getMyFriends().size() + "");
+            }
 
-        FirebaseTools.downloadImage(this, user.getImagePath(), user.getUserID(),
-                UtilityPack.FILE_KEYS.JPG, profile_IMG_image, getDrawable(R.drawable.ic_loading), R.drawable.ic_man_avatar);
-        profile_TXT_count_recipes.setText(user.getMyRecipes().size() + "");
-        profile_TXT_count_friends.setText(user.getMyFriends().size() + "");
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     private void initViews() {
@@ -134,10 +150,10 @@ public class ProfileActivity extends BaseActivity {
 
     private void confirmNameChange() {
         if(!profile_EDT_change_name.getText().toString().trim().equals("")) {
-            user.setDisplayName(profile_EDT_change_name.getText().toString());
-            profile_TXT_username.setText(user.getDisplayName());
+            currentUser.setDisplayName(profile_EDT_change_name.getText().toString());
+            profile_TXT_username.setText(currentUser.getDisplayName());
 
-            user.updateFirebase();
+            currentUser.updateFirebase();
         } else {
             Toast.makeText(this, R.string.no_name, Toast.LENGTH_SHORT).show();
         }
@@ -146,7 +162,7 @@ public class ProfileActivity extends BaseActivity {
 
     private void changePhoto() {
         new GligarPicker().requestCode(UtilityPack.REQUEST_CODES.GILGAR).withActivity(this).limit(1).show();
-        user.updateFirebase();
+        currentUser.updateFirebase();
     }
 
     @Override
@@ -166,7 +182,7 @@ public class ProfileActivity extends BaseActivity {
                 String path = UCrop.getOutput(data).getPath();
                 UtilityPack.loadUCropResult(this, path, profile_IMG_image, R.drawable.ic_man_avatar);
                 FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.PROFILE_IMAGES).child(user.getUserID());
+                StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.PROFILE_IMAGES).child(currentUser.getUserID());
                 FirebaseTools.uploadImage(this, storageReference, path, false);
                 break;
             }
