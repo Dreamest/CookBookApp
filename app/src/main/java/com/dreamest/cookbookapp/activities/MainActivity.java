@@ -40,7 +40,6 @@ public class MainActivity extends BaseActivity {
     private TextView main_TXT_no_recipes;
     private MaterialButton main_BTN_pending;
     private ArrayList<String> pendingRecipes;
-    private ArrayList<Recipe> myRecipesList;// = TestUnit.getPosts();
     private RecipeFirebaseAdapter adapter;
 
     @Override
@@ -73,10 +72,7 @@ public class MainActivity extends BaseActivity {
             return;
         }
         //Since we use lists, on reloading them they need to be emptied first.
-        myRecipesList = new ArrayList<>();
         pendingRecipes = new ArrayList<>();
-
-        //onResume so it'll update on returning to the activity
         loadPendingRecipes();
     }
 
@@ -186,7 +182,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void addNewRecipe() {
-        Log.d("dddd", "New recipe clicked");
         MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, new Recipe());
         Intent myIntent = new Intent(this, EditRecipeActivity.class);
         startActivity(myIntent);

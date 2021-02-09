@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.dreamest.cookbookapp.R;
 
 import com.dreamest.cookbookapp.adapters.PendingRecipeFirebaseAdapter;
-import com.dreamest.cookbookapp.logic.User;
+import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -73,13 +73,13 @@ public class PendingRecipesActivity extends BaseActivity {
     }
 
     private void ignoreRecipe(String recipeID) {
-        User.actionToCurrentUserDatabase(User.REMOVE, recipeID, UtilityPack.KEYS.PENDING_RECIPES);
+        FirebaseTools.actionToCurrentUserDatabase(FirebaseTools.REMOVE, recipeID, UtilityPack.KEYS.PENDING_RECIPES);
         Toast.makeText(PendingRecipesActivity.this, R.string.recipe_ignored, Toast.LENGTH_SHORT).show();
     }
 
     private void addRecipe(String recipeID) {
-        User.actionToCurrentUserDatabase(User.ADD, recipeID, UtilityPack.KEYS.MY_RECIPES);
-        User.actionToCurrentUserDatabase(User.REMOVE, recipeID, UtilityPack.KEYS.PENDING_RECIPES);
+        FirebaseTools.actionToCurrentUserDatabase(FirebaseTools.ADD, recipeID, UtilityPack.KEYS.MY_RECIPES);
+        FirebaseTools.actionToCurrentUserDatabase(FirebaseTools.REMOVE, recipeID, UtilityPack.KEYS.PENDING_RECIPES);
         Toast.makeText(PendingRecipesActivity.this, R.string.recipe_added, Toast.LENGTH_SHORT).show();
     }
 

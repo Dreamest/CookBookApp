@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
@@ -88,7 +87,7 @@ public class WelcomeActivity extends BaseActivity {
                 .setDisplayName(userName)
                 .setPhoneNumber(firebaseUser.getPhoneNumber())
                 .setImagePath(storageReference.getPath());
-        user.updateFirebase();
+        FirebaseTools.storeUser(user);
 
         if(imageChanged) {
             FirebaseTools.uploadImage(this, storageReference, tempPath, false);

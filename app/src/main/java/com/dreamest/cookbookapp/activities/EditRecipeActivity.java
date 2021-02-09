@@ -21,7 +21,6 @@ import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.IngredientAdapter;
 import com.dreamest.cookbookapp.logic.Ingredient;
 import com.dreamest.cookbookapp.logic.Recipe;
-import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
@@ -81,7 +80,7 @@ public class EditRecipeActivity extends BaseActivity {
     private void loadRecipe() {
         recipe = (Recipe) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.RECIPE, new Recipe(), Recipe.class);
         if(recipe.getRecipeID().trim().equals("")) { //New recipe. Ensures it has an id for image loading
-            recipe.setRecipeID(Recipe.CreateRecipeID(FirebaseAuth.getInstance().getUid()));
+            recipe.setRecipeID(UtilityPack.CreateRecipeID(FirebaseAuth.getInstance().getUid()));
         }
         ingredients = recipe.getIngredients();
         difficulty = recipe.getDifficulty();
@@ -94,7 +93,6 @@ public class EditRecipeActivity extends BaseActivity {
         } else {
             edit_IMG_image.setImageResource(R.drawable.ic_camera);
         }
-
 
         edit_CTR_prepTime.setCurrentValue((double) recipe.getPrepTime());
         edit_CTR_prepTime.setDisplayingInteger(true);
@@ -162,11 +160,14 @@ public class EditRecipeActivity extends BaseActivity {
                 }
             });
         }
-        loadIngredientsAdapter();
     }
 
     private void setImage() {
-        new GligarPicker().requestCode(UtilityPack.REQUEST_CODES.GILGAR).withActivity(this).limit(1).show();
+        new GligarPicker()
+                .requestCode(UtilityPack.REQUEST_CODES.GILGAR)
+                .withActivity(this)
+                .limit(1) //maximum amount of images picked
+                .show();
     }
 
     private void changeDifficulty(int difficulty) {
@@ -227,8 +228,8 @@ public class EditRecipeActivity extends BaseActivity {
         if(!edit_EDT_title.getText().toString().trim().equals("")) {
             updateRecipe();
             MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe);
-            recipe.storeInFirebase();
-            User.actionToCurrentUserDatabase(User.ADD, recipe.getRecipeID(), UtilityPack.KEYS.MY_RECIPES);
+            FirebaseTools.storeRecipe(recipe);
+            FirebaseTools.actionToCurrentUserDatabase(FirebaseTools.ADD, recipe.getRecipeID(), UtilityPack.KEYS.MY_RECIPES);
 
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageReference = storage
@@ -258,7 +259,7 @@ public class EditRecipeActivity extends BaseActivity {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
         if (recipe.getRecipeID().trim().equals("")) {
-            recipe.setRecipeID(Recipe.CreateRecipeID(firebaseUser.getUid()));
+            recipe.setRecipeID(UtilityPack.CreateRecipeID(firebaseUser.getUid()));
         }
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.RECIPE_IMAGES).child(firebaseUser.getUid()).child(recipe.getRecipeID());

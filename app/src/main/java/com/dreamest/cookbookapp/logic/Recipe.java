@@ -26,10 +26,6 @@ public class Recipe {
         imagePath = "";
     }
 
-    public static String CreateRecipeID(String uid) {
-        return uid + System.currentTimeMillis();
-    }
-
     public String getOwnerID() {
         return ownerID;
     }
@@ -109,12 +105,6 @@ public class Recipe {
     public Recipe setDifficulty(int difficulty) {
         this.difficulty = difficulty;
         return this;
-    }
-
-    public void storeInFirebase() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.RECIPES).child(this.getRecipeID());
-        ref.setValue(this);
     }
 
 }

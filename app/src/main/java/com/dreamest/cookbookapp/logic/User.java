@@ -20,9 +20,6 @@ public class User {
     private String phoneNumber;
     private String imagePath;
 
-    public static final int ADD = 1;
-    public static final int REMOVE = 2;
-
     public User(){
         myRecipes = new HashMap<>();
         myFriends = new HashMap<>();
@@ -40,29 +37,6 @@ public class User {
         this.imagePath = imagePath;
         return this;
     }
-
-    public static void actionToCurrentUserDatabase(int action, String id, String key) {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
-                .child(firebaseUser.getUid())
-                .child(key)
-                .child(id);
-        if(action == ADD) {
-            ref.setValue(id);
-        } else if (action == REMOVE) {
-            ref.removeValue();
-        }
-    }
-//    public static void addFriendToCurrentUserDatabase(String friendID, int position) {
-//        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
-//                .child(firebaseUser.getUid())
-//                .child(UtilityPack.KEYS.MY_FRIENDS)
-//                .child(String.valueOf(position));
-//        ref.setValue(friendID);
-//    }
 
     public String getUserID() {
         return userID;
@@ -89,21 +63,6 @@ public class User {
     public User setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         return this;
-    }
-
-    public void updateFirebase() {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(this.getUserID());
-        ref.setValue(this);
-
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest
-                .Builder()
-                .setDisplayName(this.displayName)
-                .build();
-        firebaseUser.updateProfile(profileUpdates);
-        firebaseAuth.updateCurrentUser(firebaseUser);
     }
 
     public HashMap<String, String> getMyRecipes() {

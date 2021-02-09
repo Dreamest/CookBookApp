@@ -59,6 +59,7 @@ public class FriendsListActivity extends BaseActivity {
         super.onStart();
         adapter.startListening();
 
+        // TODO: 2/9/21 Observer untested
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() { // TODO: 2/8/21 test
             @Override
             public void onChanged() {
@@ -114,7 +115,6 @@ public class FriendsListActivity extends BaseActivity {
         DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
                 .child(FirebaseAuth.getInstance().getUid())
                 .child(UtilityPack.KEYS.PENDING_FRIENDS);
-
         ref.addChildEventListener(new ChildEventListener() { //using ChildListener so in case a pending request happens, we'll be notified.
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {

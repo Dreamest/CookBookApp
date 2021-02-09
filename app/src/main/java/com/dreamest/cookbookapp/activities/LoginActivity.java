@@ -154,9 +154,7 @@ public class LoginActivity extends BaseActivity {
         }
 
         @Override
-        public void onCodeSent(@NonNull String verificationId,
-                               @NonNull PhoneAuthProvider.ForceResendingToken token) {
-            Log.d("dddd", "onCodeSent:" + verificationId);
+        public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken token) {
             mVerificationId = verificationId;
             mResendToken = token;
             changeState(LOGIN_STATE.ENTERING_CODE);
@@ -169,14 +167,11 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("dddd", "signInWithCredential:success");
                             FirebaseUser user = task.getResult().getUser();
                             Toast.makeText(LoginActivity.this, R.string.signed_in_successfully, Toast.LENGTH_SHORT).show();
                             userSignedIn(user);
                             // ...
                         } else {
-                            // Sign in failed, display a message and update the UI
                             Log.w("dddd", "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 Toast.makeText(LoginActivity.this, R.string.invalid_code, Toast.LENGTH_SHORT).show();
@@ -248,7 +243,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void cancelClicked() {
-        // Trying to input new values after cancelClicked only actually works after timeout. Guy said it's ok on email
+        // Known bug: Trying to input new values after cancelClicked only actually works after timeout. Guy said it's ok on email
         changeState(LOGIN_STATE.ENTERING_NUMBER);
     }
 

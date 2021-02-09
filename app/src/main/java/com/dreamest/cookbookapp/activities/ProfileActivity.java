@@ -65,19 +65,21 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 currentUser = snapshot.getValue(User.class);
-                profile_TXT_username.setText(currentUser.getDisplayName());
-                FirebaseTools.downloadImage(ProfileActivity.this, currentUser.getImagePath(), currentUser.getUserID(),
-                        UtilityPack.FILE_KEYS.JPG, profile_IMG_image, getDrawable(R.drawable.ic_loading), R.drawable.ic_man_avatar);
-                profile_TXT_count_recipes.setText(currentUser.getMyRecipes().size() + "");
-                profile_TXT_count_friends.setText(currentUser.getMyFriends().size() + "");
+                visualizeUser();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
+    }
 
+    private void visualizeUser() {
+        profile_TXT_username.setText(currentUser.getDisplayName());
+        FirebaseTools.downloadImage(ProfileActivity.this, currentUser.getImagePath(), currentUser.getUserID(),
+                UtilityPack.FILE_KEYS.JPG, profile_IMG_image, getDrawable(R.drawable.ic_loading), R.drawable.ic_man_avatar);
+        profile_TXT_count_recipes.setText(currentUser.getMyRecipes().size() + "");
+        profile_TXT_count_friends.setText(currentUser.getMyFriends().size() + "");
     }
 
     private void initViews() {
@@ -101,7 +103,7 @@ public class ProfileActivity extends BaseActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
                     HideUI.clearFocus(ProfileActivity.this, profile_EDT_change_name);
-
+                    confirmNameChange();
                 }
                 return false;
             }
@@ -152,8 +154,7 @@ public class ProfileActivity extends BaseActivity {
         if(!profile_EDT_change_name.getText().toString().trim().equals("")) {
             currentUser.setDisplayName(profile_EDT_change_name.getText().toString());
             profile_TXT_username.setText(currentUser.getDisplayName());
-
-            currentUser.updateFirebase();
+            FirebaseTools.storeUser(currentUser);
         } else {
             Toast.makeText(this, R.string.no_name, Toast.LENGTH_SHORT).show();
         }
@@ -162,7 +163,7 @@ public class ProfileActivity extends BaseActivity {
 
     private void changePhoto() {
         new GligarPicker().requestCode(UtilityPack.REQUEST_CODES.GILGAR).withActivity(this).limit(1).show();
-        currentUser.updateFirebase();
+        FirebaseTools.storeUser(currentUser);
     }
 
     @Override
@@ -172,13 +173,13 @@ public class ProfileActivity extends BaseActivity {
             return;
         }
         switch (requestCode){
-            case UtilityPack.REQUEST_CODES.GILGAR : {
+            case UtilityPack.REQUEST_CODES.GILGAR : { //Image picked
                 File image = new File(data.getExtras().getStringArray(GligarPicker.IMAGES_RESULT)[0]);
                 UtilityPack.cropImage(this, image, FirebaseAuth.getInstance().getCurrentUser().getUid());
                 break;
             }
 
-            case UtilityPack.REQUEST_CODES.UCROP : {
+            case UtilityPack.REQUEST_CODES.UCROP : { //Image cropped
                 String path = UCrop.getOutput(data).getPath();
                 UtilityPack.loadUCropResult(this, path, profile_IMG_image, R.drawable.ic_man_avatar);
                 FirebaseStorage storage = FirebaseStorage.getInstance();

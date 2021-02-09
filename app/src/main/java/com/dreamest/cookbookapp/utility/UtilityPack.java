@@ -56,6 +56,10 @@ public class UtilityPack {
                 .onLoadStarted(ContextCompat.getDrawable(activity, defaultIntDrawable));
     }
 
+    public static String CreateRecipeID(String uid) {
+        return uid + System.currentTimeMillis();
+    }
+
     public interface KEYS {
         String USERS = "users";
         String RECIPES = "recipes";

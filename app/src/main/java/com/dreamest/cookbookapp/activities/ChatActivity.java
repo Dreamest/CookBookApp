@@ -121,12 +121,7 @@ public class ChatActivity extends BaseActivity {
                 .setText(message)
                 .setTimestamp(timestamp);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database
-                .getReference(UtilityPack.KEYS.CHATS)
-                .child(chatKey)
-                .child(String.valueOf(timestamp));
-        ref.setValue(chatMessage);
+        FirebaseTools.uploadMessage(chatMessage, chatKey, timestamp, currentUser.getUserID());
         chat_LST_messages.smoothScrollToPosition(adapter.getItemCount());
     }
 
