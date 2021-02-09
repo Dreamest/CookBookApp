@@ -1,8 +1,6 @@
 package com.dreamest.cookbookapp.activities;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +19,6 @@ import com.dreamest.cookbookapp.logic.ChatMessage;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
-import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -79,7 +76,7 @@ public class ChatActivity extends BaseActivity {
         chat_LST_messages.setLayoutManager(linearLayoutManager);
 
         DatabaseReference chatRoot = FirebaseDatabase.getInstance()
-                .getReference(UtilityPack.KEYS.CHATS)
+                .getReference(FirebaseTools.DATABASE_KEYS.CHATS)
                 .child(chatKey);
 
         FirebaseRecyclerOptions<ChatMessage> options = new FirebaseRecyclerOptions.Builder<ChatMessage>()
@@ -135,7 +132,7 @@ public class ChatActivity extends BaseActivity {
 
     private void loadUsers(String friendID) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS);
+        DatabaseReference ref = database.getReference(FirebaseTools.DATABASE_KEYS.USERS);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
-import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -41,7 +40,7 @@ public class RecipeFirebaseAdapter extends FirebaseRecyclerAdapter<String, Recip
     protected void onBindViewHolder(@NonNull RecipeFirebaseAdapter.ViewHolder holder, int position, @NonNull String model) {
 
         DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference(UtilityPack.KEYS.RECIPES)
+                .getReference(FirebaseTools.DATABASE_KEYS.RECIPES)
                 .child(model);
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -56,7 +55,7 @@ public class RecipeFirebaseAdapter extends FirebaseRecyclerAdapter<String, Recip
         Which might be smarter for a small database with a few users and a few recipes, but it's a good practice to think about the future.
  */
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(recipe.getOwnerID()).child(UtilityPack.KEYS.DISPLAY_NAME);
+                DatabaseReference ref = database.getReference(FirebaseTools.DATABASE_KEYS.USERS).child(recipe.getOwnerID()).child(FirebaseTools.DATABASE_KEYS.DISPLAY_NAME);
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -68,7 +67,7 @@ public class RecipeFirebaseAdapter extends FirebaseRecyclerAdapter<String, Recip
                     }
                 });
                 holder.listRecipe_TXT_date.setText(recipe.getDate());
-                FirebaseTools.downloadImage(mInflater.getContext(), recipe.getImagePath(), recipe.getRecipeID(), UtilityPack.FILE_KEYS.JPG, holder.listRecipe_IMG_image,
+                FirebaseTools.downloadImage(mInflater.getContext(), recipe.getImagePath(), recipe.getRecipeID(), FirebaseTools.FILE_KEYS.JPG, holder.listRecipe_IMG_image,
                         ContextCompat.getDrawable(mInflater.getContext(), R.drawable.ic_loading), R.drawable.ic_no_image);
                 holder.listRecipe_TXT_time.setText(recipe.getPrepTime() + "");
 

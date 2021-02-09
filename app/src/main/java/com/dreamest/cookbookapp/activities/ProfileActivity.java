@@ -59,7 +59,7 @@ public class ProfileActivity extends BaseActivity {
 
     private void loadUser() {
         DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference(UtilityPack.KEYS.USERS)
+                .getReference(FirebaseTools.DATABASE_KEYS.USERS)
                 .child(FirebaseAuth.getInstance().getUid());
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -77,7 +77,7 @@ public class ProfileActivity extends BaseActivity {
     private void visualizeUser() {
         profile_TXT_username.setText(currentUser.getDisplayName());
         FirebaseTools.downloadImage(ProfileActivity.this, currentUser.getImagePath(), currentUser.getUserID(),
-                UtilityPack.FILE_KEYS.JPG, profile_IMG_image, getDrawable(R.drawable.ic_loading), R.drawable.ic_man_avatar);
+                FirebaseTools.FILE_KEYS.JPG, profile_IMG_image, getDrawable(R.drawable.ic_loading), R.drawable.ic_man_avatar);
         profile_TXT_count_recipes.setText(currentUser.getMyRecipes().size() + "");
         profile_TXT_count_friends.setText(currentUser.getMyFriends().size() + "");
     }
@@ -183,7 +183,7 @@ public class ProfileActivity extends BaseActivity {
                 String path = UCrop.getOutput(data).getPath();
                 UtilityPack.loadUCropResult(this, path, profile_IMG_image, R.drawable.ic_man_avatar);
                 FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.PROFILE_IMAGES).child(currentUser.getUserID());
+                StorageReference storageReference = storage.getReference(FirebaseTools.STORAGE_KEYS.PROFILE_IMAGES).child(currentUser.getUserID());
                 FirebaseTools.uploadImage(this, storageReference, path, false);
                 break;
             }

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Recipe;
-import com.dreamest.cookbookapp.utility.UtilityPack;
+import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,7 +51,7 @@ public class PendingRecipeAdapter extends RecyclerView.Adapter<PendingRecipeAdap
         Which might be smarter for a small database with a few users and a few recipes, but it's a good practice to think about the future.
  */
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(recipe.getOwnerID()).child(UtilityPack.KEYS.DISPLAY_NAME);
+        DatabaseReference ref = database.getReference(FirebaseTools.DATABASE_KEYS.USERS).child(recipe.getOwnerID()).child(FirebaseTools.DATABASE_KEYS.DISPLAY_NAME);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

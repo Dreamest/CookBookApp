@@ -102,14 +102,8 @@ public class MySharedPreferences {
         String INGREDIENT = "INGREDIENT";
         String UPDATED_INGREDIENT = "UPDATED_INGREDIENT";
         String USER_ID = "USER_ID";
-        String LOGOUT = "LOGOUT";
-        boolean LOGOUT_SIGNAL = true;
-        boolean STAY_LOGGED = false;
         String FRIENDSLIST_ARRAY = "FRIENDS_ARRAY";
         String PENDING_FRIENDS_ARRAY = "PENDING_FRIENDS_ARRAY";
-        String MY_RECIPES_ARRAY = "RECIPES_LIST";
-        String PENDING_RECIPES_ARRAY = "PENDING_RECIPES_ARRAY";
-
     }
 
 

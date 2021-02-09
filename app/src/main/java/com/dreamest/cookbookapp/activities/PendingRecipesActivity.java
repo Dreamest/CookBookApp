@@ -10,7 +10,6 @@ import com.dreamest.cookbookapp.R;
 
 import com.dreamest.cookbookapp.adapters.PendingRecipeFirebaseAdapter;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
-import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -45,9 +44,9 @@ public class PendingRecipesActivity extends BaseActivity {
         pending_recipe_LST_recipes.setLayoutManager(new LinearLayoutManager(this));
 
         DatabaseReference pendingRecipesRoot = FirebaseDatabase.getInstance()
-                .getReference(UtilityPack.KEYS.USERS)
+                .getReference(FirebaseTools.DATABASE_KEYS.USERS)
                 .child(FirebaseAuth.getInstance().getUid())
-                .child(UtilityPack.KEYS.PENDING_RECIPES);
+                .child(FirebaseTools.DATABASE_KEYS.PENDING_RECIPES);
 
         FirebaseRecyclerOptions<String> options
                 = new FirebaseRecyclerOptions.Builder<String>()
@@ -73,13 +72,13 @@ public class PendingRecipesActivity extends BaseActivity {
     }
 
     private void ignoreRecipe(String recipeID) {
-        FirebaseTools.actionToCurrentUserDatabase(FirebaseTools.REMOVE, recipeID, UtilityPack.KEYS.PENDING_RECIPES);
+        FirebaseTools.actionToCurrentUserDatabase(FirebaseTools.REMOVE, recipeID, FirebaseTools.DATABASE_KEYS.PENDING_RECIPES);
         Toast.makeText(PendingRecipesActivity.this, R.string.recipe_ignored, Toast.LENGTH_SHORT).show();
     }
 
     private void addRecipe(String recipeID) {
-        FirebaseTools.actionToCurrentUserDatabase(FirebaseTools.ADD, recipeID, UtilityPack.KEYS.MY_RECIPES);
-        FirebaseTools.actionToCurrentUserDatabase(FirebaseTools.REMOVE, recipeID, UtilityPack.KEYS.PENDING_RECIPES);
+        FirebaseTools.actionToCurrentUserDatabase(FirebaseTools.ADD, recipeID, FirebaseTools.DATABASE_KEYS.MY_RECIPES);
+        FirebaseTools.actionToCurrentUserDatabase(FirebaseTools.REMOVE, recipeID, FirebaseTools.DATABASE_KEYS.PENDING_RECIPES);
         Toast.makeText(PendingRecipesActivity.this, R.string.recipe_added, Toast.LENGTH_SHORT).show();
     }
 

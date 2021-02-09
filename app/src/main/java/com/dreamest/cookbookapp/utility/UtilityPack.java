@@ -18,11 +18,13 @@ import java.io.IOException;
 import java.util.Random;
 
 public class UtilityPack {
-    private static int[] allBackgrounds = {R.drawable.background1, R.drawable.background2, R.drawable.background3, R.drawable.background4};
 
-
+    /**
+     * @return background from random predetermined background options
+     */
     public static int randomBackground() {
-        return allBackgrounds[new Random().nextInt(4)];
+        int[] allBackgrounds = {R.drawable.background1, R.drawable.background2, R.drawable.background3, R.drawable.background4};
+        return allBackgrounds[new Random().nextInt(allBackgrounds.length)];
     }
 
 
@@ -37,10 +39,17 @@ public class UtilityPack {
             return phoneInput;
     }
 
+    /**
+     * Creates a UCrop activity for File image
+     * @param activity activity context
+     * @param image the image to be cropped
+     * @param resultPrefix how the result file will be called.
+     */
     public static void cropImage(Activity activity, File image, String resultPrefix) {
         try {
             UCrop
-                    .of(Uri.fromFile(image), Uri.fromFile(File.createTempFile(FirebaseAuth.getInstance().getCurrentUser().getUid(), UtilityPack.FILE_KEYS.JPG)))
+                    .of(Uri.fromFile(image), Uri.fromFile(
+                            File.createTempFile(resultPrefix, FirebaseTools.FILE_KEYS.JPG)))
                     .withAspectRatio(1, 1)
                     .start(activity, UtilityPack.REQUEST_CODES.UCROP);
         } catch (IOException e) {
@@ -48,6 +57,14 @@ public class UtilityPack {
         }
     }
 
+
+    /**
+     * Loads cropped image into imageView using Glide
+     * @param activity activity context
+     * @param path path to image File
+     * @param imageView imageView to load into
+     * @param defaultIntDrawable placeholder drawable
+     */
     public static void loadUCropResult(Activity activity, String path, ImageView imageView, int defaultIntDrawable) {
         Glide
                 .with(activity)
@@ -60,42 +77,9 @@ public class UtilityPack {
         return uid + System.currentTimeMillis();
     }
 
-    public interface KEYS {
-        String USERS = "users";
-        String RECIPES = "recipes";
-        String CHATS = "chats";
-        String MY_RECIPES = "myRecipes";
-        String MY_FRIENDS = "myFriends";
-        String MY_CHATS = "myChats";
-        String PENDING_RECIPES = "pendingRecipes";
-        String PENDING_FRIENDS = "pendingFriends";
-        String PHONE_NUMBER = "phoneNumber";
-        String DISPLAY_NAME = "displayName";
-        String USER_ID = "userID";
-        String PROFILE_IMAGE = "profileImage";
-        String RECIPE_ID = "RecipeID";
-        String DATE = "date";
-        String DIFFICULTY = "difficulty";
-        String METHOD = "method";
-        String OWNER = "owner";
-        String OWNER_ID = "ownerID";
-        String PREP_TIME = "prepTime";
-        String TITLE = "title";
-        String IMAGE = "image";
-        String INGREDIENTS = "ingredients";
-    }
-
-    public interface STORAGE_KEYS {
-        String PROFILE_IMAGES = "profiles";
-        String RECIPE_IMAGES = "recipes";
-    }
-
     public interface REQUEST_CODES {
         int UCROP = 1111;
         int GILGAR = 1112;
     }
 
-    public interface FILE_KEYS {
-        String JPG = ".jpg";
-    }
 }

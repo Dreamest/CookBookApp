@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.ChatMessage;
-import com.dreamest.cookbookapp.utility.UtilityPack;
+import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,7 +50,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String key = mData.get(position);
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(UtilityPack.KEYS.CHATS).child(chatID).child(key);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(FirebaseTools.DATABASE_KEYS.CHATS).child(chatID).child(key);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

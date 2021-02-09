@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
+import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,7 +27,6 @@ import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthSettings;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
@@ -184,7 +184,7 @@ public class LoginActivity extends BaseActivity {
 
     private void userSignedIn(FirebaseUser user) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(user.getUid());
+        DatabaseReference ref = database.getReference(FirebaseTools.DATABASE_KEYS.USERS).child(user.getUid());
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

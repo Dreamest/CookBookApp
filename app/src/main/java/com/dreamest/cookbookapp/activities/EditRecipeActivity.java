@@ -88,7 +88,7 @@ public class EditRecipeActivity extends BaseActivity {
         edit_EDT_method.setText(recipe.getMethod());
         changeDifficulty(recipe.getDifficulty());
         if(!recipe.getImagePath().trim().equals("")) {
-            FirebaseTools.downloadImage(this, recipe.getImagePath(), recipe.getRecipeID(), UtilityPack.FILE_KEYS.JPG,
+            FirebaseTools.downloadImage(this, recipe.getImagePath(), recipe.getRecipeID(), FirebaseTools.FILE_KEYS.JPG,
                     edit_IMG_image, ContextCompat.getDrawable(this, R.drawable.ic_loading), R.drawable.ic_no_image);
         } else {
             edit_IMG_image.setImageResource(R.drawable.ic_camera);
@@ -229,11 +229,11 @@ public class EditRecipeActivity extends BaseActivity {
             updateRecipe();
             MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe);
             FirebaseTools.storeRecipe(recipe);
-            FirebaseTools.actionToCurrentUserDatabase(FirebaseTools.ADD, recipe.getRecipeID(), UtilityPack.KEYS.MY_RECIPES);
+            FirebaseTools.actionToCurrentUserDatabase(FirebaseTools.ADD, recipe.getRecipeID(), FirebaseTools.DATABASE_KEYS.MY_RECIPES);
 
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageReference = storage
-                    .getReference(UtilityPack.STORAGE_KEYS.RECIPE_IMAGES)
+                    .getReference(FirebaseTools.STORAGE_KEYS.RECIPE_IMAGES)
                     .child(recipe.getOwnerID())
                     .child(recipe.getRecipeID());
             Toast.makeText(this, R.string.uploading, Toast.LENGTH_SHORT).show();
@@ -262,7 +262,7 @@ public class EditRecipeActivity extends BaseActivity {
             recipe.setRecipeID(UtilityPack.CreateRecipeID(firebaseUser.getUid()));
         }
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.RECIPE_IMAGES).child(firebaseUser.getUid()).child(recipe.getRecipeID());
+        StorageReference storageReference = storage.getReference(FirebaseTools.STORAGE_KEYS.RECIPE_IMAGES).child(firebaseUser.getUid()).child(recipe.getRecipeID());
 
         String pattern = "dd.MM.yyyy";
         SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.getDefault());

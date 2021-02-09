@@ -16,9 +16,9 @@ import android.widget.TextView;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.FriendFirebaseAdapter;
 import com.dreamest.cookbookapp.logic.User;
+import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
-import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -91,9 +91,9 @@ public class FriendsListActivity extends BaseActivity {
         friendslist_LST_friends.setLayoutManager(new LinearLayoutManager(this));
 
         DatabaseReference friendslistRoot = FirebaseDatabase.getInstance()
-                .getReference(UtilityPack.KEYS.USERS)
+                .getReference(FirebaseTools.DATABASE_KEYS.USERS)
                 .child(FirebaseAuth.getInstance().getUid())
-                .child(UtilityPack.KEYS.MY_FRIENDS);
+                .child(FirebaseTools.DATABASE_KEYS.MY_FRIENDS);
 
         FirebaseRecyclerOptions<String> options
                 = new FirebaseRecyclerOptions.Builder<String>()
@@ -112,9 +112,9 @@ public class FriendsListActivity extends BaseActivity {
 
     private void loadPendingFriends() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
+        DatabaseReference ref = database.getReference(FirebaseTools.DATABASE_KEYS.USERS)
                 .child(FirebaseAuth.getInstance().getUid())
-                .child(UtilityPack.KEYS.PENDING_FRIENDS);
+                .child(FirebaseTools.DATABASE_KEYS.PENDING_FRIENDS);
         ref.addChildEventListener(new ChildEventListener() { //using ChildListener so in case a pending request happens, we'll be notified.
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -154,7 +154,7 @@ public class FriendsListActivity extends BaseActivity {
     }
 
     private void loadFriend(DataSnapshot id, FirebaseDatabase database, int loadTo, boolean last) {
-        DatabaseReference friendRef = database.getReference(UtilityPack.KEYS.USERS)
+        DatabaseReference friendRef = database.getReference(FirebaseTools.DATABASE_KEYS.USERS)
                 .child(id.getValue(String.class));
         friendRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -165,7 +165,7 @@ public class FriendsListActivity extends BaseActivity {
                     if(last) {
                         Intent myIntent = new Intent(FriendsListActivity.this, AddFriendActivity.class);
                         MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.FRIENDSLIST_ARRAY, friendslist);
-                        MySharedPreferences.getMsp().putObject(UtilityPack.KEYS.PENDING_FRIENDS, pendingFriends);
+                        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.PENDING_FRIENDS_ARRAY, pendingFriends);
                         startActivity(myIntent);
                     }
                 } else if (loadTo == PENDING_FRIENDS) {
@@ -220,9 +220,9 @@ public class FriendsListActivity extends BaseActivity {
         friendslist = new ArrayList<>();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database
-                .getReference(UtilityPack.KEYS.USERS)
+                .getReference(FirebaseTools.DATABASE_KEYS.USERS)
                 .child(FirebaseAuth.getInstance().getUid())
-                .child(UtilityPack.KEYS.MY_FRIENDS);
+                .child(FirebaseTools.DATABASE_KEYS.MY_FRIENDS);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
-import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
@@ -43,7 +42,7 @@ public class PendingFriendAdapter extends RecyclerView.Adapter<PendingFriendAdap
         holder.pending_item_friend_TXT_displayName.setText(user.getDisplayName());
         holder.pending_item_friend_TXT_phoneNumber.setText(user.getPhoneNumber());
 
-        FirebaseTools.downloadImage(mInflater.getContext(), user.getImagePath(), user.getUserID(), UtilityPack.FILE_KEYS.JPG,
+        FirebaseTools.downloadImage(mInflater.getContext(), user.getImagePath(), user.getUserID(), FirebaseTools.FILE_KEYS.JPG,
                 holder.pending_item_friend_IMG_profile_image, ContextCompat.getDrawable(mInflater.getContext(), R.drawable.ic_loading), R.drawable.ic_no_image);
         }
 

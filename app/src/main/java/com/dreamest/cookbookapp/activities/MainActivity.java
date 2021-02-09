@@ -16,9 +16,9 @@ import android.widget.TextView;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.RecipeFirebaseAdapter;
 import com.dreamest.cookbookapp.logic.Recipe;
+import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
-import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -86,9 +86,9 @@ public class MainActivity extends BaseActivity {
     private void loadPendingRecipes() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
+        DatabaseReference ref = database.getReference(FirebaseTools.DATABASE_KEYS.USERS)
                 .child(firebaseUser.getUid())
-                .child(UtilityPack.KEYS.PENDING_RECIPES);
+                .child(FirebaseTools.DATABASE_KEYS.PENDING_RECIPES);
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -120,9 +120,9 @@ public class MainActivity extends BaseActivity {
         main_LST_recipes.setLayoutManager(new LinearLayoutManager(this));
 
         DatabaseReference pendingRecipesRoot = FirebaseDatabase.getInstance()
-                .getReference(UtilityPack.KEYS.USERS)
+                .getReference(FirebaseTools.DATABASE_KEYS.USERS)
                 .child(FirebaseAuth.getInstance().getUid())
-                .child(UtilityPack.KEYS.MY_RECIPES);
+                .child(FirebaseTools.DATABASE_KEYS.MY_RECIPES);
 
         FirebaseRecyclerOptions<String> options
                 = new FirebaseRecyclerOptions.Builder<String>()
@@ -197,7 +197,7 @@ public class MainActivity extends BaseActivity {
 
     private void openRecipeActivity(int position) {
         DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference(UtilityPack.KEYS.RECIPES)
+                .getReference(FirebaseTools.DATABASE_KEYS.RECIPES)
                 .child(adapter.getItem(position));
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

@@ -1,7 +1,5 @@
 package com.dreamest.cookbookapp.adapters;
 
-import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,17 +7,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Recipe;
-import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
-import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,7 +38,7 @@ public class PendingRecipeFirebaseAdapter extends FirebaseRecyclerAdapter<String
     protected void onBindViewHolder(@NonNull PendingRecipeFirebaseAdapter.ViewHolder holder, int position, @NonNull String model) {
 
         DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference(UtilityPack.KEYS.RECIPES)
+                .getReference(FirebaseTools.DATABASE_KEYS.RECIPES)
                 .child(model);
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -58,7 +52,7 @@ public class PendingRecipeFirebaseAdapter extends FirebaseRecyclerAdapter<String
         Which might be smarter for a small database with a few users and a few recipes, but it's a good practice to think about the future.
  */
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(recipe.getOwnerID()).child(UtilityPack.KEYS.DISPLAY_NAME);
+                DatabaseReference ref = database.getReference(FirebaseTools.DATABASE_KEYS.USERS).child(recipe.getOwnerID()).child(FirebaseTools.DATABASE_KEYS.DISPLAY_NAME);
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {

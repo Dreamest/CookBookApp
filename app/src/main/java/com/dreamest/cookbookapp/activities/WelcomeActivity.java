@@ -80,7 +80,7 @@ public class WelcomeActivity extends BaseActivity {
         }
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReference(UtilityPack.STORAGE_KEYS.PROFILE_IMAGES).child(firebaseUser.getUid());
+        StorageReference storageReference = storage.getReference(FirebaseTools.STORAGE_KEYS.PROFILE_IMAGES).child(firebaseUser.getUid());
 
         User user = new User()
                 .setUserID(firebaseUser.getUid())

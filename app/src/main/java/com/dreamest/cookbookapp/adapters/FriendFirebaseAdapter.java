@@ -1,7 +1,5 @@
 package com.dreamest.cookbookapp.adapters;
 
-import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
-import com.dreamest.cookbookapp.utility.MySharedPreferences;
-import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -43,7 +39,7 @@ public class FriendFirebaseAdapter extends FirebaseRecyclerAdapter<String, Frien
     protected void onBindViewHolder(@NonNull FriendFirebaseAdapter.ViewHolder holder, int position, @NonNull String model) {
 
         DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference(UtilityPack.KEYS.USERS)
+                .getReference(FirebaseTools.DATABASE_KEYS.USERS)
                 .child(model);
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -51,7 +47,7 @@ public class FriendFirebaseAdapter extends FirebaseRecyclerAdapter<String, Frien
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
                 holder.friend_TXT_name.setText(user.getDisplayName());
-                FirebaseTools.downloadImage(mInflater.getContext(), user.getImagePath(), user.getUserID(), UtilityPack.FILE_KEYS.JPG,
+                FirebaseTools.downloadImage(mInflater.getContext(), user.getImagePath(), user.getUserID(), FirebaseTools.FILE_KEYS.JPG,
                         holder.friend_IMG_profile, ContextCompat.getDrawable(mInflater.getContext(), R.drawable.ic_loading), R.drawable.ic_no_image);
             }
 

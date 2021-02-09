@@ -17,7 +17,6 @@ import com.dreamest.cookbookapp.adapters.IngredientAdapter;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
-import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -82,9 +81,9 @@ public class RecipeActivity extends BaseActivity {
     private void removeRecipe() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database
-                .getReference(UtilityPack.KEYS.USERS)
+                .getReference(FirebaseTools.DATABASE_KEYS.USERS)
                 .child(FirebaseAuth.getInstance().getUid())
-                .child(UtilityPack.KEYS.MY_RECIPES)
+                .child(FirebaseTools.DATABASE_KEYS.MY_RECIPES)
                 .child(recipe.getRecipeID());
         ref.removeValue();
         finish();
@@ -96,7 +95,7 @@ public class RecipeActivity extends BaseActivity {
         }
         recipe_TXT_title.setText(recipe.getTitle());
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(recipe.getOwnerID()).child(UtilityPack.KEYS.DISPLAY_NAME);
+        DatabaseReference ref = database.getReference(FirebaseTools.DATABASE_KEYS.USERS).child(recipe.getOwnerID()).child(FirebaseTools.DATABASE_KEYS.DISPLAY_NAME);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -109,7 +108,7 @@ public class RecipeActivity extends BaseActivity {
         });
         recipe_TXT_date.setText(recipe.getDate());
         recipe_TXT_method.setText(recipe.getMethod());
-        FirebaseTools.downloadImage(this, recipe.getImagePath(), recipe.getRecipeID(), UtilityPack.FILE_KEYS.JPG,
+        FirebaseTools.downloadImage(this, recipe.getImagePath(), recipe.getRecipeID(), FirebaseTools.FILE_KEYS.JPG,
                 recipe_IMG_image, ContextCompat.getDrawable(this, R.drawable.ic_loading), R.drawable.ic_no_image);
     }
 
@@ -138,7 +137,7 @@ public class RecipeActivity extends BaseActivity {
 
     private void shareRecipe() {
         Intent myIntent = new Intent(this, ShareRecipeActivity.class);
-        myIntent.putExtra(UtilityPack.KEYS.RECIPE_ID, recipe.getRecipeID()); //ID of the recipe to share
+        myIntent.putExtra(FirebaseTools.DATABASE_KEYS.RECIPE_ID, recipe.getRecipeID()); //ID of the recipe to share
         startActivity(myIntent);
 
     }

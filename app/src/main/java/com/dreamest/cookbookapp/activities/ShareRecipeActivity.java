@@ -1,6 +1,5 @@
 package com.dreamest.cookbookapp.activities;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,7 +10,7 @@ import android.widget.Toast;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.FriendFirebaseAdapter;
-import com.dreamest.cookbookapp.utility.UtilityPack;
+import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -28,7 +27,7 @@ public class ShareRecipeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_recipe);
-        recipeToShare = getIntent().getStringExtra(UtilityPack.KEYS.RECIPE_ID);
+        recipeToShare = getIntent().getStringExtra(FirebaseTools.DATABASE_KEYS.RECIPE_ID);
         findViews();
         initFirebaseAdapter();
     }
@@ -54,9 +53,9 @@ public class ShareRecipeActivity extends BaseActivity {
         share_LST_friends.setLayoutManager(new LinearLayoutManager(this));
 
         DatabaseReference friendslistRoot = FirebaseDatabase.getInstance()
-                .getReference(UtilityPack.KEYS.USERS)
+                .getReference(FirebaseTools.DATABASE_KEYS.USERS)
                 .child(FirebaseAuth.getInstance().getUid())
-                .child(UtilityPack.KEYS.MY_FRIENDS);
+                .child(FirebaseTools.DATABASE_KEYS.MY_FRIENDS);
 
         FirebaseRecyclerOptions<String> options
                 = new FirebaseRecyclerOptions.Builder<String>()
@@ -76,9 +75,9 @@ public class ShareRecipeActivity extends BaseActivity {
     private void shareWith(String friendUID) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database
-                .getReference(UtilityPack.KEYS.USERS)
+                .getReference(FirebaseTools.DATABASE_KEYS.USERS)
                 .child(friendUID)
-                .child(UtilityPack.KEYS.PENDING_RECIPES).child(recipeToShare);
+                .child(FirebaseTools.DATABASE_KEYS.PENDING_RECIPES).child(recipeToShare);
         ref.setValue(recipeToShare);
         Toast.makeText(this, R.string.recipe_shared, Toast.LENGTH_SHORT).show();
         finish();

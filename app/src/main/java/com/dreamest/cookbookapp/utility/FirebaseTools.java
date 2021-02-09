@@ -123,11 +123,11 @@ public class FirebaseTools {
             chatKey = friendID+myID;
         }
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS);
+        DatabaseReference ref = database.getReference(DATABASE_KEYS.USERS);
         // When this function is called we can already update the current user's last seen
-        ref.child(myID).child(UtilityPack.KEYS.MY_CHATS).child(chatKey).setValue(String.valueOf(System.currentTimeMillis()));
-        if(!ref.child(friendID).child(UtilityPack.KEYS.MY_CHATS).child(chatKey).getKey().equals(chatKey)) {
-            ref.child(friendID).child(UtilityPack.KEYS.MY_CHATS).child(chatKey).setValue(String.valueOf(System.currentTimeMillis()));
+        ref.child(myID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).setValue(String.valueOf(System.currentTimeMillis()));
+        if(!ref.child(friendID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).getKey().equals(chatKey)) {
+            ref.child(friendID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).setValue(String.valueOf(System.currentTimeMillis()));
         }
         return chatKey;
     }
@@ -140,15 +140,15 @@ public class FirebaseTools {
      */
     public static void addUserToPending(AppCompatActivity activity, String searchValue, boolean finishOnFind) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS);
+        DatabaseReference ref = database.getReference(DATABASE_KEYS.USERS);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot user : snapshot.getChildren()) {
-                    if (user.child(UtilityPack.KEYS.PHONE_NUMBER).getValue(String.class).equals(searchValue)) {
+                    if (user.child(DATABASE_KEYS.PHONE_NUMBER).getValue(String.class).equals(searchValue)) {
                         String currentUserID = FirebaseAuth.getInstance().getUid();
-                        String friendID = user.child(UtilityPack.KEYS.USER_ID).getValue(String.class);
-                        ref.child(friendID).child(UtilityPack.KEYS.PENDING_FRIENDS).child(currentUserID).setValue(currentUserID); //could've called User.actionToCurrentUser instead, but half the work has already been done here so just continuing.
+                        String friendID = user.child(DATABASE_KEYS.USER_ID).getValue(String.class);
+                        ref.child(friendID).child(DATABASE_KEYS.PENDING_FRIENDS).child(currentUserID).setValue(currentUserID); //could've called User.actionToCurrentUser instead, but half the work has already been done here so just continuing.
                         Toast.makeText(activity, R.string.friend_request_send, Toast.LENGTH_SHORT).show();
                         if(finishOnFind) {
                             activity.finish();
@@ -175,15 +175,15 @@ public class FirebaseTools {
     public static void uploadMessage(ChatMessage chatMessage, String chatKey, long timestamp, String userID) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference messageRef = database
-                .getReference(UtilityPack.KEYS.CHATS)
+                .getReference(DATABASE_KEYS.CHATS)
                 .child(chatKey)
                 .child(String.valueOf(timestamp));
         messageRef.setValue(chatMessage);
 
         DatabaseReference timeRef = database
-                .getReference(UtilityPack.KEYS.USERS)
+                .getReference(DATABASE_KEYS.USERS)
                 .child(userID)
-                .child(UtilityPack.KEYS.MY_CHATS)
+                .child(DATABASE_KEYS.MY_CHATS)
                 .child(chatKey);
         timeRef.setValue(timestamp);
     }
@@ -195,7 +195,7 @@ public class FirebaseTools {
      */
     public static void storeRecipe(Recipe recipe) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.RECIPES).child(recipe.getRecipeID());
+        DatabaseReference ref = database.getReference(DATABASE_KEYS.RECIPES).child(recipe.getRecipeID());
         ref.setValue(recipe);
     }
 
@@ -207,7 +207,7 @@ public class FirebaseTools {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS).child(user.getUserID());
+        DatabaseReference ref = database.getReference(DATABASE_KEYS.USERS).child(user.getUserID());
         ref.setValue(user);
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest
@@ -227,7 +227,7 @@ public class FirebaseTools {
     public static void actionToCurrentUserDatabase(int action, String id, String key) {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(UtilityPack.KEYS.USERS)
+        DatabaseReference ref = database.getReference(DATABASE_KEYS.USERS)
                 .child(firebaseUser.getUid())
                 .child(key)
                 .child(id);
@@ -236,5 +236,39 @@ public class FirebaseTools {
         } else if (action == REMOVE) {
             ref.removeValue();
         }
+    }
+
+    public interface DATABASE_KEYS {
+        String USERS = "users";
+        String RECIPES = "recipes";
+        String CHATS = "chats";
+        String MY_RECIPES = "myRecipes";
+        String MY_FRIENDS = "myFriends";
+        String MY_CHATS = "myChats";
+        String PENDING_RECIPES = "pendingRecipes";
+        String PENDING_FRIENDS = "pendingFriends";
+        String PHONE_NUMBER = "phoneNumber";
+        String DISPLAY_NAME = "displayName";
+        String USER_ID = "userID";
+        String PROFILE_IMAGE = "profileImage";
+        String RECIPE_ID = "RecipeID";
+        String DATE = "date";
+        String DIFFICULTY = "difficulty";
+        String METHOD = "method";
+        String OWNER = "owner";
+        String OWNER_ID = "ownerID";
+        String PREP_TIME = "prepTime";
+        String TITLE = "title";
+        String IMAGE = "image";
+        String INGREDIENTS = "ingredients";
+    }
+
+    public interface STORAGE_KEYS {
+        String PROFILE_IMAGES = "profiles";
+        String RECIPE_IMAGES = "recipes";
+    }
+
+    public interface FILE_KEYS {
+        String JPG = ".jpg";
     }
 }
