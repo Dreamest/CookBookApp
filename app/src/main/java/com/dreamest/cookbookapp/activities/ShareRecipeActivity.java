@@ -5,9 +5,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.FriendFirebaseAdapter;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
@@ -20,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class ShareRecipeActivity extends BaseActivity {
     private RecyclerView share_LST_friends;
     private TextView share_TXT_no_friends;
+    private ImageView share_IMG_background;
     private String recipeToShare;
     private FriendFirebaseAdapter adapter;
 
@@ -29,6 +32,10 @@ public class ShareRecipeActivity extends BaseActivity {
         setContentView(R.layout.activity_share_recipe);
         recipeToShare = getIntent().getStringExtra(FirebaseTools.DATABASE_KEYS.RECIPE_ID);
         findViews();
+        Glide
+                .with(this)
+                .load(R.drawable.recipe_box)
+                .into(share_IMG_background);
         initFirebaseAdapter();
     }
 
@@ -36,6 +43,18 @@ public class ShareRecipeActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         adapter.startListening();
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                if (adapter.getItemCount() > 0) {
+                    share_TXT_no_friends.setVisibility(View.GONE);
+                } else {
+                    share_TXT_no_friends.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -47,6 +66,7 @@ public class ShareRecipeActivity extends BaseActivity {
     private void findViews() {
         share_TXT_no_friends = findViewById(R.id.share_TXT_no_friends);
         share_LST_friends = findViewById(R.id.share_LST_friends);
+        share_IMG_background = findViewById(R.id.share_IMG_background);
     }
 
     private void initFirebaseAdapter() {

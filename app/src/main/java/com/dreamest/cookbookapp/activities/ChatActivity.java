@@ -10,9 +10,11 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.ChatFirebaseAdapter;
 import com.dreamest.cookbookapp.logic.ChatMessage;
@@ -35,6 +37,7 @@ public class ChatActivity extends BaseActivity {
     private MaterialButton chat_BTN_send;
     private EditText chat_EDT_input;
     private ProgressBar chat_PROGBAR_spinner;
+    private ImageView chat_IMG_background;
 
     private ChatFirebaseAdapter adapter;
     private String chatKey;
@@ -88,6 +91,10 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void initViews() {
+        Glide
+                .with(this)
+                .load(R.drawable.chat_background)
+                .into(chat_IMG_background);
         chat_BTN_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,6 +135,7 @@ public class ChatActivity extends BaseActivity {
         chat_BTN_send = findViewById(R.id.chat_BTN_send);
         chat_EDT_input = findViewById(R.id.chat_EDT_input);
         chat_PROGBAR_spinner = findViewById(R.id.chat_PROGBAR_spinner);
+        chat_IMG_background = findViewById(R.id.chat_IMG_background);
     }
 
     private void loadUsers(String friendID) {

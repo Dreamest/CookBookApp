@@ -19,11 +19,16 @@
 
     <color name="purple_300">#F57047FF</color>
 
-    <color name="my_message">#A7C5F1</color>
+    <color name="my_message">#F1EAA7</color>
     <color name="other_message">#9EA2A3</color>
 
-    <color name="soft_grey">#FAFAFA</color>
+    <color name="gold_strong">#EDD94A</color>
+    <color name="gold">#F8EFAE</color>
+    <color name="gold_bright">#FAF6D8</color>
+    <color name="transparent_gold">#80FAF6D8</color>
+    <color name="soft_grey">#D1D1D1</color>
 
 
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="gold_muted">#EAE6DF</color>
 </resources>

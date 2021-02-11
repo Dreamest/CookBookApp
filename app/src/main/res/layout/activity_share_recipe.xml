@@ -4,7 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ShareRecipeActivity">
+    tools:context=".activities.ShareRecipeActivity"
+    >
+    <ImageView
+        android:id="@+id/share_IMG_background"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:alpha="0.3"
+        />
 
     <TextView
         android:id="@+id/share_TXT_title"

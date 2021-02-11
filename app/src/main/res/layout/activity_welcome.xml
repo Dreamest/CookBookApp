@@ -5,7 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.WelcomeActivity">
+    tools:context=".activities.WelcomeActivity"
+    android:background="@drawable/ic_liquid_cheese"
+    >
 
     <TextView
         android:id="@+id/welcome_TXT_title"
@@ -53,7 +55,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/welcome_IMG_user_image"
         android:layout_centerHorizontal="true"
-
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/welcome_EDT_name"
@@ -84,7 +85,7 @@
         app:strokeWidth="2dp"
         android:textColor="@color/black"
         android:textAllCaps="false"
-        android:backgroundTint="@color/teal_200"
+        android:backgroundTint="@color/gold"
 
         android:text="@string/submit"
         />

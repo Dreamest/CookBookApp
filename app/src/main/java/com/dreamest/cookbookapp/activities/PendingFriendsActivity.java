@@ -15,7 +15,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class PendingFriendsActivity extends BaseActivity {
-    // TODO: 2/9/21 test new adapter
     private RecyclerView pending_friend_LST_recipes;
     private PendingFriendsFirebaseAdapter adapter;
 

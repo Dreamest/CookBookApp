@@ -1,4 +1,4 @@
-package com.dreamest.cookbookapp.activities.old_and_unused;
+package com.dreamest.cookbookapp.old_and_unused;
 
 import android.content.Context;
 import android.util.Log;

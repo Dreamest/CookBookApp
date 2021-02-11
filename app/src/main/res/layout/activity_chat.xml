@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,18 +7,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.ChatActivity"
-    android:weightSum="100"
     >
+    <ImageView
+        android:id="@+id/chat_IMG_background"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        />
 
     <TextView
         android:id="@+id/chat_TXT_other_person"
 
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:background="@color/purple_500"
-        android:layout_weight="8"
-
+        android:background="@color/gold_strong"
+        android:layout_alignParentTop="true"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:text="@string/owner_name"
         android:textSize="30sp"
         />
@@ -28,33 +35,32 @@
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="82"
+        android:layout_centerInParent="true"
         />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chat_LST_messages"
 
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="82"
+        android:layout_height="match_parent"
+        android:layout_below="@id/chat_TXT_other_person"
+        android:layout_above="@id/chat_LAY_text"
         app:stackFromEnd="true"
 
 
-        android:visibility="gone"
         tools:listitem="@layout/message_item"
         />
 
 
-
     <RelativeLayout
+        android:id="@+id/chat_LAY_text"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
 
-        android:padding="5dp"
-        android:background="@color/red_calm"
-        android:layout_weight="10"
-
+        android:padding="10dp"
+        android:background="@color/gold_muted"
         >
         <com.google.android.material.button.MaterialButton
             android:id="@+id/chat_BTN_send"
@@ -63,7 +69,7 @@
             android:layout_alignParentEnd="true"
 
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:backgroundTint="@color/teal_200"
+            android:backgroundTint="@color/gold"
             android:text="@string/send"
             android:textAllCaps="false"
             android:textColor="@color/black"
@@ -85,4 +91,4 @@
             android:layout_toStartOf="@+id/chat_BTN_send" />
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

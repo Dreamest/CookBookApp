@@ -47,7 +47,6 @@ public class LoginActivity extends BaseActivity {
     private MaterialButton login_BTN_continue;
     private CountryCodePicker login_CCP_code;
     private ProgressBar login_PROGBAR_spinner;
-    private ImageView login_IMG_background;
     private FirebaseAuth firebaseAuth;
 
 
@@ -70,8 +69,6 @@ public class LoginActivity extends BaseActivity {
 
         findViews();
         initViews();
-        Glide.with(this).load(UtilityPack.randomBackground()).fitCenter().into(login_IMG_background);
-
 
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
@@ -253,7 +250,6 @@ public class LoginActivity extends BaseActivity {
         login_BTN_continue = findViewById(R.id.login_BTN_continue);
         login_CCP_code = findViewById(R.id.login_CCP_code);
         login_PROGBAR_spinner = findViewById(R.id.login_PROGBAR_spinner);
-        login_IMG_background = findViewById(R.id.login_IMG_background);
     }
 
     /**

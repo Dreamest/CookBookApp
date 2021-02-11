@@ -2,6 +2,7 @@ package com.dreamest.cookbookapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
@@ -23,6 +25,7 @@ import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,13 +42,14 @@ import java.io.File;
 public class ProfileActivity extends BaseActivity {
     private TextView profile_TXT_username;
     private ImageView profile_IMG_image;
-    private EditText profile_EDT_change_name;
+    private TextInputEditText profile_EDT_change_name;
     private MaterialButton profile_BTN_confirm_name;
     private TextView profile_TXT_count_recipes;
     private TextView profile_TXT_count_friends;
     private User currentUser;
     private RelativeLayout profile_LAY_master;
     private MaterialButton profile_BTN_sign_out;
+    private ImageView profile_IMG_background;
 
 
     @Override
@@ -77,12 +81,16 @@ public class ProfileActivity extends BaseActivity {
     private void visualizeUser() {
         profile_TXT_username.setText(currentUser.getDisplayName());
         FirebaseTools.downloadImage(ProfileActivity.this, currentUser.getImagePath(), currentUser.getUserID(),
-                FirebaseTools.FILE_KEYS.JPG, profile_IMG_image, getDrawable(R.drawable.ic_loading), R.drawable.ic_man_avatar);
+                FirebaseTools.FILE_KEYS.JPG, profile_IMG_image, ContextCompat.getDrawable(this, R.drawable.ic_loading), R.drawable.ic_man_avatar);
         profile_TXT_count_recipes.setText(currentUser.getMyRecipes().size() + "");
         profile_TXT_count_friends.setText(currentUser.getMyFriends().size() + "");
     }
 
     private void initViews() {
+        Glide
+                .with(this)
+                .load(R.drawable.dinner_table)
+                .into(profile_IMG_background);
         profile_IMG_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,6 +156,7 @@ public class ProfileActivity extends BaseActivity {
         profile_TXT_count_friends = findViewById(R.id.profile_TXT_count_friends);
         profile_LAY_master = findViewById(R.id.profile_LAY_master);
         profile_BTN_sign_out = findViewById(R.id.profile_BTN_sign_out);
+        profile_IMG_background = findViewById(R.id.profile_IMG_background);
     }
 
     private void confirmNameChange() {

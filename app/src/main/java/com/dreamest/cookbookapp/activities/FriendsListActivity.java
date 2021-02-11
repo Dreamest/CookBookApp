@@ -59,8 +59,7 @@ public class FriendsListActivity extends BaseActivity {
         super.onStart();
         adapter.startListening();
 
-        // TODO: 2/9/21 Observer untested
-        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() { // TODO: 2/8/21 test
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
                 super.onChanged();
@@ -71,7 +70,7 @@ public class FriendsListActivity extends BaseActivity {
                 }
             }
         });
-        adapter.notifyItemRangeRemoved(0, adapter.getItemCount());
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -162,11 +161,9 @@ public class FriendsListActivity extends BaseActivity {
                 User friend = snapshot.getValue(User.class);
                 if (loadTo == FRIENDSLIST) {
                     friendslist.add(friend);
-                    if(last) {
-                        Intent myIntent = new Intent(FriendsListActivity.this, AddFriendActivity.class);
-                        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.FRIENDSLIST_ARRAY, friendslist);
-                        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.PENDING_FRIENDS_ARRAY, pendingFriends);
-                        startActivity(myIntent);
+                    if (last) {
+                        startAddFriend();
+
                     }
                 } else if (loadTo == PENDING_FRIENDS) {
                     pendingFriends.add(friend);
@@ -181,6 +178,13 @@ public class FriendsListActivity extends BaseActivity {
                 Log.w("dddd", "Failed to read value.", error.toException());
             }
         });
+    }
+
+    private void startAddFriend() {
+        Intent myIntent = new Intent(FriendsListActivity.this, AddFriendActivity.class);
+        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.FRIENDSLIST_ARRAY, friendslist);
+        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.PENDING_FRIENDS_ARRAY, pendingFriends);
+        startActivity(myIntent);
     }
 
     private void initViews() {
@@ -226,8 +230,12 @@ public class FriendsListActivity extends BaseActivity {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot friend : snapshot.getChildren()) {
-                    loadFriend(friend, database, FRIENDSLIST, true);
+                if (snapshot.exists()) {
+                    for (DataSnapshot friend : snapshot.getChildren()) {
+                        loadFriend(friend, database, FRIENDSLIST, true);
+                    }
+                } else { //no friends
+                    startAddFriend();
                 }
             }
 
