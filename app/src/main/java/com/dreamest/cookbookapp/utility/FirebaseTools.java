@@ -44,7 +44,7 @@ public class FirebaseTools {
 
     /**
      * Downloads image from FirebaseStorage and store it in given imageView as long as the acitivty isn't destroyed yet.
-     * @param activity activity context
+     * @param context activity context
      * @param path path in Firebase Storage to the image
      * @param fileName prefix for tempFile creation
      * @param filePostfix postfix for tempFile creation
@@ -52,8 +52,8 @@ public class FirebaseTools {
      * @param tempDrawableID drawable to display while downloading.
      * @param onFailureDrawableID drawable to display if failed downloading
      */
-    public static void downloadImage(AppCompatActivity activity, String path, String fileName, String filePostfix, ImageView v, Drawable tempDrawableID, int onFailureDrawableID) {
-        if(!activity.isDestroyed()) {
+    public static void downloadImage(Context context, String path, String fileName, String filePostfix, ImageView v, Drawable tempDrawableID, int onFailureDrawableID) {
+        if(!((AppCompatActivity)context).isDestroyed()) {
             StorageReference ref = FirebaseStorage.getInstance().getReference(path);
             try {
                 File tempFile = File.createTempFile(fileName, filePostfix);
@@ -61,7 +61,7 @@ public class FirebaseTools {
                     @Override
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                         Glide
-                                .with(activity)
+                                .with(context)
                                 .load(tempFile)
                                 .centerCrop()
                                 .into(v)
