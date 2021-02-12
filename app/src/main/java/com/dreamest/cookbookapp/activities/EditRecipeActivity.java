@@ -187,10 +187,6 @@ public class EditRecipeActivity extends BaseActivity {
 
         ingredientAdapter.setClickListener(new IngredientAdapter.ItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
-            }
-
-            @Override
             public void onRemoveClick(int position) {
                 HideUI.clearFocus(EditRecipeActivity.this, edit_EDT_method);
                 ingredients.remove(position);

@@ -118,11 +118,6 @@ public class RecipeActivity extends BaseActivity {
 
         ingredientAdapter.setClickListener(new IngredientAdapter.ItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
-                //handled inside
-            }
-
-            @Override
             public void onRemoveClick(int position) {
             }
         });

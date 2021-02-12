@@ -79,7 +79,6 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onItemClick(View view, int position);
         void onRemoveClick(int position);
     }
 
@@ -103,10 +102,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (mClickListener != null) {
-                            mClickListener.onItemClick(v, getAdapterPosition());
-                            changeBoxStatus(v);
-                        }
+                        changeBoxStatus();
                     }
                 });
             }
@@ -140,7 +136,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
             }
         }
 
-        private void changeBoxStatus(View v) {
+        private void changeBoxStatus() {
             if(ingredient_IMG_check.getTag().equals(R.drawable.checkbox_active)) {
                 setImage(ingredient_IMG_check, R.drawable.checkbox_inactive);
             } else if(ingredient_IMG_check.getTag().equals(R.drawable.checkbox_inactive)) {
