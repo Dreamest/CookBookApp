@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.dreamest.cookbookapp.App;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.ChatMessage;
 import com.dreamest.cookbookapp.logic.Recipe;
@@ -42,8 +43,8 @@ public class FirebaseTools {
 
 
     /**
-     * Downloads image from FirebaseStorage and store it in given imageView
-     * @param context activity context
+     * Downloads image from FirebaseStorage and store it in given imageView as long as the acitivty isn't destroyed yet.
+     * @param activity activity context
      * @param path path in Firebase Storage to the image
      * @param fileName prefix for tempFile creation
      * @param filePostfix postfix for tempFile creation
@@ -51,28 +52,30 @@ public class FirebaseTools {
      * @param tempDrawableID drawable to display while downloading.
      * @param onFailureDrawableID drawable to display if failed downloading
      */
-    public static void downloadImage(Context context, String path, String fileName, String filePostfix, ImageView v, Drawable tempDrawableID, int onFailureDrawableID) {
-        StorageReference ref = FirebaseStorage.getInstance().getReference(path);
-        try {
-            File tempFile = File.createTempFile(fileName, filePostfix);
-            ref.getFile(tempFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    Glide
-                            .with(context)
-                            .load(tempFile)
-                            .centerCrop()
-                            .into(v)
-                            .onLoadStarted(tempDrawableID);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    v.setImageResource(onFailureDrawableID);
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void downloadImage(AppCompatActivity activity, String path, String fileName, String filePostfix, ImageView v, Drawable tempDrawableID, int onFailureDrawableID) {
+        if(!activity.isDestroyed()) {
+            StorageReference ref = FirebaseStorage.getInstance().getReference(path);
+            try {
+                File tempFile = File.createTempFile(fileName, filePostfix);
+                ref.getFile(tempFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        Glide
+                                .with(activity)
+                                .load(tempFile)
+                                .centerCrop()
+                                .into(v)
+                                .onLoadStarted(tempDrawableID);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        v.setImageResource(onFailureDrawableID);
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

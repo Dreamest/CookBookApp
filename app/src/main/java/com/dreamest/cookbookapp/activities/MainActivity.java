@@ -192,12 +192,15 @@ public class MainActivity extends BaseActivity {
 
     private void toProfile() {
         Intent myIntent = new Intent(MainActivity.this, ProfileActivity.class);
+        overridePendingTransition(R.anim.right_slide_in, R.anim.right_slide_out);
         startActivity(myIntent);
+
     }
 
     private void toFriendsList() {
         Intent myIntent = new Intent(MainActivity.this, FriendsListActivity.class);
         startActivity(myIntent);
+
     }
 
     private void addNewRecipe() {
