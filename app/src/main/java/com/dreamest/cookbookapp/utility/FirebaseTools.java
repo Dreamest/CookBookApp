@@ -44,22 +44,23 @@ public class FirebaseTools {
 
     /**
      * Downloads image from FirebaseStorage and store it in given imageView as long as the acitivty isn't destroyed yet.
-     * @param context activity context
-     * @param path path in Firebase Storage to the image
-     * @param fileName prefix for tempFile creation
-     * @param filePostfix postfix for tempFile creation
-     * @param v imageView where the image will be downloaded to
-     * @param tempDrawableID drawable to display while downloading.
+     *
+     * @param context             activity context
+     * @param path                path in Firebase Storage to the image
+     * @param fileName            prefix for tempFile creation
+     * @param filePostfix         postfix for tempFile creation
+     * @param v                   imageView where the image will be downloaded to
+     * @param tempDrawableID      drawable to display while downloading.
      * @param onFailureDrawableID drawable to display if failed downloading
      */
     public static void downloadImage(Context context, String path, String fileName, String filePostfix, ImageView v, Drawable tempDrawableID, int onFailureDrawableID) {
-        if(!((AppCompatActivity)context).isDestroyed()) {
-            StorageReference ref = FirebaseStorage.getInstance().getReference(path);
-            try {
-                File tempFile = File.createTempFile(fileName, filePostfix);
-                ref.getFile(tempFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+        StorageReference ref = FirebaseStorage.getInstance().getReference(path);
+        try {
+            File tempFile = File.createTempFile(fileName, filePostfix);
+            ref.getFile(tempFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    if (!((AppCompatActivity) context).isDestroyed()) {
                         Glide
                                 .with(context)
                                 .load(tempFile)
@@ -67,24 +68,27 @@ public class FirebaseTools {
                                 .into(v)
                                 .onLoadStarted(tempDrawableID);
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        v.setImageResource(onFailureDrawableID);
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    v.setImageResource(onFailureDrawableID);
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     /**
      * Uploads image from file to FirebaseStorage
-     * @param activity activity context
+     *
+     * @param activity         activity context
      * @param storageReference where the file will be stored
-     * @param path path to image file
-     * @param closeOnFinish should the activity end on upload complete?
+     * @param path             path to image file
+     * @param closeOnFinish    should the activity end on upload complete?
      */
     public static void uploadImage(AppCompatActivity activity, StorageReference storageReference, String path, boolean closeOnFinish) {
         Bitmap bitmap = BitmapFactory.decodeFile(path);
@@ -97,7 +101,7 @@ public class FirebaseTools {
             public void onFailure(@NonNull Exception exception) {
                 Toast.makeText(activity, R.string.upload_failed, Toast.LENGTH_SHORT).show();
                 Log.d("dddd", exception.getMessage());
-                if(closeOnFinish) {
+                if (closeOnFinish) {
                     activity.finish();
                 }
             }
@@ -105,7 +109,7 @@ public class FirebaseTools {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Toast.makeText(activity, R.string.upload_success, Toast.LENGTH_SHORT).show();
-                if(closeOnFinish) {
+                if (closeOnFinish) {
                     activity.finish();
                 }
             }
@@ -116,20 +120,21 @@ public class FirebaseTools {
     /**
      * Creates a unique chat key based on two user IDs regardless if who calls this and adds the key to both users
      * Also updates the currentUser timestamp, but not the friend's timestamp unless he didn't have a chatKey
-     * @param myID id of current user
+     *
+     * @param myID     id of current user
      * @param friendID id of other user
      * @return chatKKey
      */
     public static String createChatKey(String myID, String friendID) {
-        String chatKey = myID+friendID;
-        if(friendID.compareTo(myID) > 0) {
-            chatKey = friendID+myID;
+        String chatKey = myID + friendID;
+        if (friendID.compareTo(myID) > 0) {
+            chatKey = friendID + myID;
         }
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(DATABASE_KEYS.USERS);
         // When this function is called we can already update the current user's last seen
         ref.child(myID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).setValue(String.valueOf(System.currentTimeMillis()));
-        if(!ref.child(friendID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).getKey().equals(chatKey)) {
+        if (!ref.child(friendID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).getKey().equals(chatKey)) {
             ref.child(friendID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).setValue(String.valueOf(System.currentTimeMillis()));
         }
         return chatKey;
@@ -137,8 +142,9 @@ public class FirebaseTools {
 
     /**
      * On searching for friends, they will be first added to pending list. This handles that
-     * @param activity activity context
-     * @param searchValue phone number of the user. Guaranteed to be unique from other pending/existing friends
+     *
+     * @param activity     activity context
+     * @param searchValue  phone number of the user. Guaranteed to be unique from other pending/existing friends
      * @param finishOnFind on success - end the activity?
      */
     public static void addUserToPending(AppCompatActivity activity, String searchValue, boolean finishOnFind) {
@@ -153,7 +159,7 @@ public class FirebaseTools {
                         String friendID = user.child(DATABASE_KEYS.USER_ID).getValue(String.class);
                         ref.child(friendID).child(DATABASE_KEYS.PENDING_FRIENDS).child(currentUserID).setValue(currentUserID); //could've called User.actionToCurrentUser instead, but half the work has already been done here so just continuing.
                         Toast.makeText(activity, R.string.friend_request_send, Toast.LENGTH_SHORT).show();
-                        if(finishOnFind) {
+                        if (finishOnFind) {
                             activity.finish();
                             return;
                         }
@@ -161,6 +167,7 @@ public class FirebaseTools {
                 }
                 Toast.makeText(activity, R.string.user_not_in_database, Toast.LENGTH_SHORT).show();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -170,10 +177,11 @@ public class FirebaseTools {
 
     /**
      * Uploads chatMessage to the FirebaseDatabase and updates the current user's last timestamp
+     *
      * @param chatMessage Message object
-     * @param chatKey chatKey between the two users
-     * @param timestamp timestamp of message creation
-     * @param userID ID of the current user
+     * @param chatKey     chatKey between the two users
+     * @param timestamp   timestamp of message creation
+     * @param userID      ID of the current user
      */
     public static void uploadMessage(ChatMessage chatMessage, String chatKey, long timestamp, String userID) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -194,6 +202,7 @@ public class FirebaseTools {
 
     /**
      * Stores/updates a recipe in FirebaseDatabase
+     *
      * @param recipe the recipe
      */
     public static void storeRecipe(Recipe recipe) {
@@ -204,6 +213,7 @@ public class FirebaseTools {
 
     /**
      * Stores/updates user in FirebaseDatabase and FirebaseAuth
+     *
      * @param user the user
      */
     public static void storeUser(User user) {
@@ -223,9 +233,10 @@ public class FirebaseTools {
 
     /**
      * Does (Action) in the current user's FirebaseDatabase
+     *
      * @param action Add or remove
-     * @param id identifier of FirebaseDatabase leaf
-     * @param key determining which node to look into
+     * @param id     identifier of FirebaseDatabase leaf
+     * @param key    determining which node to look into
      */
     public static void actionToCurrentUserDatabase(int action, String id, String key) {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -234,7 +245,7 @@ public class FirebaseTools {
                 .child(firebaseUser.getUid())
                 .child(key)
                 .child(id);
-        if(action == ADD) {
+        if (action == ADD) {
             ref.setValue(id);
         } else if (action == REMOVE) {
             ref.removeValue();
