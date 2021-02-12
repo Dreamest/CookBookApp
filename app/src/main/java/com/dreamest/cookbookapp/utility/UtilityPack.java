@@ -18,16 +18,6 @@ import java.io.IOException;
 import java.util.Random;
 
 public class UtilityPack {
-
-    /**
-     * @return background from random predetermined background options
-     */
-    public static int randomBackground() {
-        int[] allBackgrounds = {R.drawable.background1, R.drawable.background2, R.drawable.background3, R.drawable.background4};
-        return allBackgrounds[new Random().nextInt(allBackgrounds.length)];
-    }
-
-
     /**
      * Attaches country code to phone number, and drops leading zero if there is one
      */

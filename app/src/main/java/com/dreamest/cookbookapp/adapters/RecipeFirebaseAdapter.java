@@ -108,12 +108,12 @@ public class RecipeFirebaseAdapter extends FirebaseRecyclerAdapter<String, Recip
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView listRecipe_TXT_title;
-        TextView listRecipe_TXT_date;
-        TextView listRecipe_TXT_owner;
-        ImageView listRecipe_IMG_image;
-        TextView listRecipe_TXT_time;
-        ImageView[] stars;
+        private TextView listRecipe_TXT_title;
+        private TextView listRecipe_TXT_date;
+        private TextView listRecipe_TXT_owner;
+        private ImageView listRecipe_IMG_image;
+        private TextView listRecipe_TXT_time;
+        private ImageView[] stars;
 
 
         ViewHolder(View itemView) {

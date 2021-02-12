@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public class Recipe {
     private String title;
     private String recipeID;
-//    private String owner;
     private String ownerID;
     private String date;
     private String imagePath;
