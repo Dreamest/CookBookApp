@@ -192,7 +192,6 @@ public class MainActivity extends BaseActivity {
 
     private void toProfile() {
         Intent myIntent = new Intent(MainActivity.this, ProfileActivity.class);
-        overridePendingTransition(R.anim.right_slide_in, R.anim.right_slide_out);
         startActivity(myIntent);
 
     }
