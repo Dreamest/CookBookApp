@@ -43,22 +43,6 @@
             />
     </androidx.cardview.widget.CardView>
 
-
-
-    <TextView
-        android:id="@+id/main_TXT_no_recipes"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:gravity="center"
-
-        android:text="@string/no_recipes_yet"
-        android:textStyle="bold"
-        android:textSize="40sp"
-
-        />
     <com.google.android.material.button.MaterialButton
         android:id="@+id/main_BTN_pending"
 

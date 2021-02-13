@@ -21,7 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class ShareRecipeActivity extends BaseActivity {
     private RecyclerView share_LST_friends;
-    private TextView share_TXT_no_friends;
     private ImageView share_IMG_background;
     private String recipeToShare;
     private FriendFirebaseAdapter adapter;
@@ -43,18 +42,6 @@ public class ShareRecipeActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         adapter.startListening();
-        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                if (adapter.getItemCount() > 0) {
-                    share_TXT_no_friends.setVisibility(View.GONE);
-                } else {
-                    share_TXT_no_friends.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -64,7 +51,6 @@ public class ShareRecipeActivity extends BaseActivity {
     }
 
     private void findViews() {
-        share_TXT_no_friends = findViewById(R.id.share_TXT_no_friends);
         share_LST_friends = findViewById(R.id.share_LST_friends);
         share_IMG_background = findViewById(R.id.share_IMG_background);
     }

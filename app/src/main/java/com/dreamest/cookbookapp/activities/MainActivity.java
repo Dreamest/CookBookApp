@@ -39,7 +39,6 @@ public class MainActivity extends BaseActivity {
     private ImageButton main_BTN_add;
     private ImageView main_IMG_background;
     private MaterialButton main_BTN_pending;
-    private TextView main_TXT_no_recipes;
     private ArrayList<String> pendingRecipes;
     private RecipeFirebaseAdapter adapter;
 
@@ -57,18 +56,6 @@ public class MainActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         adapter.startListening();
-        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                if (adapter.getItemCount() > 0) {
-                    main_TXT_no_recipes.setVisibility(View.GONE);
-                } else {
-                    main_TXT_no_recipes.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -213,7 +200,6 @@ public class MainActivity extends BaseActivity {
         main_LST_recipes = findViewById(R.id.main_LST_recipes);
         main_IMG_background = findViewById(R.id.main_IMG_background);
         main_BTN_pending = findViewById(R.id.main_BTN_pending);
-        main_TXT_no_recipes = findViewById(R.id.main_TXT_no_recipes);
     }
 
     private void openRecipeActivity(int position) {

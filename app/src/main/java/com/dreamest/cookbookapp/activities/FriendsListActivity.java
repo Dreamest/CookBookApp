@@ -34,7 +34,6 @@ import java.util.ArrayList;
 public class FriendsListActivity extends BaseActivity {
     private RecyclerView friendslist_LST_friends;
     private ImageButton friendslist_BTN_add_friend;
-    private TextView friends_TXT_no_friends;
     private RelativeLayout friendslist_LAY_master;
     private MaterialButton friendslist_BTN_pending;
     private ArrayList<User> pendingFriends;
@@ -58,19 +57,6 @@ public class FriendsListActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         adapter.startListening();
-
-        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                if (adapter.getItemCount() > 0) {
-                    friends_TXT_no_friends.setVisibility(View.GONE);
-                } else {
-                    friends_TXT_no_friends.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -249,7 +235,6 @@ public class FriendsListActivity extends BaseActivity {
     private void findViews() {
         friendslist_LST_friends = findViewById(R.id.friendslist_LST_friends);
         friendslist_BTN_add_friend = findViewById(R.id.friendslist_BTN_add_friend);
-        friends_TXT_no_friends = findViewById(R.id.friends_TXT_no_friends);
         friendslist_LAY_master = findViewById(R.id.friendslist_LAY_master);
         friendslist_BTN_pending = findViewById(R.id.friendslist_BTN_pending);
     }

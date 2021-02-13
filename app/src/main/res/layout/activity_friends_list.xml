@@ -63,18 +63,5 @@
 
         android:background="@drawable/ic_add"
         />
-    <TextView
-        android:id="@+id/friends_TXT_no_friends"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-
-        android:gravity="center"
-        android:text="@string/no_friends_yet"
-        android:visibility="gone"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        />
 
 </RelativeLayout>
