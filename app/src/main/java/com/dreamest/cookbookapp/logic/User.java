@@ -13,7 +13,7 @@ public class User {
     private String userID;
     private HashMap<String, String> myRecipes;
     private HashMap<String, String> myFriends;
-    private HashMap<String, String> myChats;
+    private HashMap<String, Long> myChats;
     private HashMap<String, String> pendingRecipes;
     private HashMap<String, String> pendingFriends;
     private String displayName;
@@ -83,11 +83,11 @@ public class User {
         return this;
     }
 
-    public HashMap<String, String> getMyChats() {
+    public HashMap<String, Long> getMyChats() {
         return myChats;
     }
 
-    public User setMyChats(HashMap<String, String> myChats) {
+    public User setMyChats(HashMap<String, Long> myChats) {
         this.myChats = myChats;
         return this;
     }

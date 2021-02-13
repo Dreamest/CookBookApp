@@ -24,4 +24,15 @@
     <color name="soft_grey">#D1D1D1</color>
     <color name="white">#FFFFFF</color>
     <color name="gold_muted">#EAE6DF</color>
+
+    <color name="primary_theme">#83771E</color>
+    <color name="variant_theme">#6C6742</color>
+
+
+<!--    Overriding GligarPicker colors-->
+    <color name="counter_bg">@color/gold</color>
+    <color name="toolbar_bg">@color/primary_theme</color>
+
+
+
 </resources>

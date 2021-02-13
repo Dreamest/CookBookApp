@@ -133,9 +133,10 @@ public class FirebaseTools {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(DATABASE_KEYS.USERS);
         // When this function is called we can already update the current user's last seen
-        ref.child(myID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).setValue(String.valueOf(System.currentTimeMillis()));
+        long timestamp = System.currentTimeMillis();
+        ref.child(myID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).setValue(timestamp);
         if (!ref.child(friendID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).getKey().equals(chatKey)) {
-            ref.child(friendID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).setValue(String.valueOf(System.currentTimeMillis()));
+            ref.child(friendID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).setValue(timestamp);
         }
         return chatKey;
     }

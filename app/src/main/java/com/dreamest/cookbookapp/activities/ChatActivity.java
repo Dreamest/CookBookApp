@@ -44,8 +44,6 @@ public class ChatActivity extends BaseActivity {
     private User currentUser;
     private User friend;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
