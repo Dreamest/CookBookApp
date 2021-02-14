@@ -32,18 +32,19 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@id/friend_IMG_profile"
+        android:layout_alignTop="@id/friend_IMG_profile"
+        android:layout_alignBottom="@id/friend_IMG_profile"
 
+        android:gravity="center"
         android:text="@string/owner_name"
-        android:textSize="30sp" />
+        android:textSize="20sp" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/friend_IMG_profile"
+        android:layout_below="@id/friend_TXT_name"
         android:layout_marginTop="2dp"
 
         android:background="@color/black"
-
-
         />
 </RelativeLayout>
