@@ -19,6 +19,7 @@ import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.ChatFirebaseAdapter;
 import com.dreamest.cookbookapp.logic.ChatMessage;
 import com.dreamest.cookbookapp.logic.User;
+import com.dreamest.cookbookapp.utility.FirebaseListener;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -39,7 +40,6 @@ public class ChatActivity extends BaseActivity {
     private ProgressBar chat_PROGBAR_spinner;
     private ImageView chat_IMG_background;
 
-    private ChatFirebaseAdapter adapter;
     private String chatKey;
     private User currentUser;
     private User friend;
@@ -58,34 +58,14 @@ public class ChatActivity extends BaseActivity {
         chat_PROGBAR_spinner.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
-
     private void initAdapter() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
 
         chat_LST_messages.setLayoutManager(linearLayoutManager);
 
-        DatabaseReference chatRoot = FirebaseDatabase.getInstance()
-                .getReference(FirebaseTools.DATABASE_KEYS.CHATS)
-                .child(chatKey);
 
-        FirebaseRecyclerOptions<ChatMessage> options = new FirebaseRecyclerOptions.Builder<ChatMessage>()
-                .setQuery(chatRoot, ChatMessage.class)
-                .build();
-        adapter = new ChatFirebaseAdapter(options);
-
-        chat_LST_messages.setAdapter(adapter);
+        chat_LST_messages.setAdapter(FirebaseListener.getFirebaseListener().getChatFirebaseAdapter(chatKey));
     }
 
     private void initViews() {
@@ -124,7 +104,7 @@ public class ChatActivity extends BaseActivity {
                 .setTimestamp(timestamp);
 
         FirebaseTools.uploadMessage(chatMessage, chatKey, timestamp, currentUser.getUserID());
-        chat_LST_messages.smoothScrollToPosition(adapter.getItemCount());
+        chat_LST_messages.smoothScrollToPosition(FirebaseListener.getFirebaseListener().getChatFirebaseAdapter(chatKey).getItemCount());
     }
 
     private void findViews() {

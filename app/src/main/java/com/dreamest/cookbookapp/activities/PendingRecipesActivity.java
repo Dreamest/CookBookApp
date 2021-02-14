@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.dreamest.cookbookapp.R;
 
 import com.dreamest.cookbookapp.adapters.PendingRecipeFirebaseAdapter;
+import com.dreamest.cookbookapp.utility.FirebaseListener;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,7 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class PendingRecipesActivity extends BaseActivity {
     private RecyclerView pending_recipe_LST_recipes;
-    private PendingRecipeFirebaseAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,47 +28,24 @@ public class PendingRecipesActivity extends BaseActivity {
         initAdapter();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
-
     private void initAdapter() {
         pending_recipe_LST_recipes.setLayoutManager(new LinearLayoutManager(this));
 
-        DatabaseReference pendingRecipesRoot = FirebaseDatabase.getInstance()
-                .getReference(FirebaseTools.DATABASE_KEYS.USERS)
-                .child(FirebaseAuth.getInstance().getUid())
-                .child(FirebaseTools.DATABASE_KEYS.PENDING_RECIPES);
-
-        FirebaseRecyclerOptions<String> options
-                = new FirebaseRecyclerOptions.Builder<String>()
-                .setQuery(pendingRecipesRoot, String.class)
-                .build();
-        adapter = new PendingRecipeFirebaseAdapter(options);
-
-        adapter.setClickListener(new PendingRecipeFirebaseAdapter.ItemClickListener() {
+        FirebaseListener.getFirebaseListener().getPendingRecipeFirebaseAdapter().setClickListener(new PendingRecipeFirebaseAdapter.ItemClickListener() {
             @Override
             public void onAddClick(int position) {
-                String recipeID = adapter.getItem(position);
+                String recipeID = FirebaseListener.getFirebaseListener().getPendingRecipeFirebaseAdapter().getItem(position);
                 addRecipe(recipeID);
             }
 
             @Override
             public void onRemoveClick(int position) {
-                String recipeID = adapter.getItem(position);
+                String recipeID = FirebaseListener.getFirebaseListener().getPendingRecipeFirebaseAdapter().getItem(position);
                 ignoreRecipe(recipeID);
             }
         });
 
-        pending_recipe_LST_recipes.setAdapter(adapter);
+        pending_recipe_LST_recipes.setAdapter(FirebaseListener.getFirebaseListener().getPendingRecipeFirebaseAdapter());
     }
 
     private void ignoreRecipe(String recipeID) {

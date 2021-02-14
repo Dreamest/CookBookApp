@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.FriendFirebaseAdapter;
 import com.dreamest.cookbookapp.logic.User;
+import com.dreamest.cookbookapp.utility.FirebaseListener;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
@@ -38,7 +39,6 @@ public class FriendsListActivity extends BaseActivity {
     private MaterialButton friendslist_BTN_pending;
     private ArrayList<User> pendingFriends;
     private ArrayList<User> friendslist;
-    private FriendFirebaseAdapter adapter;
     private final int PENDING_FRIENDS = 1;
     private final int FRIENDSLIST = 2;
 
@@ -54,18 +54,6 @@ public class FriendsListActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         pendingFriends = new ArrayList<>();
@@ -75,24 +63,13 @@ public class FriendsListActivity extends BaseActivity {
     private void initAdapter() {
         friendslist_LST_friends.setLayoutManager(new LinearLayoutManager(this));
 
-        DatabaseReference friendslistRoot = FirebaseDatabase.getInstance()
-                .getReference(FirebaseTools.DATABASE_KEYS.USERS)
-                .child(FirebaseAuth.getInstance().getUid())
-                .child(FirebaseTools.DATABASE_KEYS.MY_FRIENDS);
-
-        FirebaseRecyclerOptions<String> options
-                = new FirebaseRecyclerOptions.Builder<String>()
-                .setQuery(friendslistRoot, String.class)
-                .build();
-        adapter = new FriendFirebaseAdapter(options);
-
-        adapter.setClickListener(new FriendFirebaseAdapter.ItemClickListener() {
+        FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().setClickListener(new FriendFirebaseAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                openChatWith(adapter.getItem(position));
+                openChatWith(FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().getItem(position));
             }
         });
-        friendslist_LST_friends.setAdapter(adapter);
+        friendslist_LST_friends.setAdapter(FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter());
     }
 
     private void loadPendingFriends() {

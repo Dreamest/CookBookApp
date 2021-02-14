@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.PendingFriendsFirebaseAdapter;
+import com.dreamest.cookbookapp.utility.FirebaseListener;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,7 +17,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class PendingFriendsActivity extends BaseActivity {
     private RecyclerView pending_friend_LST_recipes;
-    private PendingFriendsFirebaseAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,47 +26,23 @@ public class PendingFriendsActivity extends BaseActivity {
         initAdapter();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
-
     private void initAdapter() {
         pending_friend_LST_recipes.setLayoutManager(new LinearLayoutManager(this));
 
-        DatabaseReference pendingFriendsRoot = FirebaseDatabase.getInstance()
-                .getReference(FirebaseTools.DATABASE_KEYS.USERS)
-                .child(FirebaseAuth.getInstance().getUid())
-                .child(FirebaseTools.DATABASE_KEYS.PENDING_FRIENDS);
-
-        FirebaseRecyclerOptions<String> options
-                = new FirebaseRecyclerOptions.Builder<String>()
-                .setQuery(pendingFriendsRoot, String.class)
-                .build();
-        adapter = new PendingFriendsFirebaseAdapter(options);
-
-        adapter.setClickListener(new PendingFriendsFirebaseAdapter.ItemClickListener() {
+        FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().setClickListener(new PendingFriendsFirebaseAdapter.ItemClickListener() {
             @Override
             public void onAddClick(int position) {
-                String friendID = adapter.getItem(position);
+                String friendID = FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().getItem(position);
                 createFriendship(friendID);
             }
 
             @Override
             public void onRemoveClick(int position) {
-                String friendID = adapter.getItem(position);
+                String friendID = FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().getItem(position);
                 ignoreFriendRequest(friendID);
-
             }
         });
-        pending_friend_LST_recipes.setAdapter(adapter);
+        pending_friend_LST_recipes.setAdapter(FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter());
     }
 
     private void ignoreFriendRequest(String friendID) {

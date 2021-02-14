@@ -11,16 +11,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.RecipeFirebaseAdapter;
 import com.dreamest.cookbookapp.logic.Recipe;
+import com.dreamest.cookbookapp.utility.FirebaseListener;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,7 +39,6 @@ public class MainActivity extends BaseActivity {
     private ImageView main_IMG_background;
     private MaterialButton main_BTN_pending;
     private ArrayList<String> pendingRecipes;
-    private RecipeFirebaseAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,26 +47,15 @@ public class MainActivity extends BaseActivity {
 
         findViews();
         initViews();
-        initAdapter();
+        bindAdapter();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
-    
     @Override
     protected void onResume() {
         super.onResume();
         if(FirebaseAuth.getInstance().getCurrentUser() == null) {
             preformLogout();
+            FirebaseListener.getFirebaseListener().stopListeningAll();
             return;
         }
         //Since we use lists, on reloading them they need to be emptied first.
@@ -116,27 +103,16 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void initAdapter() {
+    private void bindAdapter() {
         main_LST_recipes.setLayoutManager(new LinearLayoutManager(this));
 
-        DatabaseReference pendingRecipesRoot = FirebaseDatabase.getInstance()
-                .getReference(FirebaseTools.DATABASE_KEYS.USERS)
-                .child(FirebaseAuth.getInstance().getUid())
-                .child(FirebaseTools.DATABASE_KEYS.MY_RECIPES);
-
-        FirebaseRecyclerOptions<String> options
-                = new FirebaseRecyclerOptions.Builder<String>()
-                .setQuery(pendingRecipesRoot, String.class)
-                .build();
-        adapter = new RecipeFirebaseAdapter(options);
-
-        adapter.setClickListener(new RecipeFirebaseAdapter.ItemClickListener() {
+        FirebaseListener.getFirebaseListener().getRecipeFirebaseAdapter().setClickListener(new RecipeFirebaseAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 openRecipeActivity(position);
             }
         });
-        main_LST_recipes.setAdapter(adapter);
+        main_LST_recipes.setAdapter(FirebaseListener.getFirebaseListener().getRecipeFirebaseAdapter());
     }
 
     private void initViews() {
@@ -205,7 +181,7 @@ public class MainActivity extends BaseActivity {
     private void openRecipeActivity(int position) {
         DatabaseReference ref = FirebaseDatabase.getInstance()
                 .getReference(FirebaseTools.DATABASE_KEYS.RECIPES)
-                .child(adapter.getItem(position));
+                .child(FirebaseListener.getFirebaseListener().getRecipeFirebaseAdapter().getItem(position));
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
