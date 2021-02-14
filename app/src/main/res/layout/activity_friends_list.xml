@@ -40,6 +40,18 @@
         android:text="@string/you_have_k_pending_recipes"
         />
 
+    <TextView
+        android:id="@+id/friendslist_TXT_no_friends"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:text="@string/no_friends_yet"
+        />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/friendslist_LST_friends"

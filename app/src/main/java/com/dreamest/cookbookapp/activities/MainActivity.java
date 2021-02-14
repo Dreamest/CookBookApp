@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
@@ -38,6 +39,7 @@ public class MainActivity extends BaseActivity {
     private ImageButton main_BTN_add;
     private ImageView main_IMG_background;
     private MaterialButton main_BTN_pending;
+    private TextView main_TXT_no_recipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,28 @@ public class MainActivity extends BaseActivity {
         findViews();
         initViews();
         bindAdapter();
+        observePendingRecipes();
+        observeCurrentRecipes();
+
+    }
+
+    private void observeCurrentRecipes() {
+        FirebaseListener.getFirebaseListener().getRecipeFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                main_TXT_no_recipes.setVisibility(View.GONE);
+                super.onItemRangeInserted(positionStart, itemCount);
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                int recipeListSize = FirebaseListener.getFirebaseListener().getRecipeFirebaseAdapter().getItemCount();
+                if(recipeListSize == 0) {
+                    main_TXT_no_recipes.setVisibility(View.VISIBLE);
+                }
+                super.onItemRangeRemoved(positionStart, itemCount);
+            }
+        });
     }
 
     @Override
@@ -77,7 +101,6 @@ public class MainActivity extends BaseActivity {
         });
         main_LST_recipes.setAdapter(FirebaseListener.getFirebaseListener().getRecipeFirebaseAdapter());
 
-        observePendingRecipes();
     }
 
     private void observePendingRecipes() {
@@ -164,6 +187,7 @@ public class MainActivity extends BaseActivity {
         main_LST_recipes = findViewById(R.id.main_LST_recipes);
         main_IMG_background = findViewById(R.id.main_IMG_background);
         main_BTN_pending = findViewById(R.id.main_BTN_pending);
+        main_TXT_no_recipes = findViewById(R.id.main_TXT_no_recipes);
     }
 
     private void openRecipeActivity(int position) {

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.FriendFirebaseAdapter;
@@ -35,7 +36,7 @@ public class FriendsListActivity extends BaseActivity {
     private ImageButton friendslist_BTN_add_friend;
     private RelativeLayout friendslist_LAY_master;
     private MaterialButton friendslist_BTN_pending;
-
+    private TextView friendslist_TXT_no_friends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,27 @@ public class FriendsListActivity extends BaseActivity {
         findViews();
         initViews();
         bindAdapter();
+        observePendingFriends();
+        observeCurrentFriends();
+    }
+
+    private void observeCurrentFriends() {
+        FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                friendslist_TXT_no_friends.setVisibility(View.GONE);
+                super.onItemRangeInserted(positionStart, itemCount);
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                int friendslistSize = FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().getItemCount();
+                if(friendslistSize == 0) {
+                    friendslist_TXT_no_friends.setVisibility(View.VISIBLE);
+                }
+                super.onItemRangeRemoved(positionStart, itemCount);
+            }
+        });
     }
 
     private void bindAdapter() {
@@ -57,7 +79,6 @@ public class FriendsListActivity extends BaseActivity {
             }
         });
         friendslist_LST_friends.setAdapter(FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter());
-        observePendingFriends();
     }
 
     private void observePendingFriends() {
@@ -127,6 +148,7 @@ public class FriendsListActivity extends BaseActivity {
         friendslist_BTN_add_friend = findViewById(R.id.friendslist_BTN_add_friend);
         friendslist_LAY_master = findViewById(R.id.friendslist_LAY_master);
         friendslist_BTN_pending = findViewById(R.id.friendslist_BTN_pending);
+        friendslist_TXT_no_friends = findViewById(R.id.friendslist_TXT_no_friends);
     }
 
 

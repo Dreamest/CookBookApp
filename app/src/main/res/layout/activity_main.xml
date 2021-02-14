@@ -74,6 +74,18 @@
         tools:listitem="@layout/recipe_list_item"
         />
 
+    <TextView
+        android:id="@+id/main_TXT_no_recipes"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:text="@string/no_recipes_yet"
+        />
+
     <ImageButton
         android:id="@+id/main_BTN_add"
 
