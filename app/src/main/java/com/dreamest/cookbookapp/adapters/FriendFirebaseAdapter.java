@@ -39,16 +39,16 @@ public class FriendFirebaseAdapter extends FirebaseRecyclerAdapter<String, Frien
     protected void onBindViewHolder(@NonNull FriendFirebaseAdapter.ViewHolder holder, int position, @NonNull String model) {
 
         DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference(FirebaseTools.DATABASE_KEYS.USERS)
-                .child(model);
+                .getReference(FirebaseTools.DATABASE_KEYS.USERS);
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user = snapshot.getValue(User.class);
+                User user = snapshot.child(model).getValue(User.class);
                 holder.friend_TXT_name.setText(user.getDisplayName());
                 FirebaseTools.downloadImage(mInflater.getContext(), user.getImagePath(), user.getUserID(), FirebaseTools.FILE_KEYS.JPG,
                         holder.friend_IMG_profile, ContextCompat.getDrawable(mInflater.getContext(), R.drawable.ic_loading), R.drawable.ic_man_avatar);
+
             }
 
             @Override
