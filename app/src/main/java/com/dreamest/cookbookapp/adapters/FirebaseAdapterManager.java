@@ -32,7 +32,7 @@ public class FirebaseAdapterManager {
 
     }
 
-    // TODO: 2/14/21 test with another user 
+    // TODO: 2/14/21 test with another user
     public void addChat(String chatKey) {
         if(chatAdapters.containsKey(chatKey)) {
             return;
@@ -59,15 +59,8 @@ public class FirebaseAdapterManager {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot chatKey : snapshot.getChildren()) {
-                    DatabaseReference chatRoot = FirebaseDatabase.getInstance()
-                            .getReference(FirebaseTools.DATABASE_KEYS.CHATS)
-                            .child(chatKey.getKey());
-                    FirebaseRecyclerOptions<ChatMessage> options = new FirebaseRecyclerOptions.Builder<ChatMessage>()
-                            .setQuery(chatRoot, ChatMessage.class)
-                            .build();
-                    ChatFirebaseAdapter adapter = new ChatFirebaseAdapter(options);
-                    adapter.startListening();
-                    chatAdapters.put(chatKey.getKey(), adapter);
+                    String key = chatKey.getKey();
+                    addChat(key);
                 }
             }
 
