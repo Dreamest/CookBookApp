@@ -55,6 +55,13 @@ public class MainActivity extends BaseActivity {
     }
 
     private void observeCurrentRecipes() {
+        int recipeListSize = FirebaseListener.getFirebaseListener().getRecipeFirebaseAdapter().getItemCount();
+        if(recipeListSize == 0) {
+            main_TXT_no_recipes.setVisibility(View.VISIBLE);
+        } else {
+            main_TXT_no_recipes.setVisibility(View.GONE);
+        }
+
         FirebaseListener.getFirebaseListener().getRecipeFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {

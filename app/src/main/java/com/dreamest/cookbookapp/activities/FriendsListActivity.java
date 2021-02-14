@@ -51,6 +51,13 @@ public class FriendsListActivity extends BaseActivity {
     }
 
     private void observeCurrentFriends() {
+        int friendslistSize = FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().getItemCount();
+        if(friendslistSize == 0) {
+            friendslist_TXT_no_friends.setVisibility(View.VISIBLE);
+        } else {
+            friendslist_TXT_no_friends.setVisibility(View.GONE);
+        }
+
         FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
