@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:padding="10dp">
 
@@ -12,8 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:background="@drawable/checkbox_inactive"
-        />
+        android:background="@drawable/checkbox_inactive" />
 
     <TextView
         android:id="@+id/ingredient_TXT_amount"
@@ -23,9 +21,8 @@
         android:layout_marginStart="5dp"
 
         android:text="@string/ingredient_amount"
-        android:textStyle="bold"
         android:textSize="15sp"
-        />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/ingredient_TXT_units"
@@ -35,9 +32,8 @@
         android:layout_marginStart="5dp"
 
         android:text="@string/ingredient_units_gr"
-        android:textStyle="bold"
         android:textSize="15sp"
-        />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/ingredient_TXT_item"
@@ -47,8 +43,7 @@
         android:layout_marginStart="5dp"
 
         android:text="@string/ingredient_item"
-        android:textSize="15sp"
-        />
+        android:textSize="15sp" />
 
     <ImageButton
         android:id="@+id/ingredient_BTN_remove"
@@ -57,7 +52,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
 
-        android:background="@drawable/ic_remove_small"
-        />
+        android:background="@drawable/ic_remove_small" />
 
 </LinearLayout>

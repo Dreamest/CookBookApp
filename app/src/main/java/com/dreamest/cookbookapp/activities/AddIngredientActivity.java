@@ -1,6 +1,5 @@
 package com.dreamest.cookbookapp.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -11,7 +10,6 @@ import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Ingredient;
 import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
-import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -35,7 +33,7 @@ public class AddIngredientActivity extends BaseActivity {
         add_ingredient_EDT_ingredient.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     HideUI.setNextFocus(AddIngredientActivity.this, add_ingredient_EDT_amount);
                 }
                 return false;
@@ -44,7 +42,7 @@ public class AddIngredientActivity extends BaseActivity {
         add_ingredient_EDT_amount.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     HideUI.setNextFocus(AddIngredientActivity.this, add_ingredient_EDT_units);
                 }
                 return false;
@@ -53,7 +51,7 @@ public class AddIngredientActivity extends BaseActivity {
         add_ingredient_EDT_units.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     HideUI.clearFocus(AddIngredientActivity.this, add_ingredient_EDT_units);
                 }
                 return false;
@@ -76,7 +74,7 @@ public class AddIngredientActivity extends BaseActivity {
     }
 
     private void submitIngredient() {
-        float amount = !add_ingredient_EDT_amount.getText().toString().equals("")?
+        float amount = !add_ingredient_EDT_amount.getText().toString().equals("") ?
                 Float.parseFloat((add_ingredient_EDT_amount.getText().toString())) : 0;
 
         Ingredient ingredient = new Ingredient().

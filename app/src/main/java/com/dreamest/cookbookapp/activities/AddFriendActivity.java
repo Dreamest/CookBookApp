@@ -1,8 +1,5 @@
 package com.dreamest.cookbookapp.activities;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -17,12 +14,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+
 import com.dreamest.cookbookapp.R;
-import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.FirebaseListener;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.HideUI;
-import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -32,10 +30,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.reflect.TypeToken;
 import com.rilixtech.CountryCodePicker;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class AddFriendActivity extends BaseActivity {
@@ -49,7 +45,7 @@ public class AddFriendActivity extends BaseActivity {
 
     private final int CONTACT_REQUEST_CODE = 99;
     private final int PERMISSION_REQUEST_CODE = 101;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +55,9 @@ public class AddFriendActivity extends BaseActivity {
         loadUserLists();
     }
 
+    /**
+     * Loads friends and pending friends lists from the database for easy access. While loading, it'll show a spinner instead of the interface.
+     */
     private void loadUserLists() {
         showSpinner();
         int friendsCount = FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().getItemCount();
@@ -69,11 +68,11 @@ public class AddFriendActivity extends BaseActivity {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(int i = 0; i<friendsCount; i++) {
+                for (int i = 0; i < friendsCount; i++) {
                     String friendID = FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().getItem(i);
                     currentFriends.add(snapshot.child(friendID).child(FirebaseTools.DATABASE_KEYS.PHONE_NUMBER).getValue(String.class));
                 }
-                for(int i = 0; i<pendingFriendsCount; i++) {
+                for (int i = 0; i < pendingFriendsCount; i++) {
                     String pendingID = FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().getItem(i);
                     pendingFriends.add(snapshot.child(pendingID).child(FirebaseTools.DATABASE_KEYS.PHONE_NUMBER).getValue(String.class));
                 }
@@ -87,6 +86,9 @@ public class AddFriendActivity extends BaseActivity {
         });
     }
 
+    /**
+     * Shows spinner, hides interface
+     */
     private void showSpinner() {
         add_friend_PROGBAR_spinner.setVisibility(View.VISIBLE);
         add_friend_CCP_code_picker.setVisibility(View.GONE);
@@ -96,6 +98,9 @@ public class AddFriendActivity extends BaseActivity {
 
     }
 
+    /**
+     * Hides spinner, shows interface
+     */
     private void hideSpinner() {
         add_friend_PROGBAR_spinner.setVisibility(View.GONE);
         add_friend_CCP_code_picker.setVisibility(View.VISIBLE);
@@ -146,6 +151,12 @@ public class AddFriendActivity extends BaseActivity {
         }
     }
 
+    /**
+     * searches if given searchValue already exists in pending and current friendslists.
+     *
+     * @param searchValue phone number if new friend
+     * @return if the number is duplicate or not
+     */
     private boolean duplicateNumber(String searchValue) {
         String currentUserPhoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
         if (searchValue.equals(currentUserPhoneNumber)) {
@@ -195,7 +206,7 @@ public class AddFriendActivity extends BaseActivity {
                         Cursor numbers = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
                         while (numbers.moveToNext()) {
                             String phoneNumber = numbers.getString(numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                            if(!duplicateNumber(phoneNumber)) {
+                            if (!duplicateNumber(phoneNumber)) {
                                 FirebaseTools.addUserToPending(this, phoneNumber, true);
                             }
                         }

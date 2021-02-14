@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/profile_LAY_master"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ProfileActivity"
-    >
+    tools:context=".activities.ProfileActivity">
+
     <ImageView
         android:id="@+id/profile_IMG_background"
 
@@ -17,46 +16,44 @@
 
         />
 
-        <TextView
-            android:id="@+id/profile_TXT_profile_title"
+    <TextView
+        android:id="@+id/profile_TXT_profile_title"
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
 
-            android:text="@string/profile_page"
-            android:textSize="40sp"
-            android:textStyle="bold"
-            />
+        android:text="@string/profile_page"
+        android:textSize="40sp"
+        android:textStyle="bold" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/profile_BTN_sign_out"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/profile_BTN_sign_out"
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:backgroundTint="@color/red_calm"
-            android:text="@string/sign_out"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:cornerRadius="10dp"
-            app:strokeColor="@color/black"
-            app:strokeWidth="2dp"
-            />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="@color/red_calm"
+        android:text="@string/sign_out"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        app:cornerRadius="10dp"
+        app:strokeColor="@color/black"
+        app:strokeWidth="2dp" />
 
     <TextView
         android:id="@+id/profile_TXT_username"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:layout_below="@id/profile_TXT_profile_title"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
 
         android:text="@string/owner_name"
         android:textSize="32sp" />
@@ -72,8 +69,7 @@
         android:layout_marginTop="5dp"
         android:clickable="true"
 
-        android:src="@drawable/ic_loading"
-         />
+        android:src="@drawable/ic_loading" />
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -83,10 +79,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/profile_IMG_image"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
         android:layout_marginStart="20dp"
-        >
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/profile_EDT_change_name"
@@ -96,30 +91,28 @@
             android:background="@drawable/flag_transparent"
 
             android:ems="11"
-            android:imeOptions="actionDone"
-            android:inputType="text"
             android:hint="@string/change_your_username"
-            />
+            android:imeOptions="actionDone"
+            android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/profile_BTN_confirm_name"
 
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/profile_LAY_change_name"
         android:layout_alignBottom="@id/profile_LAY_change_name"
         android:layout_marginStart="5dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_marginTop="5dp"
+        android:layout_toEndOf="@id/profile_LAY_change_name"
         android:backgroundTint="@color/gold"
         android:text="@string/submit"
         android:textAllCaps="false"
         android:textColor="@color/black"
         app:cornerRadius="10dp"
         app:strokeColor="@color/black"
-        app:strokeWidth="2dp"
-        />
+        app:strokeWidth="2dp" />
 
     <TextView
         android:id="@+id/profile_TXT_recipes"

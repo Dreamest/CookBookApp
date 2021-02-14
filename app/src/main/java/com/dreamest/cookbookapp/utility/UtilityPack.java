@@ -7,32 +7,30 @@ import android.widget.ImageView;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
-import com.dreamest.cookbookapp.R;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
 import com.rilixtech.CountryCodePicker;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 public class UtilityPack {
     /**
      * Attaches country code to phone number, and drops leading zero if there is one
      */
     public static String extractPhoneNumber(CountryCodePicker ccp, TextInputEditText editText) {
-            String phoneInput = editText.getText().toString();
-            if (phoneInput.charAt(0) == '0' && phoneInput.length() == 10)
-                phoneInput = phoneInput.substring(1);
-            phoneInput = ccp.getSelectedCountryCodeWithPlus() + phoneInput;
-            return phoneInput;
+        String phoneInput = editText.getText().toString();
+        if (phoneInput.charAt(0) == '0' && phoneInput.length() == 10)
+            phoneInput = phoneInput.substring(1);
+        phoneInput = ccp.getSelectedCountryCodeWithPlus() + phoneInput;
+        return phoneInput;
     }
 
     /**
      * Creates a UCrop activity for File image
-     * @param activity activity context
-     * @param image the image to be cropped
+     *
+     * @param activity     activity context
+     * @param image        the image to be cropped
      * @param resultPrefix how the result file will be called.
      */
     public static void cropImage(Activity activity, File image, String resultPrefix) {
@@ -50,9 +48,10 @@ public class UtilityPack {
 
     /**
      * Loads cropped image into imageView using Glide
-     * @param activity activity context
-     * @param path path to image File
-     * @param imageView imageView to load into
+     *
+     * @param activity           activity context
+     * @param path               path to image File
+     * @param imageView          imageView to load into
      * @param defaultIntDrawable placeholder drawable
      */
     public static void loadUCropResult(Activity activity, String path, ImageView imageView, int defaultIntDrawable) {

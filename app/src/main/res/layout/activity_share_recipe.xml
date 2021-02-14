@@ -1,31 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ShareRecipeActivity"
-    >
+    tools:context=".activities.ShareRecipeActivity">
+
     <ImageView
         android:id="@+id/share_IMG_background"
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
         android:alpha="0.3"
-        />
+        android:scaleType="fitXY" />
 
     <TextView
         android:id="@+id/share_TXT_title"
 
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
 
         android:text="@string/share_recipe"
-        android:textSize="45sp"
-        />
+        android:textSize="45sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/share_LST_friends"
@@ -35,10 +32,8 @@
         android:layout_below="@+id/share_TXT_title"
         android:layout_marginTop="40dp"
 
-        tools:listitem="@layout/friend_list_item"
         tools:itemCount="3"
-        />
-
+        tools:listitem="@layout/friend_list_item" />
 
 
 </RelativeLayout>

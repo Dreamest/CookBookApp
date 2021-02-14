@@ -1,10 +1,5 @@
 package com.dreamest.cookbookapp.activities;
 
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +11,11 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.IngredientAdapter;
@@ -68,18 +68,23 @@ public class EditRecipeActivity extends BaseActivity {
         initViews();
     }
 
-    private void focusOnView(ScrollView sv, View v){
+    /**
+     * forces the ScrollView sv to focus on the bottom part of View v
+     * @param sv Activity ScrollView
+     * @param v TextInput for multi-line input.
+     */
+    private void focusOnView(ScrollView sv, View v) {
         sv.post(new Runnable() {
             @Override
             public void run() {
-                sv.smoothScrollTo(0,v.getHeight());
+                sv.smoothScrollTo(0, v.getHeight());
             }
         });
     }
 
     private void loadRecipe() {
         recipe = (Recipe) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.RECIPE, new Recipe(), Recipe.class);
-        if(recipe.getRecipeID().trim().equals("")) { //New recipe. Ensures it has an id for image loading
+        if (recipe.getRecipeID().trim().equals("")) { //New recipe. Ensures it has an id for image loading
             recipe.setRecipeID(UtilityPack.CreateRecipeID(FirebaseAuth.getInstance().getUid()));
         }
         ingredients = recipe.getIngredients();
@@ -87,7 +92,7 @@ public class EditRecipeActivity extends BaseActivity {
         edit_EDT_title.setText(recipe.getTitle());
         edit_EDT_method.setText(recipe.getMethod());
         changeDifficulty(recipe.getDifficulty());
-        if(!recipe.getImagePath().trim().equals("")) {
+        if (!recipe.getImagePath().trim().equals("")) {
             FirebaseTools.downloadImage(this, recipe.getImagePath(), recipe.getRecipeID(), FirebaseTools.FILE_KEYS.JPG,
                     edit_IMG_image, ContextCompat.getDrawable(this, R.drawable.ic_loading), R.drawable.ic_no_image);
         } else {
@@ -212,7 +217,7 @@ public class EditRecipeActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(MySharedPreferences.getMsp().getBoolean(MySharedPreferences.KEYS.UPDATED_INGREDIENT, false)) {
+        if (MySharedPreferences.getMsp().getBoolean(MySharedPreferences.KEYS.UPDATED_INGREDIENT, false)) {
             MySharedPreferences.getMsp().putBoolean(MySharedPreferences.KEYS.UPDATED_INGREDIENT, false);
             ingredients.add((Ingredient) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.INGREDIENT, new Ingredient(), Ingredient.class));
             loadIngredientsAdapter();
@@ -221,7 +226,7 @@ public class EditRecipeActivity extends BaseActivity {
     }
 
     private void submitRecipe() {
-        if(!edit_EDT_title.getText().toString().trim().equals("")) {
+        if (!edit_EDT_title.getText().toString().trim().equals("")) {
             updateRecipe();
             MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe);
             FirebaseTools.storeRecipe(recipe);
@@ -233,7 +238,7 @@ public class EditRecipeActivity extends BaseActivity {
                     .child(recipe.getOwnerID())
                     .child(recipe.getRecipeID());
             Toast.makeText(this, R.string.uploading, Toast.LENGTH_SHORT).show();
-            if(imageChanged) {
+            if (imageChanged) {
                 FirebaseTools.uploadImage(this, storageReference, tempPath, true);
                 playLoading();
             } else {
@@ -258,7 +263,10 @@ public class EditRecipeActivity extends BaseActivity {
             recipe.setRecipeID(UtilityPack.CreateRecipeID(firebaseUser.getUid()));
         }
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReference(FirebaseTools.STORAGE_KEYS.RECIPE_IMAGES).child(firebaseUser.getUid()).child(recipe.getRecipeID());
+        StorageReference storageReference = storage
+                .getReference(FirebaseTools.STORAGE_KEYS.RECIPE_IMAGES)
+                .child(firebaseUser.getUid())
+                .child(recipe.getRecipeID());
 
         String pattern = "dd.MM.yyyy";
         SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.getDefault());
@@ -310,14 +318,14 @@ public class EditRecipeActivity extends BaseActivity {
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
-        switch (requestCode){
-            case UtilityPack.REQUEST_CODES.GILGAR : {
+        switch (requestCode) {
+            case UtilityPack.REQUEST_CODES.GILGAR: {
                 File image = new File(data.getExtras().getStringArray(GligarPicker.IMAGES_RESULT)[0]);
                 UtilityPack.cropImage(this, image, recipe.getRecipeID());
                 break;
             }
 
-            case UtilityPack.REQUEST_CODES.UCROP : {
+            case UtilityPack.REQUEST_CODES.UCROP: {
                 tempPath = UCrop.getOutput(data).getPath();
                 UtilityPack.loadUCropResult(this, tempPath, edit_IMG_image, R.drawable.ic_no_image);
                 imageChanged = true;

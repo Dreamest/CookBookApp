@@ -1,35 +1,21 @@
 package com.dreamest.cookbookapp.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.FriendFirebaseAdapter;
-import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.FirebaseListener;
-import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 public class FriendsListActivity extends BaseActivity {
     private RecyclerView friendslist_LST_friends;
@@ -52,7 +38,7 @@ public class FriendsListActivity extends BaseActivity {
 
     private void observeCurrentFriends() {
         int friendslistSize = FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().getItemCount();
-        if(friendslistSize == 0) {
+        if (friendslistSize == 0) {
             friendslist_TXT_no_friends.setVisibility(View.VISIBLE);
         } else {
             friendslist_TXT_no_friends.setVisibility(View.GONE);
@@ -68,7 +54,7 @@ public class FriendsListActivity extends BaseActivity {
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount) {
                 int friendslistSize = FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().getItemCount();
-                if(friendslistSize == 0) {
+                if (friendslistSize == 0) {
                     friendslist_TXT_no_friends.setVisibility(View.VISIBLE);
                 }
                 super.onItemRangeRemoved(positionStart, itemCount);
@@ -103,7 +89,7 @@ public class FriendsListActivity extends BaseActivity {
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount) {
                 int pendingSize = FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().getItemCount();
-                if(pendingSize == 0) {
+                if (pendingSize == 0) {
                     friendslist_BTN_pending.setVisibility(View.GONE);
                 }
                 super.onItemRangeRemoved(positionStart, itemCount);

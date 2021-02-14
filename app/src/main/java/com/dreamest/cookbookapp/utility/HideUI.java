@@ -43,7 +43,7 @@ public class HideUI {
     }
 
     public static void clearFocus(AppCompatActivity activity, View... views) {
-        for(View v: views) {
+        for (View v : views) {
             v.clearFocus();
         }
         hideSystemUI(activity);

@@ -1,47 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.LoginActivity"
     android:background="@drawable/ic_background1"
-    >
+    tools:context=".activities.LoginActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="32dp"
         android:divider="@drawable/divider8p"
-        android:showDividers="middle"
-        >
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:showDividers="middle">
+
         <TextView
+            style="@style/outlinedFont"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/outlinedFont"
-            android:textColor="@color/white"
             android:text="@string/welcome"
+            android:textColor="@color/white"
             android:textSize="60sp" />
 
         <TextView
+            style="@style/outlinedFont"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
 
-            style="@style/outlinedFont"
+            android:text="@string/to_your_very_own"
             android:textColor="@color/white"
-            android:text="@string/to_your_very_own"/>
+            android:textSize="30sp" />
 
 
         <TextView
+            style="@style/outlinedFont"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
             android:text="@string/cookbook"
-            style="@style/outlinedFont"
             android:textColor="@color/white"
             android:textSize="60sp" />
 
@@ -56,83 +55,81 @@
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-             />
+            android:visibility="gone" />
 
         <LinearLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
             android:background="@drawable/rounded_layout"
+            android:gravity="center"
             android:layoutDirection="ltr"
+            android:orientation="horizontal"
             android:padding="5dp"
 
             >
+
             <com.rilixtech.CountryCodePicker
                 android:id="@+id/login_CCP_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:ccp_textColor="@color/white"
-                />
+                app:ccp_textColor="@color/white" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_EDT_input"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-
-                android:inputType="number"
                 android:ems="8"
-                android:imeOptions="actionDone"
 
                 android:hint="@string/phone_number"
-                android:textColorHint="@color/white"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+
+                android:paddingTop="5dp"
                 android:textColor="@color/white"
-                />
+                android:textColorHint="@color/white" />
         </LinearLayout>
 
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/login_BTN_cancel"
 
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
                 android:layout_marginEnd="50dp"
 
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-
+                android:backgroundTint="@color/black_fade"
+                android:text="@string/cancel"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
                 app:cornerRadius="10dp"
                 app:strokeColor="@color/white"
-                android:textColor="@color/white"
-                android:textAllCaps="false"
-                android:backgroundTint="@color/black_fade"
                 app:strokeWidth="2dp"
-                android:text="@string/cancel"
 
                 />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/login_BTN_continue"
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                app:cornerRadius="10dp"
-                app:strokeColor="@color/white"
-                android:textColor="@color/white"
-                android:textAllCaps="false"
-                app:strokeWidth="2dp"
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/black_fade"
                 android:text="@string/continue_"
-                />
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:cornerRadius="10dp"
+                app:strokeColor="@color/white"
+                app:strokeWidth="2dp" />
 
         </LinearLayout>
     </LinearLayout>

@@ -1,17 +1,15 @@
 package com.dreamest.cookbookapp.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
@@ -23,15 +21,11 @@ import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity {
 
@@ -51,12 +45,11 @@ public class MainActivity extends BaseActivity {
         bindAdapter();
         observePendingRecipes();
         observeCurrentRecipes();
-
     }
 
     private void observeCurrentRecipes() {
         int recipeListSize = FirebaseListener.getFirebaseListener().getRecipeFirebaseAdapter().getItemCount();
-        if(recipeListSize == 0) {
+        if (recipeListSize == 0) {
             main_TXT_no_recipes.setVisibility(View.VISIBLE);
         } else {
             main_TXT_no_recipes.setVisibility(View.GONE);
@@ -72,7 +65,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount) {
                 int recipeListSize = FirebaseListener.getFirebaseListener().getRecipeFirebaseAdapter().getItemCount();
-                if(recipeListSize == 0) {
+                if (recipeListSize == 0) {
                     main_TXT_no_recipes.setVisibility(View.VISIBLE);
                 }
                 super.onItemRangeRemoved(positionStart, itemCount);
@@ -83,9 +76,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(FirebaseAuth.getInstance().getCurrentUser() == null) {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) { //specifically upon returning from profileActivity
             preformLogout();
-            FirebaseListener.getFirebaseListener().stopListeningAll();
             return;
         }
     }
@@ -125,7 +117,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount) {
                 int pendingSize = FirebaseListener.getFirebaseListener().getPendingRecipeFirebaseAdapter().getItemCount();
-                if(pendingSize == 0) {
+                if (pendingSize == 0) {
                     main_BTN_pending.setVisibility(View.GONE);
                 }
                 super.onItemRangeRemoved(positionStart, itemCount);
@@ -139,7 +131,7 @@ public class MainActivity extends BaseActivity {
                 .load(R.drawable.background_diary)
                 .fitCenter()
                 .into(main_IMG_background);
-        
+
         main_BTN_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -2,13 +2,10 @@ package com.dreamest.cookbookapp.utility;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MySharedPreferences {
 
@@ -83,7 +80,8 @@ public class MySharedPreferences {
 
     /**
      * Loads object back from sharedPreferences
-     * @param key key of the item stored
+     *
+     * @param key          key of the item stored
      * @param defaultValue if loading failed, will load this
      * @return object saved under key
      */
@@ -102,6 +100,7 @@ public class MySharedPreferences {
         String INGREDIENT = "INGREDIENT";
         String UPDATED_INGREDIENT = "UPDATED_INGREDIENT";
         String USER_ID = "USER_ID";
+        String RECIPE_ID = "RECIPE_ID";
         String FRIENDSLIST_ARRAY = "FRIENDS_ARRAY";
         String PENDING_FRIENDS_ARRAY = "PENDING_FRIENDS_ARRAY";
     }

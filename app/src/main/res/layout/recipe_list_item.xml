@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="40dp"
-    android:elevation="20dp"
-    app:cardElevation="20dp"
     android:layout_margin="12dp"
-    >
+    android:elevation="20dp"
+    app:cardCornerRadius="40dp"
+    app:cardElevation="20dp">
 
     <RelativeLayout
         android:id="@+id/listRecipe_LAY_window"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="15dp"
         android:background="@color/gold_bright"
-        >
+        android:padding="15dp">
 
         <TextView
             android:id="@+id/listRecipe_TXT_title"
@@ -26,9 +23,9 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
 
-            android:textStyle="bold"
             android:text="@string/recipe_title"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
 
         <TextView
@@ -80,9 +77,8 @@
             android:layout_centerHorizontal="true"
 
             android:scaleType="centerCrop"
-            app:shapeAppearanceOverlay="@style/roundedImageView"
             android:src="@drawable/ic_loading"
-            />
+            app:shapeAppearanceOverlay="@style/roundedImageView" />
 
         <TextView
             android:id="@+id/listRecipe_TXT_prepTime"
@@ -103,9 +99,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/listRecipe_IMG_image"
-            android:layout_toEndOf="@id/listRecipe_TXT_prepTime"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
+            android:layout_toEndOf="@id/listRecipe_TXT_prepTime"
 
             android:text="@string/number_30"
             android:textSize="15sp" />
@@ -116,8 +112,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/listRecipe_IMG_image"
-            android:layout_toEndOf="@id/listRecipe_TXT_time"
             android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/listRecipe_TXT_time"
 
             android:text="@string/minutes"
             android:textSize="15sp" />
@@ -140,8 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/listRecipe_TXT_prepTime"
             android:layout_toEndOf="@id/listRecipe_TXT_difficulty"
-            android:layoutDirection="ltr"
-            >
+            android:layoutDirection="ltr">
 
             <ImageView
                 android:id="@+id/listRecipe_IMG_star1"

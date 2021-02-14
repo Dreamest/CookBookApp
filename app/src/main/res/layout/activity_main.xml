@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activities.MainActivity">
 
     <ImageView
@@ -11,8 +11,7 @@
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        />
+        android:scaleType="fitXY" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/main_CARD_title"
@@ -22,12 +21,11 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-
-        app:cardCornerRadius="50dp"
-        app:cardBackgroundColor="@color/transparent_gold"
         android:layout_marginTop="10dp"
-        >
+
+        android:layout_marginEnd="5dp"
+        app:cardBackgroundColor="@color/transparent_gold"
+        app:cardCornerRadius="50dp">
 
         <TextView
             android:id="@+id/main_TXT_title"
@@ -37,31 +35,29 @@
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
 
-            android:textSize="40sp"
-            android:textStyle="bold"
             android:text="@string/your_cookbook"
-            />
+            android:textSize="40sp"
+            android:textStyle="bold" />
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/main_BTN_pending"
 
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
 
-        android:visibility="gone"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_below="@+id/main_CARD_title"
+        android:layout_margin="10dp"
         android:layout_marginTop="5dp"
         android:backgroundTint="@color/gold"
-        android:layout_below="@+id/main_CARD_title"
+        android:text="@string/you_have_k_pending_recipes"
         android:textAllCaps="false"
         android:textColor="@color/black"
+        android:visibility="gone"
         app:cornerRadius="10dp"
         app:strokeColor="@color/black"
-        app:strokeWidth="2dp"
-        android:text="@string/you_have_k_pending_recipes"
-        />
+        app:strokeWidth="2dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/main_LST_recipes"
@@ -71,8 +67,7 @@
         android:layout_below="@id/main_BTN_pending"
         android:layout_marginTop="10dp"
 
-        tools:listitem="@layout/recipe_list_item"
-        />
+        tools:listitem="@layout/recipe_list_item" />
 
     <TextView
         android:id="@+id/main_TXT_no_recipes"
@@ -81,20 +76,18 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
 
-        android:textSize="40sp"
-        android:textStyle="bold"
         android:text="@string/no_recipes_yet"
-        />
+        android:textSize="40sp"
+        android:textStyle="bold" />
 
     <ImageButton
         android:id="@+id/main_BTN_add"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
-        android:layout_alignParentBottom="true"
 
-        android:background="@drawable/ic_add"
-        />
+        android:background="@drawable/ic_add" />
 </RelativeLayout>

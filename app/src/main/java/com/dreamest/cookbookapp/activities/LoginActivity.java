@@ -1,7 +1,5 @@
 package com.dreamest.cookbookapp.activities;
 
-import androidx.annotation.NonNull;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +9,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.utility.FirebaseListener;
@@ -51,7 +51,6 @@ public class LoginActivity extends BaseActivity {
 
     private String phoneInput = "";
     private String mVerificationId;
-    private PhoneAuthProvider.ForceResendingToken mResendToken;
 
     private enum LOGIN_STATE {
         ENTERING_NUMBER,
@@ -79,12 +78,12 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void stayInActivity() {
-            firebaseAuth.signOut();
-            finish();
+        firebaseAuth.signOut();
+        finish();
     }
 
     private void codeEntered() {
-        if(!login_EDT_input.getText().toString().trim().equals("")) {
+        if (!login_EDT_input.getText().toString().trim().equals("")) {
             String smsVerificationCode = login_EDT_input.getText().toString();
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, smsVerificationCode);
             signInWithPhoneAuthCredential(credential);
@@ -96,7 +95,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void startLoginProcess() {
-        if(!login_EDT_input.getText().toString().trim().equals("")) {
+        if (!login_EDT_input.getText().toString().trim().equals("")) {
             phoneInput = UtilityPack.extractPhoneNumber(login_CCP_code, login_EDT_input);
             PhoneAuthOptions options =
                     PhoneAuthOptions.newBuilder(firebaseAuth)
@@ -151,7 +150,6 @@ public class LoginActivity extends BaseActivity {
         @Override
         public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken token) {
             mVerificationId = verificationId;
-            mResendToken = token;
             changeState(LOGIN_STATE.ENTERING_CODE);
         }
     };
@@ -232,8 +230,7 @@ public class LoginActivity extends BaseActivity {
     private void continueClicked() {
         if (login_state == LOGIN_STATE.ENTERING_NUMBER) {
             startLoginProcess();
-        }
-        else if (login_state == LOGIN_STATE.ENTERING_CODE) {
+        } else if (login_state == LOGIN_STATE.ENTERING_CODE) {
             codeEntered();
         }
     }

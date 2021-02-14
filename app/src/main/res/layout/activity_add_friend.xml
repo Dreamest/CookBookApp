@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.AddFriendActivity"
-    android:padding="20dp"
     android:background="@drawable/ic_liquid_cheese"
-    >
+    android:padding="20dp"
+    tools:context=".activities.AddFriendActivity">
+
     <ProgressBar
         android:id="@+id/add_friend_PROGBAR_spinner"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        />
+        android:layout_centerInParent="true" />
 
 
     <TextView
@@ -26,22 +24,20 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
 
-        android:textSize="40sp"
         android:text="@string/add_a_friend"
-        />
+        android:textSize="40sp" />
 
     <TextView
         android:id="@+id/add_friend_TXT_contacts"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/add_friend_TXT_title"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
 
-        android:textSize="30sp"
         android:text="@string/search_contacts"
-        />
+        android:textSize="30sp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/add_friend_BTN_contacts"
@@ -53,40 +49,37 @@
         android:layout_margin="5dp"
 
         android:backgroundTint="@color/teal_200"
+        android:text="@string/add_contacts"
         android:textAllCaps="false"
         android:textColor="@color/black"
         app:cornerRadius="10dp"
         app:strokeColor="@color/black"
-        app:strokeWidth="2dp"
-        android:text="@string/add_contacts"
-        />
+        app:strokeWidth="2dp" />
 
     <TextView
         android:id="@+id/add_friend_TXT_search"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/add_friend_BTN_contacts"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
 
-        android:textSize="30sp"
         android:text="@string/search_for_number"
-        />
+        android:textSize="30sp" />
 
     <LinearLayout
         android:id="@+id/add_friend_LAY_phone"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_below="@id/add_friend_TXT_search"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
+        android:gravity="center"
 
         android:layoutDirection="ltr"
-        android:gravity="center"
-        >
+        android:orientation="horizontal">
 
 
         <com.rilixtech.CountryCodePicker
@@ -105,14 +98,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:inputType="number"
-            android:imeOptions="actionGo"
-
             android:ems="8"
             android:hint="@string/phone_number"
-            android:textColorHint="@color/black"
+
+            android:imeOptions="actionGo"
+            android:inputType="number"
             android:textColor="@color/black"
-            />
+            android:textColorHint="@color/black" />
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
@@ -125,13 +117,12 @@
         android:layout_marginTop="5dp"
 
         android:backgroundTint="@color/teal_200"
+        android:text="@string/search"
         android:textAllCaps="false"
         android:textColor="@color/black"
         app:cornerRadius="10dp"
         app:strokeColor="@color/black"
-        app:strokeWidth="2dp"
-        android:text="@string/search"
-        />
+        app:strokeWidth="2dp" />
 
 
 </RelativeLayout>

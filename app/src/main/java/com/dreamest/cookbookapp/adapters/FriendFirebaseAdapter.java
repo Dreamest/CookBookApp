@@ -72,7 +72,6 @@ public class FriendFirebaseAdapter extends FirebaseRecyclerAdapter<String, Frien
                 .inflate(R.layout.friend_list_item, parent, false);
         return new FriendFirebaseAdapter.ViewHolder(view);
     }
-    // allows clicks events to be caught
 
     public void setClickListener(FriendFirebaseAdapter.ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;

@@ -1,16 +1,16 @@
 package com.dreamest.cookbookapp.activities;
 
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.IngredientAdapter;
@@ -43,14 +43,12 @@ public class RecipeActivity extends BaseActivity {
         setContentView(R.layout.activity_recipe);
         findViews();
         initViews();
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         loadRecipe(); //So that recipe will update when returning from Edit as well.
-        initAdapter(); //Needs to run after the recipe was loaded
         visualizeRecipe();
     }
 
@@ -90,7 +88,7 @@ public class RecipeActivity extends BaseActivity {
     }
 
     private void visualizeRecipe() {
-        if(!recipe.getOwnerID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+        if (!recipe.getOwnerID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             recipe_BTN_edit.setVisibility(View.GONE);
         }
         recipe_TXT_title.setText(recipe.getTitle());
@@ -101,6 +99,7 @@ public class RecipeActivity extends BaseActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 recipe_TXT_owner.setText(snapshot.getValue(String.class));
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.w("dddd", "Failed to read value.", error.toException());
@@ -132,13 +131,15 @@ public class RecipeActivity extends BaseActivity {
 
     private void shareRecipe() {
         Intent myIntent = new Intent(this, ShareRecipeActivity.class);
-        myIntent.putExtra(FirebaseTools.DATABASE_KEYS.RECIPE_ID, recipe.getRecipeID()); //ID of the recipe to share
+        myIntent.putExtra(MySharedPreferences.KEYS.RECIPE_ID, recipe.getRecipeID()); //ID of the recipe to share
         startActivity(myIntent);
 
     }
 
     private void loadRecipe() {
         recipe = (Recipe) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.RECIPE, new Recipe(), Recipe.class);
+        initAdapter();
+
     }
 
     private void findViews() {

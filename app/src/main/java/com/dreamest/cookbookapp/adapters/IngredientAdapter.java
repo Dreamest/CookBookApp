@@ -15,10 +15,7 @@ import com.dreamest.cookbookapp.logic.Ingredient;
 
 import java.util.ArrayList;
 
-/**
- * Adapter for ingredient list that shows the checkbox element
- */
-public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.MyViewHolder>  {
+public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.MyViewHolder> {
     private ArrayList<Ingredient> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
@@ -44,7 +41,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Ingredient ingredient = mData.get(position);
-        if(ingredient.getAmount() != 0) {
+        if (ingredient.getAmount() != 0) {
             holder.ingredient_TXT_amount.setText(ingredient.getAmount() + "");
             holder.ingredient_TXT_amount.setVisibility(View.VISIBLE);
         } else
@@ -52,7 +49,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
 
         holder.ingredient_TXT_item.setText(ingredient.getItem());
 
-        if(!ingredient.getUnits().trim().equals("")) {
+        if (!ingredient.getUnits().trim().equals("")) {
             holder.ingredient_TXT_units.setText(ingredient.getUnits());
             holder.ingredient_TXT_units.setVisibility(View.VISIBLE);
         } else
@@ -74,8 +71,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
     public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
-    
-    
+
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
@@ -96,7 +92,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
             super(itemView);
             this.mode = mode;
             findViews(itemView);
-            if(mode == IngredientAdapter.CHECKBOX) {
+            if (mode == IngredientAdapter.CHECKBOX) {
                 setImage(ingredient_IMG_check, R.drawable.checkbox_inactive);
 
                 itemView.setOnClickListener(new View.OnClickListener() {
@@ -106,11 +102,11 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
                     }
                 });
             }
-            if(mode == IngredientAdapter.REMOVE_BUTTON) {
+            if (mode == IngredientAdapter.REMOVE_BUTTON) {
                 ingredient_BTN_remove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(mClickListener != null) {
+                        if (mClickListener != null) {
                             mClickListener.onRemoveClick(getAdapterPosition());
                         }
                     }
@@ -129,7 +125,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
             ingredient_TXT_amount = itemView.findViewById(R.id.ingredient_TXT_amount);
             ingredient_IMG_check = itemView.findViewById(R.id.ingredient_IMG_check);
             ingredient_BTN_remove = itemView.findViewById(R.id.ingredient_BTN_remove);
-            if(mode == IngredientAdapter.CHECKBOX) {
+            if (mode == IngredientAdapter.CHECKBOX) {
                 ingredient_BTN_remove.setVisibility(View.GONE);
             } else if (mode == IngredientAdapter.REMOVE_BUTTON) {
                 ingredient_IMG_check.setVisibility(View.GONE);
@@ -137,9 +133,9 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.My
         }
 
         private void changeBoxStatus() {
-            if(ingredient_IMG_check.getTag().equals(R.drawable.checkbox_active)) {
+            if (ingredient_IMG_check.getTag().equals(R.drawable.checkbox_active)) {
                 setImage(ingredient_IMG_check, R.drawable.checkbox_inactive);
-            } else if(ingredient_IMG_check.getTag().equals(R.drawable.checkbox_inactive)) {
+            } else if (ingredient_IMG_check.getTag().equals(R.drawable.checkbox_inactive)) {
                 setImage(ingredient_IMG_check, R.drawable.checkbox_active);
             }
         }

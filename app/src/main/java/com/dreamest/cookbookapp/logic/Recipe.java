@@ -1,9 +1,5 @@
 package com.dreamest.cookbookapp.logic;
 
-import com.dreamest.cookbookapp.utility.UtilityPack;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.ArrayList;
 
 public class Recipe {

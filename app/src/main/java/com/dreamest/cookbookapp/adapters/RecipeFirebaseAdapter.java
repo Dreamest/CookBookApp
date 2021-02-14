@@ -61,6 +61,7 @@ public class RecipeFirebaseAdapter extends FirebaseRecyclerAdapter<String, Recip
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         holder.listRecipe_TXT_owner.setText(snapshot.getValue(String.class));
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         Log.w("dddd", "Failed to read value.", error.toException());
@@ -95,18 +96,15 @@ public class RecipeFirebaseAdapter extends FirebaseRecyclerAdapter<String, Recip
                 .inflate(R.layout.recipe_list_item, parent, false);
         return new RecipeFirebaseAdapter.ViewHolder(view);
     }
-    // allows clicks events to be caught
 
     public void setClickListener(RecipeFirebaseAdapter.ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 
-    // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
     }
 
-    // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView listRecipe_TXT_title;
         private TextView listRecipe_TXT_date;

@@ -4,7 +4,8 @@ public class Ingredient {
     private String units;
     private Float amount;
     private String item;
-    public Ingredient(){
+
+    public Ingredient() {
     }
 
     public Ingredient(String units, Float amount, String item) {

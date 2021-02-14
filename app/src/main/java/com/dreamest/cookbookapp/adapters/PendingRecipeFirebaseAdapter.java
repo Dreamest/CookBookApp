@@ -58,6 +58,7 @@ public class PendingRecipeFirebaseAdapter extends FirebaseRecyclerAdapter<String
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         holder.pending_item_recipe_TXT_owner.setText(snapshot.getValue(String.class));
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
 
@@ -81,19 +82,17 @@ public class PendingRecipeFirebaseAdapter extends FirebaseRecyclerAdapter<String
                 .inflate(R.layout.pending_recipe_item, parent, false);
         return new PendingRecipeFirebaseAdapter.ViewHolder(view);
     }
-    // allows clicks events to be caught
 
     public void setClickListener(PendingRecipeFirebaseAdapter.ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 
-    // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onAddClick(int position);
+
         void onRemoveClick(int position);
     }
 
-    // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView pending_item_recipe_TXT_title;
         private TextView pending_item_recipe_TXT_owner;
@@ -107,7 +106,7 @@ public class PendingRecipeFirebaseAdapter extends FirebaseRecyclerAdapter<String
             pending_item_recipe_BTN_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mClickListener != null) {
+                    if (mClickListener != null) {
                         mClickListener.onAddClick(getAdapterPosition());
                     }
                 }
@@ -115,7 +114,7 @@ public class PendingRecipeFirebaseAdapter extends FirebaseRecyclerAdapter<String
             pending_item_recipe_BTN_remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mClickListener != null) {
+                    if (mClickListener != null) {
                         mClickListener.onRemoveClick(getAdapterPosition());
                     }
                 }

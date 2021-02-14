@@ -1,18 +1,19 @@
 package com.dreamest.cookbookapp.activities;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.FriendFirebaseAdapter;
 import com.dreamest.cookbookapp.utility.FirebaseListener;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
+import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -25,7 +26,7 @@ public class ShareRecipeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_recipe);
-        recipeToShare = getIntent().getStringExtra(FirebaseTools.DATABASE_KEYS.RECIPE_ID);
+        recipeToShare = getIntent().getStringExtra(MySharedPreferences.KEYS.RECIPE_ID);
         findViews();
         Glide
                 .with(this)

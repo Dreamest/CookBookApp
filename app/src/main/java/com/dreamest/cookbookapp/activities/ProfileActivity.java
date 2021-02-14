@@ -1,9 +1,5 @@
 package com.dreamest.cookbookapp.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,15 +7,19 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
+import com.dreamest.cookbookapp.utility.FirebaseListener;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
@@ -109,7 +109,7 @@ public class ProfileActivity extends BaseActivity {
         profile_EDT_change_name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     HideUI.clearFocus(ProfileActivity.this, profile_EDT_change_name);
                     confirmNameChange();
                 }
@@ -117,7 +117,7 @@ public class ProfileActivity extends BaseActivity {
             }
         });
 
-        profile_LAY_master.setOnTouchListener(new OnSwipeTouchListener(this){
+        profile_LAY_master.setOnTouchListener(new OnSwipeTouchListener(this) {
             public void onSwipeRight() {
                 finish();
             }
@@ -133,11 +133,13 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void logout() {
+        FirebaseListener.getFirebaseListener().stopListeningAll();
+
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser() == null) {
+                if (firebaseAuth.getCurrentUser() == null) {
                     Log.d("dddd", "user now null");
                     Toast.makeText(ProfileActivity.this, R.string.logging_out, Toast.LENGTH_SHORT).show();
                     finish();
@@ -160,7 +162,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void confirmNameChange() {
-        if(!profile_EDT_change_name.getText().toString().trim().equals("")) {
+        if (!profile_EDT_change_name.getText().toString().trim().equals("")) {
             currentUser.setDisplayName(profile_EDT_change_name.getText().toString());
             profile_TXT_username.setText(currentUser.getDisplayName());
             FirebaseTools.storeUser(currentUser);
@@ -181,14 +183,14 @@ public class ProfileActivity extends BaseActivity {
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
-        switch (requestCode){
-            case UtilityPack.REQUEST_CODES.GILGAR : { //Image picked
+        switch (requestCode) {
+            case UtilityPack.REQUEST_CODES.GILGAR: { //Image picked
                 File image = new File(data.getExtras().getStringArray(GligarPicker.IMAGES_RESULT)[0]);
                 UtilityPack.cropImage(this, image, FirebaseAuth.getInstance().getCurrentUser().getUid());
                 break;
             }
 
-            case UtilityPack.REQUEST_CODES.UCROP : { //Image cropped
+            case UtilityPack.REQUEST_CODES.UCROP: { //Image cropped
                 String path = UCrop.getOutput(data).getPath();
                 UtilityPack.loadUCropResult(this, path, profile_IMG_image, R.drawable.ic_man_avatar);
                 FirebaseStorage storage = FirebaseStorage.getInstance();

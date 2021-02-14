@@ -70,19 +70,17 @@ public class PendingFriendsFirebaseAdapter extends FirebaseRecyclerAdapter<Strin
                 .inflate(R.layout.pending_friend_item, parent, false);
         return new PendingFriendsFirebaseAdapter.ViewHolder(view);
     }
-    // allows clicks events to be caught
 
     public void setClickListener(PendingFriendsFirebaseAdapter.ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 
-    // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onAddClick(int position);
+
         void onRemoveClick(int position);
     }
 
-    // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ShapeableImageView pending_item_friend_IMG_profile_image;
         private TextView pending_item_friend_TXT_displayName;
@@ -97,7 +95,7 @@ public class PendingFriendsFirebaseAdapter extends FirebaseRecyclerAdapter<Strin
             pending_item_friend_BTN_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mClickListener != null) {
+                    if (mClickListener != null) {
                         mClickListener.onAddClick(getAdapterPosition());
                     }
                 }
@@ -105,7 +103,7 @@ public class PendingFriendsFirebaseAdapter extends FirebaseRecyclerAdapter<Strin
             pending_item_friend_BTN_remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mClickListener != null) {
+                    if (mClickListener != null) {
                         mClickListener.onRemoveClick(getAdapterPosition());
                     }
                 }

@@ -1,7 +1,5 @@
 package com.dreamest.cookbookapp.activities;
 
-import androidx.annotation.Nullable;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +8,8 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
@@ -61,7 +61,7 @@ public class WelcomeActivity extends BaseActivity {
         welcome_EDT_name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     HideUI.clearFocus(WelcomeActivity.this, welcome_EDT_name);
                 }
                 return false;
@@ -73,7 +73,7 @@ public class WelcomeActivity extends BaseActivity {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         String userName;
-        if(!welcome_EDT_name.getText().toString().trim().equals("")) {
+        if (!welcome_EDT_name.getText().toString().trim().equals("")) {
             userName = welcome_EDT_name.getText().toString();
         } else {
             userName = firebaseUser.getPhoneNumber();
@@ -89,7 +89,7 @@ public class WelcomeActivity extends BaseActivity {
                 .setImagePath(storageReference.getPath());
         FirebaseTools.storeUser(user);
 
-        if(imageChanged) {
+        if (imageChanged) {
             FirebaseTools.uploadImage(this, storageReference, tempPath, false);
         }
         moveToMainActivity();
@@ -112,14 +112,14 @@ public class WelcomeActivity extends BaseActivity {
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
-        switch (requestCode){
-            case UtilityPack.REQUEST_CODES.GILGAR : {
+        switch (requestCode) {
+            case UtilityPack.REQUEST_CODES.GILGAR: {
                 File image = new File(data.getExtras().getStringArray(GligarPicker.IMAGES_RESULT)[0]);
                 UtilityPack.cropImage(this, image, FirebaseAuth.getInstance().getCurrentUser().getUid());
                 break;
             }
 
-            case UtilityPack.REQUEST_CODES.UCROP : {
+            case UtilityPack.REQUEST_CODES.UCROP: {
                 tempPath = UCrop.getOutput(data).getPath();
                 UtilityPack.loadUCropResult(this, tempPath, welcome_IMG_user_image, R.drawable.ic_man_avatar);
                 imageChanged = true;

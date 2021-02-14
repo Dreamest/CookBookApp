@@ -1,12 +1,5 @@
 package com.dreamest.cookbookapp.logic;
 
-import com.dreamest.cookbookapp.utility.UtilityPack;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.HashMap;
 
 public class User {
@@ -20,7 +13,7 @@ public class User {
     private String phoneNumber;
     private String imagePath;
 
-    public User(){
+    public User() {
         myRecipes = new HashMap<>();
         myFriends = new HashMap<>();
         myChats = new HashMap<>();

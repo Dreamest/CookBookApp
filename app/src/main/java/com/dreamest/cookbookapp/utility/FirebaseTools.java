@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.dreamest.cookbookapp.App;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.ChatMessage;
 import com.dreamest.cookbookapp.logic.Recipe;

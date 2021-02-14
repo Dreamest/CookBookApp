@@ -1,7 +1,5 @@
 package com.dreamest.cookbookapp.utility;
 
-import android.service.autofill.Dataset;
-
 import androidx.annotation.NonNull;
 
 import com.dreamest.cookbookapp.adapters.ChatFirebaseAdapter;
@@ -38,6 +36,7 @@ public class FirebaseListener {
 
     }
 
+    // TODO: 2/14/21 possible error on adding new chat. Never gets added to the adapter map 
     private void initChats() {
         chatAdapters = new HashMap<>();
         DatabaseReference ref = FirebaseDatabase.getInstance()
@@ -48,7 +47,7 @@ public class FirebaseListener {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot chatKey : snapshot.getChildren()) {
+                for (DataSnapshot chatKey : snapshot.getChildren()) {
                     DatabaseReference chatRoot = FirebaseDatabase.getInstance()
                             .getReference(FirebaseTools.DATABASE_KEYS.CHATS)
                             .child(chatKey.getKey());
@@ -96,7 +95,7 @@ public class FirebaseListener {
     }
 
     public static void init() {
-        if(firebaseListener == null) {
+        if (firebaseListener == null) {
             firebaseListener = new FirebaseListener();
         }
     }
@@ -124,7 +123,7 @@ public class FirebaseListener {
                 = new FirebaseRecyclerOptions.Builder<String>()
                 .setQuery(recipesRoot, String.class)
                 .build();
-        recipeFirebaseAdapter =  new RecipeFirebaseAdapter(options);
+        recipeFirebaseAdapter = new RecipeFirebaseAdapter(options);
     }
 
     public static FirebaseListener getFirebaseListener() {
@@ -163,7 +162,7 @@ public class FirebaseListener {
         pendingRecipeFirebaseAdapter.stopListening();
         pendingFriendsFirebaseAdapter.stopListening();
         friendFirebaseAdapter.stopListening();
-        for(ChatFirebaseAdapter adapter: chatAdapters.values()) {
+        for (ChatFirebaseAdapter adapter : chatAdapters.values()) {
             adapter.stopListening();
         }
     }

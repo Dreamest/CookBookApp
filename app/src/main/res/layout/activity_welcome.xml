@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.WelcomeActivity"
     android:background="@drawable/ic_liquid_cheese"
-    >
+    tools:context=".activities.WelcomeActivity">
 
     <TextView
         android:id="@+id/welcome_TXT_title"
@@ -18,22 +16,21 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
 
-        android:textSize="60sp"
         android:text="@string/welcome_"
-        />
+        android:textSize="60sp" />
+
     <TextView
         android:id="@+id/welcome_TXT_sub_title"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/welcome_TXT_title"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
 
         android:text="@string/welcome_subtitle"
-        android:textSize="30sp"
-        />
+        android:textSize="30sp" />
 
     <ImageView
         android:id="@+id/welcome_IMG_user_image"
@@ -45,8 +42,7 @@
         android:layout_marginTop="30dp"
 
         android:clickable="true"
-        android:src="@drawable/ic_camera"
-        />
+        android:src="@drawable/ic_camera" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/welcome_LAY_name"
@@ -54,8 +50,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/welcome_IMG_user_image"
-        android:layout_centerHorizontal="true"
-        >
+        android:layout_centerHorizontal="true">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/welcome_EDT_name"
 
@@ -63,30 +59,28 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/soft_grey"
-            android:imeOptions="actionDone"
-            android:inputType="text"
             android:ems="12"
             android:hint="@string/what_your_name"
-            />
+            android:imeOptions="actionDone"
+            android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/welcome_BTN_submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
-
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="@color/gold"
+        android:text="@string/submit"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
         app:cornerRadius="10dp"
         app:strokeColor="@color/black"
-        app:strokeWidth="2dp"
-        android:textColor="@color/black"
-        android:textAllCaps="false"
-        android:backgroundTint="@color/gold"
 
-        android:text="@string/submit"
-        />
+        app:strokeWidth="2dp" />
 </RelativeLayout>

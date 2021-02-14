@@ -1,9 +1,5 @@
 package com.dreamest.cookbookapp.activities;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -14,15 +10,17 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
-import com.dreamest.cookbookapp.adapters.ChatFirebaseAdapter;
 import com.dreamest.cookbookapp.logic.ChatMessage;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.FirebaseListener;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -88,16 +86,17 @@ public class ChatActivity extends BaseActivity {
                 }
                 return false;
             }
-        });    }
+        });
+    }
 
     private void sendMessage() {
         String message = chat_EDT_input.getText().toString();
-        if(message.trim().equals("")) {
+        if (message.trim().equals("")) {
             return;
         }
         chat_EDT_input.setText("");
         long timestamp = System.currentTimeMillis();
-        ChatMessage chatMessage= new ChatMessage()
+        ChatMessage chatMessage = new ChatMessage()
                 .setSenderID(FirebaseAuth.getInstance().getUid())
                 .setSenderName(currentUser.getDisplayName())
                 .setText(message)
@@ -116,6 +115,11 @@ public class ChatActivity extends BaseActivity {
         chat_IMG_background = findViewById(R.id.chat_IMG_background);
     }
 
+    /**
+     * loads the users of the active chat
+     *
+     * @param friendID the not current user
+     */
     private void loadUsers(String friendID) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(FirebaseTools.DATABASE_KEYS.USERS);
@@ -130,6 +134,7 @@ public class ChatActivity extends BaseActivity {
                 chat_LST_messages.setVisibility(View.VISIBLE);
 
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.w("dddd", "Failed to read value.", error.toException());

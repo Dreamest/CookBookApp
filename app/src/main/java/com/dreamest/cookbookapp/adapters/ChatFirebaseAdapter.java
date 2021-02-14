@@ -1,6 +1,5 @@
 package com.dreamest.cookbookapp.adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.ChatMessage;
-
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,7 +48,7 @@ public class ChatFirebaseAdapter extends FirebaseRecyclerAdapter<ChatMessage, Ch
         holder.message_item_TXT_timestamp.setText(timestamp);
 
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.message_item_LAY_master.getLayoutParams();
-        if(message.getSenderID().equals(FirebaseAuth.getInstance().getUid())) { // i.e current user is the sender
+        if (message.getSenderID().equals(FirebaseAuth.getInstance().getUid())) { // i.e current user is the sender
             holder.message_item_LAY_container.setBackgroundColor(mInflater.getContext().getColor(R.color.my_message));
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             params.removeRule(RelativeLayout.ALIGN_PARENT_LEFT);
@@ -77,7 +75,6 @@ public class ChatFirebaseAdapter extends FirebaseRecyclerAdapter<ChatMessage, Ch
                 .inflate(R.layout.message_item, parent, false);
         return new ChatFirebaseAdapter.ViewHolder(view);
     }
-    // allows clicks events to be caught
 
     public void setClickListener(ChatFirebaseAdapter.ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
