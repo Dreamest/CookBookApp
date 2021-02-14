@@ -36,13 +36,15 @@ public class FriendsListActivity extends BaseActivity {
         observeCurrentFriends();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handleCurrentFriendsEntry();
+        handlePendingRequestsEntry();
+
+    }
+
     private void observeCurrentFriends() {
-        int friendslistSize = FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter().getItemCount();
-        if (friendslistSize == 0) {
-            friendslist_TXT_no_friends.setVisibility(View.VISIBLE);
-        } else {
-            friendslist_TXT_no_friends.setVisibility(View.GONE);
-        }
 
         FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -62,6 +64,15 @@ public class FriendsListActivity extends BaseActivity {
         });
     }
 
+    private void handleCurrentFriendsEntry() {
+        int friendslistSize = FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter().getItemCount();
+        if (friendslistSize == 0) {
+            friendslist_TXT_no_friends.setVisibility(View.VISIBLE);
+        } else {
+            friendslist_TXT_no_friends.setVisibility(View.GONE);
+        }
+    }
+
     private void bindAdapter() {
         friendslist_LST_friends.setLayoutManager(new LinearLayoutManager(this));
 
@@ -75,6 +86,7 @@ public class FriendsListActivity extends BaseActivity {
     }
 
     private void observePendingFriends() {
+
         FirebaseAdapterManager.getFirebaseAdapterManager().getPendingFriendsFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -91,10 +103,25 @@ public class FriendsListActivity extends BaseActivity {
                 int pendingSize = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingFriendsFirebaseAdapter().getItemCount();
                 if (pendingSize == 0) {
                     friendslist_BTN_pending.setVisibility(View.GONE);
+                } else {
+                    String message = getString(R.string.you_have) + " " + pendingSize + " " + getString(R.string.pending_friends);
+                    friendslist_BTN_pending.setText(message);
+                    friendslist_BTN_pending.setVisibility(View.VISIBLE);
                 }
                 super.onItemRangeRemoved(positionStart, itemCount);
             }
         });
+    }
+
+    private void handlePendingRequestsEntry() {
+        int pendingSize = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingFriendsFirebaseAdapter().getItemCount();
+        if (pendingSize > 0) {
+            String message = getString(R.string.you_have) + " " + pendingSize + " " + getString(R.string.pending_friends);
+            friendslist_BTN_pending.setText(message);
+            friendslist_BTN_pending.setVisibility(View.VISIBLE);
+        } else {
+            friendslist_BTN_pending.setVisibility(View.GONE);
+        }
     }
 
     private void startAddFriend() {

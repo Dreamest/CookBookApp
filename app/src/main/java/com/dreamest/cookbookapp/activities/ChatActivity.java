@@ -48,6 +48,7 @@ public class ChatActivity extends BaseActivity {
         setContentView(R.layout.activity_chat);
         String friendID = MySharedPreferences.getMsp().getString(MySharedPreferences.KEYS.USER_ID, null);
         chatKey = FirebaseTools.createChatKey(FirebaseAuth.getInstance().getUid(), friendID);
+        FirebaseTools.uploadChatKey(chatKey, FirebaseAuth.getInstance().getUid(), friendID);
         loadUsers(friendID);
         findViews();
         initViews();

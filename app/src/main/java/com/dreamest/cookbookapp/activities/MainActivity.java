@@ -47,13 +47,8 @@ public class MainActivity extends BaseActivity {
         observeCurrentRecipes();
     }
 
+
     private void observeCurrentRecipes() {
-        int recipeListSize = FirebaseAdapterManager.getFirebaseAdapterManager().getRecipeFirebaseAdapter().getItemCount();
-        if (recipeListSize == 0) {
-            main_TXT_no_recipes.setVisibility(View.VISIBLE);
-        } else {
-            main_TXT_no_recipes.setVisibility(View.GONE);
-        }
 
         FirebaseAdapterManager.getFirebaseAdapterManager().getRecipeFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -73,6 +68,15 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    private void handleCurrentRecipesEntry() {
+        int recipeListSize = FirebaseAdapterManager.getFirebaseAdapterManager().getRecipeFirebaseAdapter().getItemCount();
+        if (recipeListSize == 0) {
+            main_TXT_no_recipes.setVisibility(View.VISIBLE);
+        } else {
+            main_TXT_no_recipes.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -80,6 +84,8 @@ public class MainActivity extends BaseActivity {
             preformLogout();
             return;
         }
+        handleCurrentRecipesEntry();
+        handlePendingRecipesEntry();
     }
 
 
@@ -103,6 +109,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void observePendingRecipes() {
+
         FirebaseAdapterManager.getFirebaseAdapterManager().getPendingRecipeFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -119,10 +126,25 @@ public class MainActivity extends BaseActivity {
                 int pendingSize = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingRecipeFirebaseAdapter().getItemCount();
                 if (pendingSize == 0) {
                     main_BTN_pending.setVisibility(View.GONE);
+                } else {
+                    String message = getString(R.string.you_have) + " " + pendingSize + " " + getString(R.string.pending_recipes);
+                    main_BTN_pending.setText(message);
+                    main_BTN_pending.setVisibility(View.VISIBLE);
                 }
                 super.onItemRangeRemoved(positionStart, itemCount);
             }
         });
+    }
+
+    private void handlePendingRecipesEntry() {
+        int pendingSize = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingRecipeFirebaseAdapter().getItemCount();
+        if(pendingSize > 0) {
+            String message = getString(R.string.you_have) + " " + pendingSize + " " + getString(R.string.pending_recipes);
+            main_BTN_pending.setText(message);
+            main_BTN_pending.setVisibility(View.VISIBLE);
+        } else {
+            main_BTN_pending.setVisibility(View.GONE);
+        }
     }
 
     private void initViews() {

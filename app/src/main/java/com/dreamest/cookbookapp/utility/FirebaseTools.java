@@ -130,16 +130,18 @@ public class FirebaseTools {
         if (friendID.compareTo(myID) > 0) {
             chatKey = friendID + myID;
         }
+        return chatKey;
+    }
+
+    public static void uploadChatKey(String chatKey, String myID, String friendID) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(DATABASE_KEYS.USERS);
-        // When this function is called we can already update the current user's last seen
         long timestamp = System.currentTimeMillis();
         ref.child(myID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).setValue(timestamp);
         FirebaseAdapterManager.getFirebaseAdapterManager().addChat(chatKey);
         if (!ref.child(friendID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).getKey().equals(chatKey)) {
             ref.child(friendID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).setValue(timestamp);
         }
-        return chatKey;
     }
 
     /**
