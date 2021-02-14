@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import com.dreamest.cookbookapp.R;
-import com.dreamest.cookbookapp.utility.FirebaseListener;
+import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.UtilityPack;
@@ -60,8 +60,8 @@ public class AddFriendActivity extends BaseActivity {
      */
     private void loadUserLists() {
         showSpinner();
-        int friendsCount = FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().getItemCount();
-        int pendingFriendsCount = FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().getItemCount();
+        int friendsCount = FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter().getItemCount();
+        int pendingFriendsCount = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingFriendsFirebaseAdapter().getItemCount();
         currentFriends = new ArrayList<>();
         pendingFriends = new ArrayList<>();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(FirebaseTools.DATABASE_KEYS.USERS);
@@ -69,11 +69,11 @@ public class AddFriendActivity extends BaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (int i = 0; i < friendsCount; i++) {
-                    String friendID = FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().getItem(i);
+                    String friendID = FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter().getItem(i);
                     currentFriends.add(snapshot.child(friendID).child(FirebaseTools.DATABASE_KEYS.PHONE_NUMBER).getValue(String.class));
                 }
                 for (int i = 0; i < pendingFriendsCount; i++) {
-                    String pendingID = FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().getItem(i);
+                    String pendingID = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingFriendsFirebaseAdapter().getItem(i);
                     pendingFriends.add(snapshot.child(pendingID).child(FirebaseTools.DATABASE_KEYS.PHONE_NUMBER).getValue(String.class));
                 }
                 hideSpinner();

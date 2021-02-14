@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.PendingRecipeFirebaseAdapter;
-import com.dreamest.cookbookapp.utility.FirebaseListener;
+import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 
 
@@ -26,21 +26,21 @@ public class PendingRecipesActivity extends BaseActivity {
     private void bindAdapter() {
         pending_recipe_LST_recipes.setLayoutManager(new LinearLayoutManager(this));
 
-        FirebaseListener.getFirebaseListener().getPendingRecipeFirebaseAdapter().setClickListener(new PendingRecipeFirebaseAdapter.ItemClickListener() {
+        FirebaseAdapterManager.getFirebaseAdapterManager().getPendingRecipeFirebaseAdapter().setClickListener(new PendingRecipeFirebaseAdapter.ItemClickListener() {
             @Override
             public void onAddClick(int position) {
-                String recipeID = FirebaseListener.getFirebaseListener().getPendingRecipeFirebaseAdapter().getItem(position);
+                String recipeID = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingRecipeFirebaseAdapter().getItem(position);
                 addRecipe(recipeID);
             }
 
             @Override
             public void onRemoveClick(int position) {
-                String recipeID = FirebaseListener.getFirebaseListener().getPendingRecipeFirebaseAdapter().getItem(position);
+                String recipeID = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingRecipeFirebaseAdapter().getItem(position);
                 ignoreRecipe(recipeID);
             }
         });
 
-        pending_recipe_LST_recipes.setAdapter(FirebaseListener.getFirebaseListener().getPendingRecipeFirebaseAdapter());
+        pending_recipe_LST_recipes.setAdapter(FirebaseAdapterManager.getFirebaseAdapterManager().getPendingRecipeFirebaseAdapter());
     }
 
     private void ignoreRecipe(String recipeID) {

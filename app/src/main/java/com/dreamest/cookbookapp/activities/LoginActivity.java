@@ -13,7 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.dreamest.cookbookapp.R;
-import com.dreamest.cookbookapp.utility.FirebaseListener;
+import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.UtilityPack;
@@ -176,7 +176,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void userSignedIn(FirebaseUser user) {
-        FirebaseListener.init();
+        FirebaseAdapterManager.init();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(FirebaseTools.DATABASE_KEYS.USERS).child(user.getUid());

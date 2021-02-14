@@ -1,13 +1,9 @@
-package com.dreamest.cookbookapp.utility;
+package com.dreamest.cookbookapp.adapters;
 
 import androidx.annotation.NonNull;
 
-import com.dreamest.cookbookapp.adapters.ChatFirebaseAdapter;
-import com.dreamest.cookbookapp.adapters.FriendFirebaseAdapter;
-import com.dreamest.cookbookapp.adapters.PendingFriendsFirebaseAdapter;
-import com.dreamest.cookbookapp.adapters.PendingRecipeFirebaseAdapter;
-import com.dreamest.cookbookapp.adapters.RecipeFirebaseAdapter;
 import com.dreamest.cookbookapp.logic.ChatMessage;
+import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -18,15 +14,15 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
-public class FirebaseListener {
-    private static FirebaseListener firebaseListener;
+public class FirebaseAdapterManager {
+    private static FirebaseAdapterManager firebaseAdapterManager;
     private RecipeFirebaseAdapter recipeFirebaseAdapter;
     private PendingRecipeFirebaseAdapter pendingRecipeFirebaseAdapter;
     private PendingFriendsFirebaseAdapter pendingFriendsFirebaseAdapter;
     private FriendFirebaseAdapter friendFirebaseAdapter;
     private HashMap<String, ChatFirebaseAdapter> chatAdapters;
 
-    private FirebaseListener() {
+    private FirebaseAdapterManager() {
         initRecipes();
         initPendingRecipes();
         initFriends();
@@ -36,7 +32,22 @@ public class FirebaseListener {
 
     }
 
-    // TODO: 2/14/21 possible error on adding new chat. Never gets added to the adapter map 
+    // TODO: 2/14/21 test with another user 
+    public void addChat(String chatKey) {
+        if(chatAdapters.containsKey(chatKey)) {
+            return;
+        }
+        DatabaseReference chatRoot = FirebaseDatabase.getInstance()
+                .getReference(FirebaseTools.DATABASE_KEYS.CHATS)
+                .child(chatKey);
+        FirebaseRecyclerOptions<ChatMessage> options = new FirebaseRecyclerOptions.Builder<ChatMessage>()
+                .setQuery(chatRoot, ChatMessage.class)
+                .build();
+        ChatFirebaseAdapter adapter = new ChatFirebaseAdapter(options);
+        adapter.startListening();
+        chatAdapters.put(chatKey, adapter);
+    }
+
     private void initChats() {
         chatAdapters = new HashMap<>();
         DatabaseReference ref = FirebaseDatabase.getInstance()
@@ -95,8 +106,8 @@ public class FirebaseListener {
     }
 
     public static void init() {
-        if (firebaseListener == null) {
-            firebaseListener = new FirebaseListener();
+        if (firebaseAdapterManager == null) {
+            firebaseAdapterManager = new FirebaseAdapterManager();
         }
     }
 
@@ -126,8 +137,8 @@ public class FirebaseListener {
         recipeFirebaseAdapter = new RecipeFirebaseAdapter(options);
     }
 
-    public static FirebaseListener getFirebaseListener() {
-        return firebaseListener;
+    public static FirebaseAdapterManager getFirebaseAdapterManager() {
+        return firebaseAdapterManager;
     }
 
     public RecipeFirebaseAdapter getRecipeFirebaseAdapter() {

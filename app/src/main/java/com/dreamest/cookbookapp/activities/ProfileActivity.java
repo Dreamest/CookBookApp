@@ -19,7 +19,7 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
-import com.dreamest.cookbookapp.utility.FirebaseListener;
+import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
@@ -133,7 +133,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void logout() {
-        FirebaseListener.getFirebaseListener().stopListeningAll();
+        FirebaseAdapterManager.getFirebaseAdapterManager().stopListeningAll();
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.PendingFriendsFirebaseAdapter;
-import com.dreamest.cookbookapp.utility.FirebaseListener;
+import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -28,20 +28,20 @@ public class PendingFriendsActivity extends BaseActivity {
     private void bindAdapter() {
         pending_friend_LST_recipes.setLayoutManager(new LinearLayoutManager(this));
 
-        FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().setClickListener(new PendingFriendsFirebaseAdapter.ItemClickListener() {
+        FirebaseAdapterManager.getFirebaseAdapterManager().getPendingFriendsFirebaseAdapter().setClickListener(new PendingFriendsFirebaseAdapter.ItemClickListener() {
             @Override
             public void onAddClick(int position) {
-                String friendID = FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().getItem(position);
+                String friendID = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingFriendsFirebaseAdapter().getItem(position);
                 createFriendship(friendID);
             }
 
             @Override
             public void onRemoveClick(int position) {
-                String friendID = FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().getItem(position);
+                String friendID = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingFriendsFirebaseAdapter().getItem(position);
                 ignoreFriendRequest(friendID);
             }
         });
-        pending_friend_LST_recipes.setAdapter(FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter());
+        pending_friend_LST_recipes.setAdapter(FirebaseAdapterManager.getFirebaseAdapterManager().getPendingFriendsFirebaseAdapter());
     }
 
     private void ignoreFriendRequest(String friendID) {

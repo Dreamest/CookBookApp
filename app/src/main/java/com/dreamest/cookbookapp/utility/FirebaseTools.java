@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
+import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
 import com.dreamest.cookbookapp.logic.ChatMessage;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.logic.User;
@@ -134,6 +135,7 @@ public class FirebaseTools {
         // When this function is called we can already update the current user's last seen
         long timestamp = System.currentTimeMillis();
         ref.child(myID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).setValue(timestamp);
+        FirebaseAdapterManager.getFirebaseAdapterManager().addChat(chatKey);
         if (!ref.child(friendID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).getKey().equals(chatKey)) {
             ref.child(friendID).child(DATABASE_KEYS.MY_CHATS).child(chatKey).setValue(timestamp);
         }

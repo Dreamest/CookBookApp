@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.RecipeFirebaseAdapter;
 import com.dreamest.cookbookapp.logic.Recipe;
-import com.dreamest.cookbookapp.utility.FirebaseListener;
+import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
@@ -48,14 +48,14 @@ public class MainActivity extends BaseActivity {
     }
 
     private void observeCurrentRecipes() {
-        int recipeListSize = FirebaseListener.getFirebaseListener().getRecipeFirebaseAdapter().getItemCount();
+        int recipeListSize = FirebaseAdapterManager.getFirebaseAdapterManager().getRecipeFirebaseAdapter().getItemCount();
         if (recipeListSize == 0) {
             main_TXT_no_recipes.setVisibility(View.VISIBLE);
         } else {
             main_TXT_no_recipes.setVisibility(View.GONE);
         }
 
-        FirebaseListener.getFirebaseListener().getRecipeFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        FirebaseAdapterManager.getFirebaseAdapterManager().getRecipeFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 main_TXT_no_recipes.setVisibility(View.GONE);
@@ -64,7 +64,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount) {
-                int recipeListSize = FirebaseListener.getFirebaseListener().getRecipeFirebaseAdapter().getItemCount();
+                int recipeListSize = FirebaseAdapterManager.getFirebaseAdapterManager().getRecipeFirebaseAdapter().getItemCount();
                 if (recipeListSize == 0) {
                     main_TXT_no_recipes.setVisibility(View.VISIBLE);
                 }
@@ -92,21 +92,21 @@ public class MainActivity extends BaseActivity {
     private void bindAdapter() {
         main_LST_recipes.setLayoutManager(new LinearLayoutManager(this));
 
-        FirebaseListener.getFirebaseListener().getRecipeFirebaseAdapter().setClickListener(new RecipeFirebaseAdapter.ItemClickListener() {
+        FirebaseAdapterManager.getFirebaseAdapterManager().getRecipeFirebaseAdapter().setClickListener(new RecipeFirebaseAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 openRecipeActivity(position);
             }
         });
-        main_LST_recipes.setAdapter(FirebaseListener.getFirebaseListener().getRecipeFirebaseAdapter());
+        main_LST_recipes.setAdapter(FirebaseAdapterManager.getFirebaseAdapterManager().getRecipeFirebaseAdapter());
 
     }
 
     private void observePendingRecipes() {
-        FirebaseListener.getFirebaseListener().getPendingRecipeFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        FirebaseAdapterManager.getFirebaseAdapterManager().getPendingRecipeFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
-                int pendingSize = FirebaseListener.getFirebaseListener().getPendingRecipeFirebaseAdapter().getItemCount();
+                int pendingSize = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingRecipeFirebaseAdapter().getItemCount();
                 String message = getString(R.string.you_have) + " " + pendingSize + " " + getString(R.string.pending_recipes);
                 main_BTN_pending.setText(message);
                 main_BTN_pending.setVisibility(View.VISIBLE);
@@ -116,7 +116,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount) {
-                int pendingSize = FirebaseListener.getFirebaseListener().getPendingRecipeFirebaseAdapter().getItemCount();
+                int pendingSize = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingRecipeFirebaseAdapter().getItemCount();
                 if (pendingSize == 0) {
                     main_BTN_pending.setVisibility(View.GONE);
                 }
@@ -192,7 +192,7 @@ public class MainActivity extends BaseActivity {
     private void openRecipeActivity(int position) {
         DatabaseReference ref = FirebaseDatabase.getInstance()
                 .getReference(FirebaseTools.DATABASE_KEYS.RECIPES)
-                .child(FirebaseListener.getFirebaseListener().getRecipeFirebaseAdapter().getItem(position));
+                .child(FirebaseAdapterManager.getFirebaseAdapterManager().getRecipeFirebaseAdapter().getItem(position));
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

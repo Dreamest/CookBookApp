@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.FriendFirebaseAdapter;
-import com.dreamest.cookbookapp.utility.FirebaseListener;
+import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.google.firebase.database.DatabaseReference;
@@ -43,13 +43,13 @@ public class ShareRecipeActivity extends BaseActivity {
     private void bindAdapter() {
         share_LST_friends.setLayoutManager(new LinearLayoutManager(this));
 
-        FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().setClickListener(new FriendFirebaseAdapter.ItemClickListener() {
+        FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter().setClickListener(new FriendFirebaseAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                shareWith(FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().getItem(position));
+                shareWith(FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter().getItem(position));
             }
         });
-        share_LST_friends.setAdapter(FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter());
+        share_LST_friends.setAdapter(FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter());
     }
 
     private void shareWith(String friendUID) {

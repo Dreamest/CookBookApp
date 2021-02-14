@@ -18,7 +18,7 @@ import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.ChatMessage;
 import com.dreamest.cookbookapp.logic.User;
-import com.dreamest.cookbookapp.utility.FirebaseListener;
+import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.google.android.material.button.MaterialButton;
@@ -63,7 +63,7 @@ public class ChatActivity extends BaseActivity {
         chat_LST_messages.setLayoutManager(linearLayoutManager);
 
 
-        chat_LST_messages.setAdapter(FirebaseListener.getFirebaseListener().getChatFirebaseAdapter(chatKey));
+        chat_LST_messages.setAdapter(FirebaseAdapterManager.getFirebaseAdapterManager().getChatFirebaseAdapter(chatKey));
     }
 
     private void initViews() {
@@ -103,7 +103,7 @@ public class ChatActivity extends BaseActivity {
                 .setTimestamp(timestamp);
 
         FirebaseTools.uploadMessage(chatMessage, chatKey, timestamp, currentUser.getUserID());
-        chat_LST_messages.smoothScrollToPosition(FirebaseListener.getFirebaseListener().getChatFirebaseAdapter(chatKey).getItemCount());
+        chat_LST_messages.smoothScrollToPosition(FirebaseAdapterManager.getFirebaseAdapterManager().getChatFirebaseAdapter(chatKey).getItemCount());
     }
 
     private void findViews() {

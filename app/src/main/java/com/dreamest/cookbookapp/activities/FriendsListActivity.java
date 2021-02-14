@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.FriendFirebaseAdapter;
-import com.dreamest.cookbookapp.utility.FirebaseListener;
+import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
 import com.google.android.material.button.MaterialButton;
@@ -37,14 +37,14 @@ public class FriendsListActivity extends BaseActivity {
     }
 
     private void observeCurrentFriends() {
-        int friendslistSize = FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().getItemCount();
+        int friendslistSize = FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter().getItemCount();
         if (friendslistSize == 0) {
             friendslist_TXT_no_friends.setVisibility(View.VISIBLE);
         } else {
             friendslist_TXT_no_friends.setVisibility(View.GONE);
         }
 
-        FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 friendslist_TXT_no_friends.setVisibility(View.GONE);
@@ -53,7 +53,7 @@ public class FriendsListActivity extends BaseActivity {
 
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount) {
-                int friendslistSize = FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().getItemCount();
+                int friendslistSize = FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter().getItemCount();
                 if (friendslistSize == 0) {
                     friendslist_TXT_no_friends.setVisibility(View.VISIBLE);
                 }
@@ -65,20 +65,20 @@ public class FriendsListActivity extends BaseActivity {
     private void bindAdapter() {
         friendslist_LST_friends.setLayoutManager(new LinearLayoutManager(this));
 
-        FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().setClickListener(new FriendFirebaseAdapter.ItemClickListener() {
+        FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter().setClickListener(new FriendFirebaseAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                openChatWith(FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().getItem(position));
+                openChatWith(FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter().getItem(position));
             }
         });
-        friendslist_LST_friends.setAdapter(FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter());
+        friendslist_LST_friends.setAdapter(FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter());
     }
 
     private void observePendingFriends() {
-        FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        FirebaseAdapterManager.getFirebaseAdapterManager().getPendingFriendsFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
-                int pendingSize = FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().getItemCount();
+                int pendingSize = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingFriendsFirebaseAdapter().getItemCount();
                 String message = getString(R.string.you_have) + " " + pendingSize + " " + getString(R.string.pending_friends);
                 friendslist_BTN_pending.setText(message);
                 friendslist_BTN_pending.setVisibility(View.VISIBLE);
@@ -88,7 +88,7 @@ public class FriendsListActivity extends BaseActivity {
 
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount) {
-                int pendingSize = FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().getItemCount();
+                int pendingSize = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingFriendsFirebaseAdapter().getItemCount();
                 if (pendingSize == 0) {
                     friendslist_BTN_pending.setVisibility(View.GONE);
                 }
