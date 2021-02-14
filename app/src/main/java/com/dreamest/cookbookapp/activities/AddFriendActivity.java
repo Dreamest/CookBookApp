@@ -1,5 +1,6 @@
 package com.dreamest.cookbookapp.activities;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
@@ -12,11 +13,13 @@ import android.provider.ContactsContract;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
+import com.dreamest.cookbookapp.utility.FirebaseListener;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
@@ -24,6 +27,11 @@ import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.reflect.TypeToken;
 import com.rilixtech.CountryCodePicker;
 
@@ -35,8 +43,9 @@ public class AddFriendActivity extends BaseActivity {
     private TextInputEditText add_friend_EDT_input;
     private MaterialButton add_friend_BTN_search;
     private MaterialButton add_friend_BTN_contacts;
-    private ArrayList<User> currentFriends;
-    private ArrayList<User> pendingFriends;
+    private ProgressBar add_friend_PROGBAR_spinner;
+    private ArrayList<String> currentFriends;
+    private ArrayList<String> pendingFriends;
 
     private final int CONTACT_REQUEST_CODE = 99;
     private final int PERMISSION_REQUEST_CODE = 101;
@@ -45,16 +54,54 @@ public class AddFriendActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
-
-        loadUserLists();
         findViews();
         initViews();
+        loadUserLists();
     }
 
     private void loadUserLists() {
-        Type listType = new TypeToken<ArrayList<User>>() {}.getType();
-        currentFriends = (ArrayList<User>) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.FRIENDSLIST_ARRAY, new ArrayList<User>(), listType);
-        pendingFriends = (ArrayList<User>) MySharedPreferences.getMsp().getObject(MySharedPreferences.KEYS.PENDING_FRIENDS_ARRAY, new ArrayList<User>(), listType);
+        showSpinner();
+        int friendsCount = FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().getItemCount();
+        int pendingFriendsCount = FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().getItemCount();
+        currentFriends = new ArrayList<>();
+        pendingFriends = new ArrayList<>();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(FirebaseTools.DATABASE_KEYS.USERS);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(int i = 0; i<friendsCount; i++) {
+                    String friendID = FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().getItem(i);
+                    currentFriends.add(snapshot.child(friendID).child(FirebaseTools.DATABASE_KEYS.PHONE_NUMBER).getValue(String.class));
+                }
+                for(int i = 0; i<pendingFriendsCount; i++) {
+                    String pendingID = FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().getItem(i);
+                    pendingFriends.add(snapshot.child(pendingID).child(FirebaseTools.DATABASE_KEYS.PHONE_NUMBER).getValue(String.class));
+                }
+                hideSpinner();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void showSpinner() {
+        add_friend_PROGBAR_spinner.setVisibility(View.VISIBLE);
+        add_friend_CCP_code_picker.setVisibility(View.GONE);
+        add_friend_EDT_input.setVisibility(View.GONE);
+        add_friend_BTN_search.setVisibility(View.GONE);
+        add_friend_BTN_contacts.setVisibility(View.GONE);
+
+    }
+
+    private void hideSpinner() {
+        add_friend_PROGBAR_spinner.setVisibility(View.GONE);
+        add_friend_CCP_code_picker.setVisibility(View.VISIBLE);
+        add_friend_EDT_input.setVisibility(View.VISIBLE);
+        add_friend_BTN_search.setVisibility(View.VISIBLE);
+        add_friend_BTN_contacts.setVisibility(View.VISIBLE);
     }
 
     private void initViews() {
@@ -86,7 +133,6 @@ public class AddFriendActivity extends BaseActivity {
 
     private void searchByContact() {
         ActivityCompat.requestPermissions(AddFriendActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_CODE);
-
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         startActivityForResult(intent, CONTACT_REQUEST_CODE);
     }
@@ -100,8 +146,6 @@ public class AddFriendActivity extends BaseActivity {
         }
     }
 
-
-
     private boolean duplicateNumber(String searchValue) {
         String currentUserPhoneNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
         if (searchValue.equals(currentUserPhoneNumber)) {
@@ -113,9 +157,9 @@ public class AddFriendActivity extends BaseActivity {
         }
     }
 
-    private boolean userInList(ArrayList<User> list, String searchValue, String message) {
-        for (User friend : list) {
-            if (friend.getPhoneNumber().equals(searchValue)) {
+    private boolean userInList(ArrayList<String> list, String searchValue, String message) {
+        for (String friendPhoneNumber : list) {
+            if (friendPhoneNumber.equals(searchValue)) {
                 notifyNotHappening(message);
                 return true;
             }
@@ -134,6 +178,7 @@ public class AddFriendActivity extends BaseActivity {
         add_friend_EDT_input = findViewById(R.id.add_friend_EDT_input);
         add_friend_BTN_search = findViewById(R.id.add_friend_BTN_search);
         add_friend_BTN_contacts = findViewById(R.id.add_friend_BTN_contacts);
+        add_friend_PROGBAR_spinner = findViewById(R.id.add_friend_PROGBAR_spinner);
     }
 
     @Override
@@ -150,7 +195,9 @@ public class AddFriendActivity extends BaseActivity {
                         Cursor numbers = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
                         while (numbers.moveToNext()) {
                             String phoneNumber = numbers.getString(numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                            FirebaseTools.addUserToPending(this, phoneNumber, true);
+                            if(!duplicateNumber(phoneNumber)) {
+                                FirebaseTools.addUserToPending(this, phoneNumber, true);
+                            }
                         }
                         c.close();
                         numbers.close();

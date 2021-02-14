@@ -35,10 +35,6 @@ public class FriendsListActivity extends BaseActivity {
     private ImageButton friendslist_BTN_add_friend;
     private RelativeLayout friendslist_LAY_master;
     private MaterialButton friendslist_BTN_pending;
-    private ArrayList<User> pendingFriends;
-    private ArrayList<User> friendslist;
-    private final int PENDING_FRIENDS = 1;
-    private final int FRIENDSLIST = 2;
 
 
     @Override
@@ -51,13 +47,6 @@ public class FriendsListActivity extends BaseActivity {
         bindAdapter();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        pendingFriends = new ArrayList<>();
-        loadPendingFriends();
-    }
-
     private void bindAdapter() {
         friendslist_LST_friends.setLayoutManager(new LinearLayoutManager(this));
 
@@ -68,83 +57,34 @@ public class FriendsListActivity extends BaseActivity {
             }
         });
         friendslist_LST_friends.setAdapter(FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter());
+        observePendingFriends();
     }
 
-    private void loadPendingFriends() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(FirebaseTools.DATABASE_KEYS.USERS)
-                .child(FirebaseAuth.getInstance().getUid())
-                .child(FirebaseTools.DATABASE_KEYS.PENDING_FRIENDS);
-        ref.addChildEventListener(new ChildEventListener() { //using ChildListener so in case a pending request happens, we'll be notified.
+    private void observePendingFriends() {
+        FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                loadFriend(snapshot, database, PENDING_FRIENDS, false);
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                int pendingSize = FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().getItemCount();
+                String message = getString(R.string.you_have) + " " + pendingSize + " " + getString(R.string.pending_friends);
+                friendslist_BTN_pending.setText(message);
+                friendslist_BTN_pending.setVisibility(View.VISIBLE);
+
+                super.onItemRangeInserted(positionStart, itemCount);
             }
 
             @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                removePending(snapshot.getValue(String.class));
-                if (pendingFriends.size() == 0) {
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                int pendingSize = FirebaseListener.getFirebaseListener().getPendingFriendsFirebaseAdapter().getItemCount();
+                if(pendingSize == 0) {
                     friendslist_BTN_pending.setVisibility(View.GONE);
                 }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("dddd", "Failed to read value.", error.toException());
-            }
-        });
-    }
-
-    private void removePending(String id) {
-        for (User user : pendingFriends) {
-            if (user.getUserID().equals(id)) {
-                pendingFriends.remove(user);
-                return;
-            }
-        }
-    }
-
-    private void loadFriend(DataSnapshot id, FirebaseDatabase database, int loadTo, boolean last) {
-        DatabaseReference friendRef = database.getReference(FirebaseTools.DATABASE_KEYS.USERS)
-                .child(id.getValue(String.class));
-        friendRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User friend = snapshot.getValue(User.class);
-                if (loadTo == FRIENDSLIST) {
-                    friendslist.add(friend);
-                    if (last) {
-                        startAddFriend();
-
-                    }
-                } else if (loadTo == PENDING_FRIENDS) {
-                    pendingFriends.add(friend);
-                    String message = getString(R.string.you_have) + " " + pendingFriends.size() + " " + getString(R.string.pending_friends);
-                    friendslist_BTN_pending.setText(message);
-                    friendslist_BTN_pending.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("dddd", "Failed to read value.", error.toException());
+                super.onItemRangeRemoved(positionStart, itemCount);
             }
         });
     }
 
     private void startAddFriend() {
         Intent myIntent = new Intent(FriendsListActivity.this, AddFriendActivity.class);
-        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.FRIENDSLIST_ARRAY, friendslist);
-        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.PENDING_FRIENDS_ARRAY, pendingFriends);
         startActivity(myIntent);
     }
 
@@ -152,7 +92,7 @@ public class FriendsListActivity extends BaseActivity {
         friendslist_BTN_add_friend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addNewFriend();
+                startAddFriend();
             }
         });
         friendslist_LST_friends.setOnTouchListener(new OnSwipeTouchListener(this) {
@@ -181,31 +121,6 @@ public class FriendsListActivity extends BaseActivity {
         startActivity(myIntent);
     }
 
-    private void addNewFriend() {
-        friendslist = new ArrayList<>();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database
-                .getReference(FirebaseTools.DATABASE_KEYS.USERS)
-                .child(FirebaseAuth.getInstance().getUid())
-                .child(FirebaseTools.DATABASE_KEYS.MY_FRIENDS);
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot friend : snapshot.getChildren()) {
-                        loadFriend(friend, database, FRIENDSLIST, true);
-                    }
-                } else { //no friends
-                    startAddFriend();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
 
     private void findViews() {
         friendslist_LST_friends = findViewById(R.id.friendslist_LST_friends);

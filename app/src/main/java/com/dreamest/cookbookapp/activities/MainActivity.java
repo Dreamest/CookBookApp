@@ -38,7 +38,6 @@ public class MainActivity extends BaseActivity {
     private ImageButton main_BTN_add;
     private ImageView main_IMG_background;
     private MaterialButton main_BTN_pending;
-    private ArrayList<String> pendingRecipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +57,6 @@ public class MainActivity extends BaseActivity {
             FirebaseListener.getFirebaseListener().stopListeningAll();
             return;
         }
-        //Since we use lists, on reloading them they need to be emptied first.
-        pendingRecipes = new ArrayList<>();
-        loadPendingRecipes();
     }
 
 
@@ -68,39 +64,6 @@ public class MainActivity extends BaseActivity {
         Intent myIntent = new Intent(this, LoginActivity.class);
         startActivity(myIntent);
         finish();
-    }
-
-    private void loadPendingRecipes() {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(FirebaseTools.DATABASE_KEYS.USERS)
-                .child(firebaseUser.getUid())
-                .child(FirebaseTools.DATABASE_KEYS.PENDING_RECIPES);
-        ref.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                pendingRecipes.add(snapshot.getValue(String.class));
-                String message = getString(R.string.you_have) + " " + pendingRecipes.size() + " " + getString(R.string.pending_recipes);
-                main_BTN_pending.setText(message);
-                main_BTN_pending.setVisibility(View.VISIBLE);
-            }
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                pendingRecipes.remove(snapshot.getValue(String.class));
-                if(pendingRecipes.size() == 0) {
-                    main_BTN_pending.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("dddd", "Failed to read value.", error.toException());
-            }
-        });
     }
 
     private void bindAdapter() {
@@ -113,6 +76,31 @@ public class MainActivity extends BaseActivity {
             }
         });
         main_LST_recipes.setAdapter(FirebaseListener.getFirebaseListener().getRecipeFirebaseAdapter());
+
+        observePendingRecipes();
+    }
+
+    private void observePendingRecipes() {
+        FirebaseListener.getFirebaseListener().getPendingRecipeFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                int pendingSize = FirebaseListener.getFirebaseListener().getPendingRecipeFirebaseAdapter().getItemCount();
+                String message = getString(R.string.you_have) + " " + pendingSize + " " + getString(R.string.pending_recipes);
+                main_BTN_pending.setText(message);
+                main_BTN_pending.setVisibility(View.VISIBLE);
+
+                super.onItemRangeInserted(positionStart, itemCount);
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                int pendingSize = FirebaseListener.getFirebaseListener().getPendingRecipeFirebaseAdapter().getItemCount();
+                if(pendingSize == 0) {
+                    main_BTN_pending.setVisibility(View.GONE);
+                }
+                super.onItemRangeRemoved(positionStart, itemCount);
+            }
+        });
     }
 
     private void initViews() {
