@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -14,8 +13,6 @@ import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.FriendFirebaseAdapter;
 import com.dreamest.cookbookapp.utility.FirebaseListener;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -34,7 +31,7 @@ public class ShareRecipeActivity extends BaseActivity {
                 .with(this)
                 .load(R.drawable.recipe_box)
                 .into(share_IMG_background);
-        initFirebaseAdapter();
+        bindAdapter();
     }
 
     private void findViews() {
@@ -42,7 +39,7 @@ public class ShareRecipeActivity extends BaseActivity {
         share_IMG_background = findViewById(R.id.share_IMG_background);
     }
 
-    private void initFirebaseAdapter() {
+    private void bindAdapter() {
         share_LST_friends.setLayoutManager(new LinearLayoutManager(this));
 
         FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().setClickListener(new FriendFirebaseAdapter.ItemClickListener() {

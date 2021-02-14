@@ -11,10 +11,6 @@ import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.PendingRecipeFirebaseAdapter;
 import com.dreamest.cookbookapp.utility.FirebaseListener;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 
 public class PendingRecipesActivity extends BaseActivity {
@@ -25,10 +21,10 @@ public class PendingRecipesActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending_recipes);
         findViews();
-        initAdapter();
+        bindAdapter();
     }
 
-    private void initAdapter() {
+    private void bindAdapter() {
         pending_recipe_LST_recipes.setLayoutManager(new LinearLayoutManager(this));
 
         FirebaseListener.getFirebaseListener().getPendingRecipeFirebaseAdapter().setClickListener(new PendingRecipeFirebaseAdapter.ItemClickListener() {

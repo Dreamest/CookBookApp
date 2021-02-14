@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.FriendFirebaseAdapter;
@@ -20,7 +19,6 @@ import com.dreamest.cookbookapp.utility.FirebaseListener;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -50,7 +48,7 @@ public class FriendsListActivity extends BaseActivity {
 
         findViews();
         initViews();
-        initAdapter();
+        bindAdapter();
     }
 
     @Override
@@ -60,7 +58,7 @@ public class FriendsListActivity extends BaseActivity {
         loadPendingFriends();
     }
 
-    private void initAdapter() {
+    private void bindAdapter() {
         friendslist_LST_friends.setLayoutManager(new LinearLayoutManager(this));
 
         FirebaseListener.getFirebaseListener().getFriendFirebaseAdapter().setClickListener(new FriendFirebaseAdapter.ItemClickListener() {

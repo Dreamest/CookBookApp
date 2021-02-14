@@ -40,8 +40,7 @@ public class AddFriendActivity extends BaseActivity {
 
     private final int CONTACT_REQUEST_CODE = 99;
     private final int PERMISSION_REQUEST_CODE = 101;
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
