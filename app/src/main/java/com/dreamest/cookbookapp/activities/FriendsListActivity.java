@@ -41,11 +41,9 @@ public class FriendsListActivity extends BaseActivity {
         super.onResume();
         handleCurrentFriendsEntry();
         handlePendingRequestsEntry();
-
     }
 
     private void observeCurrentFriends() {
-
         FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
