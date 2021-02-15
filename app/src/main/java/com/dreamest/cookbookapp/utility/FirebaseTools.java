@@ -54,6 +54,9 @@ public class FirebaseTools {
      * @param onFailureDrawableID drawable to display if failed downloading
      */
     public static void downloadImage(Context context, String path, String fileName, String filePostfix, ImageView v, Drawable tempDrawableID, int onFailureDrawableID) {
+        if(path.trim().equals("")) { //if no image on database
+            v.setImageResource(onFailureDrawableID);
+        }
         StorageReference ref = FirebaseStorage.getInstance().getReference(path);
         try {
             File tempFile = File.createTempFile(fileName, filePostfix);

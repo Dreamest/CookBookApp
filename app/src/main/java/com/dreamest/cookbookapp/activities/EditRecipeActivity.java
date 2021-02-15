@@ -92,12 +92,9 @@ public class EditRecipeActivity extends BaseActivity {
         edit_EDT_title.setText(recipe.getTitle());
         edit_EDT_method.setText(recipe.getMethod());
         changeDifficulty(recipe.getDifficulty());
-        if (!recipe.getImagePath().trim().equals("")) {
-            FirebaseTools.downloadImage(this, recipe.getImagePath(), recipe.getRecipeID(), FirebaseTools.FILE_KEYS.JPG,
-                    edit_IMG_image, ContextCompat.getDrawable(this, R.drawable.ic_loading), R.drawable.ic_no_image);
-        } else {
-            edit_IMG_image.setImageResource(R.drawable.ic_camera);
-        }
+        FirebaseTools.downloadImage(this, recipe.getImagePath(), recipe.getRecipeID(), FirebaseTools.FILE_KEYS.JPG,
+                edit_IMG_image, ContextCompat.getDrawable(this, R.drawable.ic_loading), R.drawable.ic_camera);
+
 
         edit_CTR_prepTime.setCurrentValue((double) recipe.getPrepTime());
         edit_CTR_prepTime.setDisplayingInteger(true);
