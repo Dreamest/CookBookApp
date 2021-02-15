@@ -127,7 +127,7 @@ public class LoginActivity extends BaseActivity {
             // 2 - Auto-retrieval. On some devices Google Play services can automatically
             //     detect the incoming verification SMS and perform verification without
             //     user action.
-            Log.d("dddd", "onVerificationCompleted:" + credential);
+            Log.d(UtilityPack.LOGS.LOGIN_LOG, "onVerificationCompleted:" + credential);
 
             signInWithPhoneAuthCredential(credential);
             changeState(LOGIN_STATE.LOADING);
@@ -137,10 +137,10 @@ public class LoginActivity extends BaseActivity {
         public void onVerificationFailed(FirebaseException e) {
 
             if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                Log.e("dddd", e.getMessage());
+                Log.e(UtilityPack.LOGS.LOGIN_LOG, "Invalid request: " + e.getMessage());
                 // Invalid request
             } else if (e instanceof FirebaseTooManyRequestsException) {
-                Log.e("dddd", e.getMessage());
+                Log.e(UtilityPack.LOGS.LOGIN_LOG, "too many requests: " + e.getMessage());
                 // The SMS quota for the project has been exceeded
             }
             Toast.makeText(LoginActivity.this, getString(R.string.verification_failed) + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -165,7 +165,7 @@ public class LoginActivity extends BaseActivity {
                             userSignedIn(user);
                             // ...
                         } else {
-                            Log.w("dddd", "signInWithCredential:failure", task.getException());
+                            Log.w(UtilityPack.LOGS.LOGIN_LOG, "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 Toast.makeText(LoginActivity.this, R.string.invalid_code, Toast.LENGTH_SHORT).show();
                                 changeState(LOGIN_STATE.ENTERING_CODE);
@@ -195,7 +195,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("dddd", "Failed to read value.", error.toException());
+                Log.w(UtilityPack.LOGS.FIREBASE_LOG, "Failed to read value.", error.toException());
             }
         });
     }

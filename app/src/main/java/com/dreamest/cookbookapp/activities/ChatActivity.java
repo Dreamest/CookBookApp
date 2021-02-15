@@ -21,6 +21,7 @@ import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
+import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -138,7 +139,7 @@ public class ChatActivity extends BaseActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("dddd", "Failed to read value.", error.toException());
+                Log.w(UtilityPack.LOGS.FIREBASE_LOG, "Failed to read value.", error.toException());
             }
         });
     }

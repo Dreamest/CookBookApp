@@ -71,4 +71,9 @@ public class UtilityPack {
         int GILGAR = 1112;
     }
 
+    public interface LOGS {
+        String FIREBASE_LOG = "firebaseLog";
+        String LOGIN_LOG = "loginLog";
+    }
+
 }

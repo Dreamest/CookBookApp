@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
+import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,7 +62,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("dddd", "Failed to read value.", error.toException());
+                Log.w(UtilityPack.LOGS.FIREBASE_LOG, "Failed to read value.", error.toException());
             }
         });
         holder.listRecipe_TXT_date.setText(recipe.getDate());
@@ -117,7 +118,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     if (mClickListener != null) {
-                        Log.d("dddd", "inside recipeAdapter " + getAdapterPosition());
                         mClickListener.onItemClick(v, getAdapterPosition());
                     }
                 }

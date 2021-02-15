@@ -17,6 +17,7 @@ import com.dreamest.cookbookapp.adapters.IngredientAdapter;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
+import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -102,7 +103,7 @@ public class RecipeActivity extends BaseActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("dddd", "Failed to read value.", error.toException());
+                Log.w(UtilityPack.LOGS.FIREBASE_LOG, "Failed to read value.", error.toException());
             }
         });
         recipe_TXT_date.setText(recipe.getDate());

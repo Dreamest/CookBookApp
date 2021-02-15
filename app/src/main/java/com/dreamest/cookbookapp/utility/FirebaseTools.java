@@ -103,7 +103,7 @@ public class FirebaseTools {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 Toast.makeText(activity, R.string.upload_failed, Toast.LENGTH_SHORT).show();
-                Log.d("dddd", exception.getMessage());
+                Log.d(UtilityPack.LOGS.FIREBASE_LOG, exception.getMessage());
                 if (closeOnFinish) {
                     activity.finish();
                 }

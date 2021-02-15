@@ -140,7 +140,7 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() == null) {
-                    Log.d("dddd", "user now null");
+                    Log.d(UtilityPack.LOGS.LOGIN_LOG, "sign out preformed. User = " + firebaseAuth.getCurrentUser());
                     Toast.makeText(ProfileActivity.this, R.string.logging_out, Toast.LENGTH_SHORT).show();
                     finish();
                 }

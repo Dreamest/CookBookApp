@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
+import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -58,7 +59,7 @@ public class PendingRecipeAdapter extends RecyclerView.Adapter<PendingRecipeAdap
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("dddd", "Failed to read value.", error.toException());
+                Log.w(UtilityPack.LOGS.FIREBASE_LOG, "Failed to read value.", error.toException());
             }
         });
     }
