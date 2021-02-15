@@ -43,7 +43,7 @@ public class FirebaseTools {
 
 
     /**
-     * Downloads image from FirebaseStorage and store it in given imageView as long as the acitivty isn't destroyed yet.
+     * Downloads image from FirebaseStorage and store it in given imageView as long as the activity isn't destroyed yet.
      *
      * @param context             activity context
      * @param path                path in Firebase Storage to the image

@@ -20,10 +20,8 @@
     <string name="add_a_recipe">הוסף מתכון!</string>
     <string name="title">שם מתכון</string>
     <string name="add_another_ingredient">הוסף מרכיב נוסף</string>
-    <string name="preview">תצוגה מקדימה</string>
     <string name="submit">אישור</string>
     <string name="add_first_ingredient">הוסף מרכיב</string>
-    <string name="remove">הסר</string>
     <string name="profile_page">פרופיל</string>
     <string name="num_recipes">מספר מתכונים:</string>
     <string name="num_friends">מספר חברים:</string>
@@ -41,7 +39,6 @@
     <string name="how_do_you_count_it">איך מודדים?</string>
     <string name="sign_out">התנתק</string>
     <string name="search">חיפוש</string>
-    <string name="add">הוסף</string>
     <string name="you_have_k_pending_recipes">ישנם X מתכונים ממתינים</string>
     <string name="you_have">ישנם</string>
     <string name="pending_recipes">מתכונים ממתינים</string>
@@ -49,8 +46,6 @@
     <string name="pending_friends">חברים ממתינים</string>
     <string name="friend_requests">בקשות חברות</string>
     <string name="friendslist">רשימת חברים</string>
-    <string name="no_pending_recipes">אין מתכונים ממתינים</string>
-    <string name="no_friend_requests">אין בקשות חברות</string>
     <string name="logging_out">מבצע התנתקות</string>
     <string name="friend_request_send">בקשת חברות נשלחה</string>
     <string name="recipe_added">המתכון נוסף</string>
@@ -58,7 +53,6 @@
     <string name="recipe_shared">המתכון שותף</string>
     <string name="user_not_in_database">המשתמש לא קיים במאגר</string>
     <string name="recipe_ignored">המתכון הוסר</string>
-    <string name="not_implemented">לא ממומש</string>
     <string name="verification_failed">אימות נכשל</string>
     <string name="signed_in_successfully">התחברות בוצעה בהצלחה</string>
     <string name="invalid_code">קוד שגוי</string>
@@ -78,7 +72,6 @@
     <string name="enter_phone_number">אנא הזמן מספר טלפון</string>
     <string name="warn_no_title">המתכון חייב לכלול כותרת</string>
     <string name="hello_world">שלום עולם</string>
-    <string name="seen">נראה</string>
     <string name="send">שלח</string>
     <string name="send_a_message">שלח הודעה</string>
     <string name="what_is_it_called">איך קוראים לזה?</string>

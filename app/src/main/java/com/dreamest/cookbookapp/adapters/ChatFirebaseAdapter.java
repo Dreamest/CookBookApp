@@ -27,7 +27,7 @@ public class ChatFirebaseAdapter extends FirebaseRecyclerAdapter<ChatMessage, Ch
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
      * {@link FirebaseRecyclerOptions} for configuration options.
      *
-     * @param options
+     * @param options firebase options object
      */
     public ChatFirebaseAdapter(@NonNull FirebaseRecyclerOptions<ChatMessage> options) {
         super(options);

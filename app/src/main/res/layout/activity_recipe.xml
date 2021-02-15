@@ -69,7 +69,6 @@
             android:layout_centerHorizontal="true">
 
             <TextView
-                android:id="@+id/recipe_TXT_owned_by"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -103,7 +102,6 @@
             >
 
             <TextView
-                android:id="@+id/recipe_TXT_added_on"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

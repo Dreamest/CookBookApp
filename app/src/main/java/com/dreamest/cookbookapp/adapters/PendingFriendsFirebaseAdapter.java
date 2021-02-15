@@ -30,7 +30,7 @@ public class PendingFriendsFirebaseAdapter extends FirebaseRecyclerAdapter<Strin
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
      * {@link FirebaseRecyclerOptions} for configuration options.
      *
-     * @param options
+     * @param options firebase options object
      */
     public PendingFriendsFirebaseAdapter(@NonNull FirebaseRecyclerOptions<String> options) {
         super(options);

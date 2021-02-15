@@ -29,7 +29,7 @@ public class FriendFirebaseAdapter extends FirebaseRecyclerAdapter<String, Frien
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
      * {@link FirebaseRecyclerOptions} for configuration options.
      *
-     * @param options
+     * @param options firebase options object
      */
     public FriendFirebaseAdapter(@NonNull FirebaseRecyclerOptions<String> options) {
         super(options);

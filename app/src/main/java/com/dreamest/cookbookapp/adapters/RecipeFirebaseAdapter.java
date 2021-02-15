@@ -31,7 +31,7 @@ public class RecipeFirebaseAdapter extends FirebaseRecyclerAdapter<String, Recip
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
      * {@link FirebaseRecyclerOptions} for configuration options.
      *
-     * @param options
+     * @param options firebase options object
      */
     public RecipeFirebaseAdapter(@NonNull FirebaseRecyclerOptions<String> options) {
         super(options);

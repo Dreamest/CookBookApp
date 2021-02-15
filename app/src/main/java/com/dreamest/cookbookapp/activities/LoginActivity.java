@@ -49,7 +49,6 @@ public class LoginActivity extends BaseActivity {
     private FirebaseAuth firebaseAuth;
 
 
-    private String phoneInput = "";
     private String mVerificationId;
 
     private enum LOGIN_STATE {
@@ -96,7 +95,7 @@ public class LoginActivity extends BaseActivity {
 
     private void startLoginProcess() {
         if (!login_EDT_input.getText().toString().trim().equals("")) {
-            phoneInput = UtilityPack.extractPhoneNumber(login_CCP_code, login_EDT_input);
+            String phoneInput = UtilityPack.extractPhoneNumber(login_CCP_code, login_EDT_input);
             PhoneAuthOptions options =
                     PhoneAuthOptions.newBuilder(firebaseAuth)
                             .setPhoneNumber(phoneInput)       // Phone number to verify

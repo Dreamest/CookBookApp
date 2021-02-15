@@ -101,7 +101,6 @@
         android:textSize="30sp" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/add_ingredient_LAY_units"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

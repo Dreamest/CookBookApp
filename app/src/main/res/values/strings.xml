@@ -25,9 +25,7 @@
     <string name="add_a_recipe">Add a recipe!</string>
     <string name="add_first_ingredient">Add ingredient</string>
     <string name="add_another_ingredient">Add another ingredient</string>
-    <string name="preview">Preview</string>
     <string name="submit">Submit</string>
-    <string name="remove">remove</string>
     <string name="profile_page">Profile</string>
     <string name="num_recipes"># of recipes:</string>
     <string name="num_friends"># of friends:</string>
@@ -46,7 +44,6 @@
     <string name="how_do_you_count_it">How do you measure it?</string>
     <string name="sign_out">Sign out</string>
     <string name="search">Search</string>
-    <string name="add">Add</string>
     <string name="you_have_k_pending_recipes">You have K pending recipes</string>
     <string name="you_have">You have</string>
     <string name="pending_recipes">pending recipes</string>
@@ -54,8 +51,6 @@
     <string name="pending_friends">pending friends</string>
     <string name="friend_requests">Friend requests</string>
     <string name="friendslist">Friendslist</string>
-    <string name="no_pending_recipes">No pending recipes</string>
-    <string name="no_friend_requests">No friend requests</string>
     <string name="logging_out">Logging out</string>
     <string name="friend_request_send">Request sent.</string>
     <string name="recipe_added">Recipe added</string>
@@ -63,7 +58,6 @@
     <string name="recipe_shared">Recipe shared</string>
     <string name="user_not_in_database">User not in database</string>
     <string name="recipe_ignored">Recipe ignored</string>
-    <string name="not_implemented">Not implemented yet.</string>
     <string name="time_out_try_again">Timed out.Try again</string>
     <string name="verification_failed">\"Verification Failed: \"</string>
     <string name="signed_in_successfully">Signed in successfully.</string>
@@ -84,7 +78,6 @@
     <string name="warn_no_title">Recipe must at least have a title</string>
     <string name="hello_world">Hello world</string>
     <string name="_15_34" translatable="false">15:34</string>
-    <string name="seen">seen</string>
     <string name="send">Send</string>
     <string name="send_a_message">Send a message</string>
     <string name="what_is_it_called">What is it called?</string>

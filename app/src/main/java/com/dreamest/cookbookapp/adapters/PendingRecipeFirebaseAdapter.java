@@ -28,7 +28,7 @@ public class PendingRecipeFirebaseAdapter extends FirebaseRecyclerAdapter<String
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
      * {@link FirebaseRecyclerOptions} for configuration options.
      *
-     * @param options
+     * @param options firebase options object
      */
     public PendingRecipeFirebaseAdapter(@NonNull FirebaseRecyclerOptions<String> options) {
         super(options);

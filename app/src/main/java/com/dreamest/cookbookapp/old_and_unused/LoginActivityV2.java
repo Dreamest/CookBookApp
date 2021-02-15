@@ -39,7 +39,6 @@
 //
 //
 //    private void startLoginMethod() {
-//        Log.d("pttt", "startLoginMethod");
 //
 //        startActivityForResult(
 //                AuthUI.getInstance()

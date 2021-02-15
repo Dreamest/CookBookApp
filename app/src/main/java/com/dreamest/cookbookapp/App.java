@@ -1,7 +1,6 @@
 package com.dreamest.cookbookapp;
 
 import android.app.Application;
-import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatDelegate;
 

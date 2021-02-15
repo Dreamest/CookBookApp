@@ -6,5 +6,5 @@ To-do:
   - Implement chat
   - Implement Firebase Storage for photos
   - Add fling gestures
-  - Friendslist - update positioning on recieving messages.
+  - Friendslist - update positioning on receiving messages.
   - Choose application language option
