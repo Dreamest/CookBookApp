@@ -1,9 +1,12 @@
 package com.dreamest.cookbookapp.adapters;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.dreamest.cookbookapp.logic.ChatMessage;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
+import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -29,10 +32,8 @@ public class FirebaseAdapterManager {
         initPendingFriends();
         initChats();
         startListeningAll();
-
     }
 
-    // TODO: 2/14/21 test with another user
     public void addChat(String chatKey) {
         if(chatAdapters.containsKey(chatKey)) {
             return;
@@ -66,7 +67,7 @@ public class FirebaseAdapterManager {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.w(UtilityPack.LOGS.FIREBASE_LOG, "Failed to read value.", error.toException());
             }
         });
 

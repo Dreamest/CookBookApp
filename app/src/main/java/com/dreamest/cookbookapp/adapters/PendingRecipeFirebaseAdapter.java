@@ -1,5 +1,6 @@
 package com.dreamest.cookbookapp.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Recipe;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
+import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -61,14 +63,14 @@ public class PendingRecipeFirebaseAdapter extends FirebaseRecyclerAdapter<String
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
+                        Log.w(UtilityPack.LOGS.FIREBASE_LOG, "Failed to read value.", error.toException());
                     }
                 });
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.w(UtilityPack.LOGS.FIREBASE_LOG, "Failed to read value.", error.toException());
             }
         });
     }

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.ChatActivity">
+    tools:context=".activities.ChatActivity"
+    >
 
     <ImageView
         android:id="@+id/chat_IMG_background"
@@ -22,10 +23,37 @@
         android:layout_alignParentTop="true"
         android:background="@color/gold_strong"
         android:gravity="center"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="5dp"
         android:text="@string/owner_name"
         android:textSize="30sp" />
+
+    <LinearLayout
+        android:id="@+id/chat_LAY_last_active"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chat_TXT_other_person"
+        android:background="@color/gold_strong"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingBottom="5dp"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="@string/last_seen_at"
+            android:layout_marginEnd="3dp"
+            />
+        <TextView
+            android:id="@+id/chat_TXT_last_seen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="23:23"
+            />
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/chat_PROGBAR_spinner"
@@ -41,7 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/chat_LAY_text"
-        android:layout_below="@id/chat_TXT_other_person"
+        android:layout_below="@id/chat_LAY_last_active"
         android:layout_marginBottom="20dp"
         app:stackFromEnd="true"
 

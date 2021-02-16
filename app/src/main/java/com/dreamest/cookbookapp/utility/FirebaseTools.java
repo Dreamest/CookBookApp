@@ -178,7 +178,7 @@ public class FirebaseTools {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.w(UtilityPack.LOGS.FIREBASE_LOG, "Failed to read value.", error.toException());
             }
         });
     }

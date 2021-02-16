@@ -20,6 +20,7 @@ import com.dreamest.cookbookapp.logic.ChatMessage;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
+import com.dreamest.cookbookapp.utility.HideUI;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.button.MaterialButton;
@@ -30,6 +31,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 
 public class ChatActivity extends BaseActivity {
     private TextView chat_TXT_other_person;
@@ -38,6 +42,7 @@ public class ChatActivity extends BaseActivity {
     private EditText chat_EDT_input;
     private ProgressBar chat_PROGBAR_spinner;
     private ImageView chat_IMG_background;
+    private TextView chat_TXT_last_seen;
 
     private String chatKey;
     private User currentUser;
@@ -56,6 +61,32 @@ public class ChatActivity extends BaseActivity {
         initAdapter();
         chat_LST_messages.setVisibility(View.GONE);
         chat_PROGBAR_spinner.setVisibility(View.VISIBLE);
+    }
+
+    private void updateLastSeen() {
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference(FirebaseTools.DATABASE_KEYS.USERS)
+                .child(friend.getUserID())
+                .child(FirebaseTools.DATABASE_KEYS.MY_CHATS)
+                .child(chatKey);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) { //snapshot doesn't exist if the other user never opened the chat yet and has never received a message
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                    String time = simpleDateFormat.format(snapshot.getValue(Long.class));
+                    chat_TXT_last_seen.setText(time);
+                } else {
+                    chat_TXT_last_seen.setText(R.string.never);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(UtilityPack.LOGS.FIREBASE_LOG, "Failed to read value.", error.toException());
+            }
+        });
     }
 
     private void initAdapter() {
@@ -94,6 +125,7 @@ public class ChatActivity extends BaseActivity {
 
     private void sendMessage() {
         String message = chat_EDT_input.getText().toString();
+        HideUI.hideSystemUI(this);
         if (message.trim().equals("")) {
             return;
         }
@@ -116,6 +148,7 @@ public class ChatActivity extends BaseActivity {
         chat_EDT_input = findViewById(R.id.chat_EDT_input);
         chat_PROGBAR_spinner = findViewById(R.id.chat_PROGBAR_spinner);
         chat_IMG_background = findViewById(R.id.chat_IMG_background);
+        chat_TXT_last_seen = findViewById(R.id.chat_TXT_last_seen);
     }
 
     /**
@@ -135,7 +168,7 @@ public class ChatActivity extends BaseActivity {
                 chat_TXT_other_person.setText(friend.getDisplayName());
                 chat_PROGBAR_spinner.setVisibility(View.GONE);
                 chat_LST_messages.setVisibility(View.VISIBLE);
-
+                updateLastSeen();
             }
 
             @Override

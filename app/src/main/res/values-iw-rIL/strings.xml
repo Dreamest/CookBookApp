@@ -80,4 +80,6 @@
     <string name="already_friend">המשתמש כבר ברשימת החברים</string>
     <string name="already_pending">בקשת חברות כבר נשלחה</string>
     <string name="no_name">אינך יכול להיות חסר שם</string>
+    <string name="last_seen_at">נראה לאחרונה:</string>
+    <string name="never">מעולם לא</string>
 </resources>

@@ -86,6 +86,8 @@
     <string name="already_friend">User is already a friend</string>
     <string name="already_pending">User is pending</string>
     <string name="no_name">You can\'t be nameless</string>
+    <string name="last_seen_at">last seen:</string>
+    <string name="never">never</string>
 
 
 </resources>
