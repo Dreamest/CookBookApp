@@ -2,6 +2,7 @@ package com.dreamest.cookbookapp.utility;
 
 import android.app.Activity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -47,12 +48,24 @@ public class HideUI {
             v.clearFocus();
         }
         hideSystemUI(activity);
+        hideKeyboard(activity);
 
     }
 
     public static void setNextFocus(AppCompatActivity activity, View next) {
         next.requestFocus();
         hideSystemUI(activity);
+    }
+
+    private static void hideKeyboard(AppCompatActivity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
 }
