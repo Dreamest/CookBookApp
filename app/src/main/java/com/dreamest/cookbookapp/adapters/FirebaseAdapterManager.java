@@ -24,8 +24,10 @@ public class FirebaseAdapterManager {
     private PendingFriendsFirebaseAdapter pendingFriendsFirebaseAdapter;
     private FriendFirebaseAdapter friendFirebaseAdapter;
     private HashMap<String, ChatFirebaseAdapter> chatAdapters;
+    private String uid;
 
-    private FirebaseAdapterManager() {
+    private FirebaseAdapterManager(String uid) {
+        this.uid = uid;
         initRecipes();
         initPendingRecipes();
         initFriends();
@@ -53,7 +55,7 @@ public class FirebaseAdapterManager {
         chatAdapters = new HashMap<>();
         DatabaseReference ref = FirebaseDatabase.getInstance()
                 .getReference(FirebaseTools.DATABASE_KEYS.USERS)
-                .child(FirebaseAuth.getInstance().getUid())
+                .child(uid)
                 .child(FirebaseTools.DATABASE_KEYS.MY_CHATS);
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -76,7 +78,7 @@ public class FirebaseAdapterManager {
     private void initFriends() {
         DatabaseReference friendslistRoot = FirebaseDatabase.getInstance()
                 .getReference(FirebaseTools.DATABASE_KEYS.USERS)
-                .child(FirebaseAuth.getInstance().getUid())
+                .child(uid)
                 .child(FirebaseTools.DATABASE_KEYS.MY_FRIENDS);
 
         FirebaseRecyclerOptions<String> options
@@ -89,7 +91,7 @@ public class FirebaseAdapterManager {
     private void initPendingFriends() {
         DatabaseReference pendingFriendsRoot = FirebaseDatabase.getInstance()
                 .getReference(FirebaseTools.DATABASE_KEYS.USERS)
-                .child(FirebaseAuth.getInstance().getUid())
+                .child(uid)
                 .child(FirebaseTools.DATABASE_KEYS.PENDING_FRIENDS);
 
         FirebaseRecyclerOptions<String> options
@@ -99,16 +101,16 @@ public class FirebaseAdapterManager {
         pendingFriendsFirebaseAdapter = new PendingFriendsFirebaseAdapter(options);
     }
 
-    public static void init() {
+    public static void init(String uid) {
         if (firebaseAdapterManager == null) {
-            firebaseAdapterManager = new FirebaseAdapterManager();
+            firebaseAdapterManager = new FirebaseAdapterManager(uid);
         }
     }
 
     private void initPendingRecipes() {
         DatabaseReference pendingRecipesRoot = FirebaseDatabase.getInstance()
                 .getReference(FirebaseTools.DATABASE_KEYS.USERS)
-                .child(FirebaseAuth.getInstance().getUid())
+                .child(uid)
                 .child(FirebaseTools.DATABASE_KEYS.PENDING_RECIPES);
 
         FirebaseRecyclerOptions<String> options
@@ -121,7 +123,7 @@ public class FirebaseAdapterManager {
     private void initRecipes() {
         DatabaseReference recipesRoot = FirebaseDatabase.getInstance()
                 .getReference(FirebaseTools.DATABASE_KEYS.USERS)
-                .child(FirebaseAuth.getInstance().getUid())
+                .child(uid)
                 .child(FirebaseTools.DATABASE_KEYS.MY_RECIPES);
 
         FirebaseRecyclerOptions<String> options
@@ -160,6 +162,10 @@ public class FirebaseAdapterManager {
         pendingRecipeFirebaseAdapter.startListening();
         pendingFriendsFirebaseAdapter.startListening();
         friendFirebaseAdapter.startListening();
+    }
+
+    public void destroy() {
+        firebaseAdapterManager = null;
     }
 
     public void stopListeningAll() {

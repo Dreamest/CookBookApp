@@ -175,7 +175,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void userSignedIn(FirebaseUser user) {
-        FirebaseAdapterManager.init();
+        FirebaseAdapterManager.init(user.getUid());
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(FirebaseTools.DATABASE_KEYS.USERS).child(user.getUid());

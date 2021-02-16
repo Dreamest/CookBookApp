@@ -135,6 +135,7 @@ public class ProfileActivity extends BaseActivity {
 
     private void logout() {
         FirebaseAdapterManager.getFirebaseAdapterManager().stopListeningAll();
+        FirebaseAdapterManager.getFirebaseAdapterManager().destroy();
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
