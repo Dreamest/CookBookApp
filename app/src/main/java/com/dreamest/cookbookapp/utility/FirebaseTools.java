@@ -56,6 +56,7 @@ public class FirebaseTools {
     public static void downloadImage(Context context, String path, String fileName, String filePostfix, ImageView v, Drawable tempDrawableID, int onFailureDrawableID) {
         if(path.trim().equals("")) { //if no image on database
             v.setImageResource(onFailureDrawableID);
+            return;
         }
         StorageReference ref = FirebaseStorage.getInstance().getReference(path);
         try {

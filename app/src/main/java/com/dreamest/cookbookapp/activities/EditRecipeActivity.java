@@ -3,6 +3,7 @@ package com.dreamest.cookbookapp.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -94,8 +95,6 @@ public class EditRecipeActivity extends BaseActivity {
         changeDifficulty(recipe.getDifficulty());
         FirebaseTools.downloadImage(this, recipe.getImagePath(), recipe.getRecipeID(), FirebaseTools.FILE_KEYS.JPG,
                 edit_IMG_image, ContextCompat.getDrawable(this, R.drawable.ic_loading), R.drawable.ic_camera);
-
-
         edit_CTR_prepTime.setCurrentValue((double) recipe.getPrepTime());
         edit_CTR_prepTime.setDisplayingInteger(true);
         /*
@@ -234,14 +233,13 @@ public class EditRecipeActivity extends BaseActivity {
                     .getReference(FirebaseTools.STORAGE_KEYS.RECIPE_IMAGES)
                     .child(recipe.getOwnerID())
                     .child(recipe.getRecipeID());
-            Toast.makeText(this, R.string.uploading, Toast.LENGTH_SHORT).show();
             if (imageChanged) {
+                Toast.makeText(this, R.string.uploading, Toast.LENGTH_SHORT).show();
                 FirebaseTools.uploadImage(this, storageReference, tempPath, true);
                 playLoading();
             } else {
                 finish();
             }
-//        finish(); activity will finish when upload is done
         } else {
             Toast.makeText(this, R.string.warn_no_title, Toast.LENGTH_SHORT).show();
         }
@@ -259,17 +257,19 @@ public class EditRecipeActivity extends BaseActivity {
         if (recipe.getRecipeID().trim().equals("")) {
             recipe.setRecipeID(UtilityPack.CreateRecipeID(firebaseUser.getUid()));
         }
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage
-                .getReference(FirebaseTools.STORAGE_KEYS.RECIPE_IMAGES)
-                .child(firebaseUser.getUid())
-                .child(recipe.getRecipeID());
+        if(imageChanged) {
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageReference = storage
+                    .getReference(FirebaseTools.STORAGE_KEYS.RECIPE_IMAGES)
+                    .child(firebaseUser.getUid())
+                    .child(recipe.getRecipeID());
+            recipe.setImagePath(storageReference.getPath());
+        }
 
         String pattern = "dd.MM.yyyy";
         SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.getDefault());
         recipe.setDate(format.format(new Date()));
         recipe.setDifficulty(difficulty);
-        recipe.setImagePath(storageReference.getPath());
         recipe.setIngredients(ingredients);
         recipe.setMethod(edit_EDT_method.getText().toString());
         recipe.setOwnerID(firebaseUser.getUid());
