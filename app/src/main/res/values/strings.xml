@@ -88,6 +88,8 @@
     <string name="no_name">You can\'t be nameless</string>
     <string name="last_seen_at">last seen:</string>
     <string name="never">never</string>
+    <string name="hours">hours</string>
+    <string name="days">days</string>
 
 
 </resources>

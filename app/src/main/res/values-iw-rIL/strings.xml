@@ -82,4 +82,6 @@
     <string name="no_name">אינך יכול להיות חסר שם</string>
     <string name="last_seen_at">נראה לאחרונה:</string>
     <string name="never">מעולם לא</string>
+    <string name="hours">שעות</string>
+    <string name="days">ימים</string>
 </resources>

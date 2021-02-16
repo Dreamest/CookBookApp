@@ -2,6 +2,7 @@ package com.dreamest.cookbookapp.activities;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TimeUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -33,6 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 
 public class ChatActivity extends BaseActivity {
@@ -74,8 +76,21 @@ public class ChatActivity extends BaseActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()) { //snapshot doesn't exist if the other user never opened the chat yet and has never received a message
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                    String time = simpleDateFormat.format(snapshot.getValue(Long.class));
-                    chat_TXT_last_seen.setText(time);
+                    long diff = System.currentTimeMillis() - snapshot.getValue(Long.class);
+                    long time = 0;
+                    String timeUnit = "";
+                    if(TimeUnit.MILLISECONDS.toMinutes(diff) < 60) {
+                        time = TimeUnit.MILLISECONDS.toMinutes(diff);
+                        timeUnit= getString(R.string.minutes);
+                    } else if (TimeUnit.MILLISECONDS.toHours(diff) < 24) {
+                        time = TimeUnit.MILLISECONDS.toHours(diff);
+                        timeUnit = getString(R.string.hours);
+                    } else {
+                        time = TimeUnit.MILLISECONDS.toDays(diff);
+                        timeUnit = getString(R.string.days);
+                    }
+                    String lastSeen = time + " " + timeUnit;
+                    chat_TXT_last_seen.setText(lastSeen);
                 } else {
                     chat_TXT_last_seen.setText(R.string.never);
                 }
