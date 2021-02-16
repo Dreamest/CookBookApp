@@ -101,7 +101,7 @@
             app:strokeColor="@color/black"
             app:strokeWidth="2dp" />
 
-        <EditText
+        <com.dreamest.cookbookapp.utility.BackEditText
             android:id="@+id/chat_EDT_input"
 
             android:layout_width="wrap_content"
