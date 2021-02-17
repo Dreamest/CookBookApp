@@ -86,7 +86,7 @@ public class WelcomeActivity extends BaseActivity {
                 .setUserID(firebaseUser.getUid())
                 .setDisplayName(userName)
                 .setPhoneNumber(firebaseUser.getPhoneNumber())
-                .setImagePath(storageReference.getPath());
+                .setImagePath(imageChanged?storageReference.getPath() : "");
         FirebaseTools.storeUser(user);
 
         if (imageChanged) {
