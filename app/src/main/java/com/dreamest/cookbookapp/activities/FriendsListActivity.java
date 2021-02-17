@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.FriendFirebaseAdapter;
 import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
@@ -23,6 +25,7 @@ public class FriendsListActivity extends BaseActivity {
     private RelativeLayout friendslist_LAY_master;
     private MaterialButton friendslist_BTN_pending;
     private TextView friendslist_TXT_no_friends;
+    private ImageView friendslist_IMG_background;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +131,10 @@ public class FriendsListActivity extends BaseActivity {
     }
 
     private void initViews() {
+        Glide
+                .with(this)
+                .load(R.drawable.background_simple_waves)
+                .into(friendslist_IMG_background);
         friendslist_BTN_add_friend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,6 +174,7 @@ public class FriendsListActivity extends BaseActivity {
         friendslist_LAY_master = findViewById(R.id.friendslist_LAY_master);
         friendslist_BTN_pending = findViewById(R.id.friendslist_BTN_pending);
         friendslist_TXT_no_friends = findViewById(R.id.friendslist_TXT_no_friends);
+        friendslist_IMG_background = findViewById(R.id.friendslist_IMG_background);
     }
 
 

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
+import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
@@ -41,6 +43,7 @@ public class AddFriendActivity extends BaseActivity {
     private MaterialButton add_friend_BTN_search;
     private MaterialButton add_friend_BTN_contacts;
     private ProgressBar add_friend_PROGBAR_spinner;
+    private ImageView add_friend_IMG_background;
     private ArrayList<String> currentFriends;
     private ArrayList<String> pendingFriends;
 
@@ -111,6 +114,10 @@ public class AddFriendActivity extends BaseActivity {
     }
 
     private void initViews() {
+        Glide
+                .with(this)
+                .load(R.drawable.background_simple_waves)
+                .into(add_friend_IMG_background);
         add_friend_EDT_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -191,6 +198,7 @@ public class AddFriendActivity extends BaseActivity {
         add_friend_BTN_search = findViewById(R.id.add_friend_BTN_search);
         add_friend_BTN_contacts = findViewById(R.id.add_friend_BTN_contacts);
         add_friend_PROGBAR_spinner = findViewById(R.id.add_friend_PROGBAR_spinner);
+        add_friend_IMG_background= findViewById(R.id.add_friend_IMG_background);
     }
 
     @Override

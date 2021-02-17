@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.Ingredient;
 import com.dreamest.cookbookapp.utility.HideUI;
@@ -20,6 +22,7 @@ public class AddIngredientActivity extends BaseActivity {
     private TextInputEditText add_ingredient_EDT_units;
     private MaterialButton add_ingredient_BTN_cancel;
     private MaterialButton add_ingredient_BTN_submit;
+    private ImageView add_ingredient_IMG_background;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,10 @@ public class AddIngredientActivity extends BaseActivity {
     }
 
     private void initViews() {
+        Glide
+                .with(this)
+                .load(R.drawable.background_simple_waves)
+                .into(add_ingredient_IMG_background);
         add_ingredient_EDT_ingredient.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -97,5 +104,6 @@ public class AddIngredientActivity extends BaseActivity {
         add_ingredient_EDT_units = findViewById(R.id.add_ingredient_EDT_units);
         add_ingredient_BTN_cancel = findViewById(R.id.add_ingredient_BTN_cancel);
         add_ingredient_BTN_submit = findViewById(R.id.add_ingredient_BTN_submit);
+        add_ingredient_IMG_background = findViewById(R.id.add_ingredient_IMG_background);
     }
 }

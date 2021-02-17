@@ -90,7 +90,7 @@ public class ProfileActivity extends BaseActivity {
     private void initViews() {
         Glide
                 .with(this)
-                .load(R.drawable.dinner_table)
+                .load(R.drawable.background_simple_waves)
                 .into(profile_IMG_background);
         profile_IMG_image.setOnClickListener(new View.OnClickListener() {
             @Override

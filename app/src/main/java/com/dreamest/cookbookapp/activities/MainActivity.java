@@ -152,7 +152,7 @@ public class MainActivity extends BaseActivity {
     private void initViews() {
         Glide
                 .with(this)
-                .load(R.drawable.background_diary)
+                .load(R.drawable.background_simple_waves)
                 .fitCenter()
                 .into(main_IMG_background);
 

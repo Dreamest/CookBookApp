@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.logic.User;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
@@ -31,6 +32,8 @@ public class WelcomeActivity extends BaseActivity {
     private ImageView welcome_IMG_user_image;
     private TextInputEditText welcome_EDT_name;
     private MaterialButton welcome_BTN_submit;
+    private ImageView welcome_IMG_background;
+
     private boolean imageChanged;
     private String tempPath;
 
@@ -44,6 +47,10 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void initViews() {
+        Glide
+                .with(this)
+                .load(R.drawable.background_simple_waves)
+                .into(welcome_IMG_background);
         welcome_IMG_user_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,5 +139,6 @@ public class WelcomeActivity extends BaseActivity {
         welcome_IMG_user_image = findViewById(R.id.welcome_IMG_user_image);
         welcome_EDT_name = findViewById(R.id.welcome_EDT_name);
         welcome_BTN_submit = findViewById(R.id.welcome_BTN_submit);
+        welcome_IMG_background = findViewById(R.id.welcome_IMG_background);
     }
 }

@@ -30,7 +30,7 @@ public class ShareRecipeActivity extends BaseActivity {
         findViews();
         Glide
                 .with(this)
-                .load(R.drawable.recipe_box)
+                .load(R.drawable.background_simple_waves)
                 .into(share_IMG_background);
         bindAdapter();
     }

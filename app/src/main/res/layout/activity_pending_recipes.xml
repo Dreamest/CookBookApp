@@ -3,8 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_liquid_cheese"
     tools:context=".activities.PendingRecipesActivity">
+
+    <ImageView
+        android:id="@+id/pending_recipe_IMG_background"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        />
 
     <TextView
         android:id="@+id/pending_recipe_TXT_title"

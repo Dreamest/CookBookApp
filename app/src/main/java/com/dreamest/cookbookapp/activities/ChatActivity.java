@@ -117,7 +117,7 @@ public class ChatActivity extends BaseActivity {
     private void initViews() {
         Glide
                 .with(this)
-                .load(R.drawable.chat_background)
+                .load(R.drawable.background_pattern)
                 .into(chat_IMG_background);
         chat_BTN_send.setOnClickListener(new View.OnClickListener() {
             @Override

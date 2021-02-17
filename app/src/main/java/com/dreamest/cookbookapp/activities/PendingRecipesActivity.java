@@ -1,11 +1,13 @@
 package com.dreamest.cookbookapp.activities;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.PendingRecipeFirebaseAdapter;
 import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
@@ -14,12 +16,17 @@ import com.dreamest.cookbookapp.utility.FirebaseTools;
 
 public class PendingRecipesActivity extends BaseActivity {
     private RecyclerView pending_recipe_LST_recipes;
+    private ImageView pending_recipe_IMG_background;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending_recipes);
         findViews();
+        Glide
+                .with(this)
+                .load(R.drawable.background_simple_waves)
+                .into(pending_recipe_IMG_background);
         bindAdapter();
     }
 
@@ -56,6 +63,7 @@ public class PendingRecipesActivity extends BaseActivity {
 
     private void findViews() {
         pending_recipe_LST_recipes = findViewById(R.id.pending_recipe_LST_recipes);
+        pending_recipe_IMG_background = findViewById(R.id.pending_recipe_IMG_background);
     }
 
 }

@@ -4,8 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gold_muted"
     tools:context=".activities.AddIngredientActivity">
+
+    <ImageView
+        android:id="@+id/add_ingredient_IMG_background"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:scaleType="fitXY"
+        />
 
     <TextView
         android:id="@+id/add_ingredient_TXT_title"
@@ -131,7 +139,7 @@
         android:layout_alignParentBottom="true"
 
         android:layout_margin="50dp"
-        android:backgroundTint="@color/gold"
+        android:backgroundTint="@color/teal"
         android:text="@string/cancel"
         android:textAllCaps="false"
         android:textColor="@color/black"
@@ -149,7 +157,7 @@
         android:layout_alignParentBottom="true"
 
         android:layout_margin="50dp"
-        android:backgroundTint="@color/gold"
+        android:backgroundTint="@color/teal"
         android:text="@string/submit"
         android:textAllCaps="false"
         android:textColor="@color/black"

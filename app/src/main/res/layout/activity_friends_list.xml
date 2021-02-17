@@ -5,8 +5,15 @@
     android:id="@+id/friendslist_LAY_master"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_liquid_cheese"
     tools:context=".activities.FriendsListActivity">
+
+    <ImageView
+        android:id="@+id/friendslist_IMG_background"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        />
 
     <TextView
         android:id="@+id/friendslist_TXT_title"
@@ -28,7 +35,7 @@
 
         android:layout_margin="10dp"
         android:layout_marginTop="5dp"
-        android:backgroundTint="@color/gold"
+        android:backgroundTint="@color/teal"
         android:text="@string/you_have_k_pending_recipes"
         android:textAllCaps="false"
         android:textColor="@color/black"

@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.IngredientAdapter;
 import com.dreamest.cookbookapp.logic.Ingredient;
@@ -51,8 +52,8 @@ public class EditRecipeActivity extends BaseActivity {
     private RecyclerView edit_LST_ingredients;
     private ImageView[] stars;
     private HorizontalCounter edit_CTR_prepTime;
-    private ScrollView edit_LAY_scroll;
     private ProgressBar edit_PROGBAR_spinner;
+    private ImageView edit_IMG_background;
 
     private Recipe recipe;
     private ArrayList<Ingredient> ingredients;
@@ -107,6 +108,10 @@ public class EditRecipeActivity extends BaseActivity {
     }
 
     private void initViews() {
+        Glide
+                .with(this)
+                .load(R.drawable.background_simple_waves)
+                .into(edit_IMG_background);
         edit_IMG_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +123,6 @@ public class EditRecipeActivity extends BaseActivity {
         edit_EDT_method.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                focusOnView(edit_LAY_scroll, edit_EDT_method);
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     HideUI.clearFocus(EditRecipeActivity.this, edit_EDT_method);
                 }
@@ -305,8 +309,8 @@ public class EditRecipeActivity extends BaseActivity {
         stars[4] = findViewById(R.id.edit_IMG_star5);
         stars[4].setTag(5);
         edit_CTR_prepTime = findViewById(R.id.edit_CTR_prepTime);
-        edit_LAY_scroll = findViewById(R.id.edit_LAY_scroll);
         edit_PROGBAR_spinner = findViewById(R.id.edit_PROGBAR_spinner);
+        edit_IMG_background = findViewById(R.id.edit_IMG_background);
     }
 
     @Override

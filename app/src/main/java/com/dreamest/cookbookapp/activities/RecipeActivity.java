@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
 import com.dreamest.cookbookapp.adapters.IngredientAdapter;
 import com.dreamest.cookbookapp.logic.Recipe;
@@ -36,6 +38,8 @@ public class RecipeActivity extends BaseActivity {
     private TextView recipe_TXT_method;
     private ShapeableImageView recipe_IMG_image;
     private RecyclerView recipe_LST_ingredients;
+    private ImageView recipe_IMG_background;
+
     private Recipe recipe;
 
     @Override
@@ -54,6 +58,10 @@ public class RecipeActivity extends BaseActivity {
     }
 
     private void initViews() {
+        Glide
+                .with(this)
+                .load(R.drawable.background_simple_waves)
+                .into(recipe_IMG_background);
         recipe_BTN_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,5 +161,6 @@ public class RecipeActivity extends BaseActivity {
         recipe_TXT_method = findViewById(R.id.recipe_TXT_method);
         recipe_IMG_image = findViewById(R.id.recipe_IMG_image);
         recipe_LST_ingredients = findViewById(R.id.recipe_LST_ingredients);
+        recipe_IMG_background = findViewById(R.id.recipe_IMG_background);
     }
 }

@@ -1,182 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-
-    android:layout_height="wrap_content"
-    android:background="@drawable/ic_liquid_cheese">
-
-    <RelativeLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
+    <ImageView
+        android:id="@+id/recipe_IMG_background"
 
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        tools:context=".activities.RecipeActivity">
+        >
 
-        <ImageButton
-            android:id="@+id/recipe_BTN_share"
+        <RelativeLayout
 
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="20dp"
+            android:padding="20dp"
+            tools:context=".activities.RecipeActivity">
 
-            android:background="@drawable/ic_share"
-            android:elevation="20dp" />
-
-        <ImageButton
-            android:id="@+id/recipe_BTN_edit"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/recipe_BTN_share"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="20dp"
-
-            android:background="@drawable/ic_edit"
-            android:elevation="20dp" />
-
-        <ImageButton
-            android:id="@+id/recipe_BTN_remove"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/recipe_BTN_edit"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="20dp"
-
-            android:background="@drawable/ic_remove"
-            android:elevation="20dp" />
-
-        <TextView
-            android:id="@+id/recipe_TXT_title"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="5dp"
-
-            android:text="@string/recipe_title"
-            android:textSize="40sp" />
-
-        <LinearLayout
-            android:id="@+id/recipe_LAY_name"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/recipe_TXT_title"
-            android:layout_centerHorizontal="true">
-
-            <TextView
+            <ImageButton
+                android:id="@+id/recipe_BTN_share"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="20dp"
 
-                android:text="@string/by"
+                android:background="@drawable/ic_share"
+                android:elevation="20dp" />
+
+            <ImageButton
+                android:id="@+id/recipe_BTN_edit"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recipe_BTN_share"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="20dp"
+
+                android:background="@drawable/ic_edit"
+                android:elevation="20dp" />
+
+            <ImageButton
+                android:id="@+id/recipe_BTN_remove"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recipe_BTN_edit"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="20dp"
+
+                android:background="@drawable/ic_remove"
+                android:elevation="20dp" />
+
+            <TextView
+                android:id="@+id/recipe_TXT_title"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
+
+                android:text="@string/recipe_title"
+                android:textSize="40sp" />
+
+            <LinearLayout
+                android:id="@+id/recipe_LAY_name"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recipe_TXT_title"
+                android:layout_centerHorizontal="true">
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+
+                    android:text="@string/by"
+                    android:textSize="15sp"
+
+                    />
+
+                <TextView
+                    android:id="@+id/recipe_TXT_owner"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+
+                    android:text="@string/owner_name"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/recipe_LAY_date"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recipe_LAY_name"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="5dp"
+
+                >
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+
+                    android:text="@string/added_on"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/recipe_TXT_date"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/recipe_date"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/recipe_IMG_image"
+
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_below="@id/recipe_LAY_date"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+
+                android:src="@drawable/ic_loading" />
+
+            <TextView
+                android:id="@+id/recipe_TXT_ingredients_title"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recipe_IMG_image"
+                android:layout_alignStart="@id/recipe_IMG_image"
+
+                android:text="@string/ingredients"
+                android:textSize="25sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recipe_LST_ingredients"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recipe_TXT_ingredients_title"
+                android:layout_alignStart="@id/recipe_TXT_ingredients_title"
+                android:layout_marginBottom="5dp"
+                tools:itemCount="3"
+
+                tools:listitem="@layout/ingredient_list_item" />
+
+            <TextView
+                android:id="@+id/recipe_TXT_method_title"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recipe_LST_ingredients"
+                android:layout_alignStart="@id/recipe_LST_ingredients"
+
+                android:text="@string/method"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/recipe_TXT_method"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recipe_TXT_method_title"
+                android:layout_alignStart="@id/recipe_TXT_method_title"
+
+                android:text="@string/lorem_ipsum"
                 android:textSize="15sp"
 
                 />
-
-            <TextView
-                android:id="@+id/recipe_TXT_owner"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-
-                android:text="@string/owner_name"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/recipe_LAY_date"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/recipe_LAY_name"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="5dp"
-
-            >
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-
-                android:text="@string/added_on"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/recipe_TXT_date"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="@string/recipe_date"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/recipe_IMG_image"
-
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:layout_below="@id/recipe_LAY_date"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="5dp"
-
-            android:src="@drawable/ic_loading" />
-
-        <TextView
-            android:id="@+id/recipe_TXT_ingredients_title"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/recipe_IMG_image"
-            android:layout_alignStart="@id/recipe_IMG_image"
-
-            android:text="@string/ingredients"
-            android:textSize="25sp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recipe_LST_ingredients"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/recipe_TXT_ingredients_title"
-            android:layout_alignStart="@id/recipe_TXT_ingredients_title"
-            android:layout_marginBottom="5dp"
-            tools:itemCount="3"
-
-            tools:listitem="@layout/ingredient_list_item" />
-
-        <TextView
-            android:id="@+id/recipe_TXT_method_title"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/recipe_LST_ingredients"
-            android:layout_alignStart="@id/recipe_LST_ingredients"
-
-            android:text="@string/method"
-            android:textSize="25sp" />
-
-        <TextView
-            android:id="@+id/recipe_TXT_method"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/recipe_TXT_method_title"
-            android:layout_alignStart="@id/recipe_TXT_method_title"
-
-            android:text="@string/lorem_ipsum"
-            android:textSize="15sp"
-
-            />
-    </RelativeLayout>
-</ScrollView>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

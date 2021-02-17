@@ -4,8 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_liquid_cheese"
     tools:context=".activities.WelcomeActivity">
+
+    <ImageView
+        android:id="@+id/welcome_IMG_background"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        />
 
     <TextView
         android:id="@+id/welcome_TXT_title"
@@ -74,7 +81,7 @@
         android:layout_centerHorizontal="true"
 
         android:layout_marginBottom="30dp"
-        android:backgroundTint="@color/gold"
+        android:backgroundTint="@color/teal"
         android:text="@string/submit"
         android:textAllCaps="false"
         android:textColor="@color/black"
