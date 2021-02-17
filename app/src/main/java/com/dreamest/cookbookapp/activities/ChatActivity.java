@@ -2,7 +2,6 @@ package com.dreamest.cookbookapp.activities;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TimeUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -16,12 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
+import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
 import com.dreamest.cookbookapp.logic.ChatMessage;
 import com.dreamest.cookbookapp.logic.User;
-import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
+import com.dreamest.cookbookapp.utility.BackEditText;
 import com.dreamest.cookbookapp.utility.FirebaseTools;
 import com.dreamest.cookbookapp.utility.HideUI;
-import com.dreamest.cookbookapp.utility.BackEditText;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
 import com.dreamest.cookbookapp.utility.UtilityPack;
 import com.google.android.material.button.MaterialButton;
@@ -34,6 +33,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 
@@ -50,6 +51,10 @@ public class ChatActivity extends BaseActivity {
     private User currentUser;
     private User friend;
 
+    private Timer carousalTimer;
+    private final int MINUTE = 60000;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +70,42 @@ public class ChatActivity extends BaseActivity {
         chat_PROGBAR_spinner.setVisibility(View.VISIBLE);
     }
 
-    private void updateLastSeen() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startListenToLastSeen();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopListenToLastSeen();
+    }
+
+    private void stopListenToLastSeen() {
+        if (carousalTimer != null) {
+            carousalTimer.cancel();
+        }
+    }
+
+    private void startListenToLastSeen() {
+        carousalTimer = new Timer();
+        carousalTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        changeLastSeen(friend.getMyChats().get(chatKey));
+                        Log.d("dddd", "updated");
+                    }
+                });
+            }
+        }, MINUTE, MINUTE);
+    }
+
+
+    private void listenLastSeen() {
         DatabaseReference ref = FirebaseDatabase.getInstance()
                 .getReference(FirebaseTools.DATABASE_KEYS.USERS)
                 .child(friend.getUserID())
@@ -74,23 +114,11 @@ public class ChatActivity extends BaseActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) { //snapshot doesn't exist if the other user never opened the chat yet and has never received a message
+                if (snapshot.exists()) { //snapshot doesn't exist if the other user never opened the chat yet and has never received a message
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                    long diff = System.currentTimeMillis() - snapshot.getValue(Long.class);
-                    long time = 0;
-                    String timeUnit = "";
-                    if(TimeUnit.MILLISECONDS.toMinutes(diff) < 60) {
-                        time = TimeUnit.MILLISECONDS.toMinutes(diff);
-                        timeUnit= getString(R.string.minutes);
-                    } else if (TimeUnit.MILLISECONDS.toHours(diff) < 24) {
-                        time = TimeUnit.MILLISECONDS.toHours(diff);
-                        timeUnit = getString(R.string.hours);
-                    } else {
-                        time = TimeUnit.MILLISECONDS.toDays(diff);
-                        timeUnit = getString(R.string.days);
-                    }
-                    String lastSeen = time + " " + timeUnit;
-                    chat_TXT_last_seen.setText(lastSeen);
+                    Long lastSeen = snapshot.getValue(Long.class);
+                    friend.getMyChats().put(chatKey, lastSeen);
+                    changeLastSeen(lastSeen);
                 } else {
                     chat_TXT_last_seen.setText(R.string.never);
                 }
@@ -102,6 +130,24 @@ public class ChatActivity extends BaseActivity {
                 Log.w(UtilityPack.LOGS.FIREBASE_LOG, "Failed to read value.", error.toException());
             }
         });
+    }
+
+    private void changeLastSeen(Long lastSeen) {
+        long diff = System.currentTimeMillis() - lastSeen;
+        long time = 0;
+        String timeUnit = "";
+        if (TimeUnit.MILLISECONDS.toMinutes(diff) < 60) {
+            time = TimeUnit.MILLISECONDS.toMinutes(diff);
+            timeUnit = getString(R.string.minutes);
+        } else if (TimeUnit.MILLISECONDS.toHours(diff) < 24) {
+            time = TimeUnit.MILLISECONDS.toHours(diff);
+            timeUnit = getString(R.string.hours);
+        } else {
+            time = TimeUnit.MILLISECONDS.toDays(diff);
+            timeUnit = getString(R.string.days);
+        }
+        String lastSeenMessage = time + " " + timeUnit;
+        chat_TXT_last_seen.setText(lastSeenMessage);
     }
 
     private void initAdapter() {
@@ -183,7 +229,7 @@ public class ChatActivity extends BaseActivity {
                 chat_TXT_other_person.setText(friend.getDisplayName());
                 chat_PROGBAR_spinner.setVisibility(View.GONE);
                 chat_LST_messages.setVisibility(View.VISIBLE);
-                updateLastSeen();
+                listenLastSeen();
             }
 
             @Override
