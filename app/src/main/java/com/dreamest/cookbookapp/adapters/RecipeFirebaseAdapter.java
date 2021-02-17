@@ -44,7 +44,7 @@ public class RecipeFirebaseAdapter extends FirebaseRecyclerAdapter<String, Recip
                 .getReference(FirebaseTools.DATABASE_KEYS.RECIPES)
                 .child(model);
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Recipe recipe = snapshot.getValue(Recipe.class);

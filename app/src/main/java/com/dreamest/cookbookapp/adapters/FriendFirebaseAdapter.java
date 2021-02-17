@@ -43,7 +43,7 @@ public class FriendFirebaseAdapter extends FirebaseRecyclerAdapter<String, Frien
         DatabaseReference ref = FirebaseDatabase.getInstance()
                 .getReference(FirebaseTools.DATABASE_KEYS.USERS);
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.child(model).getValue(User.class);

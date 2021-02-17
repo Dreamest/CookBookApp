@@ -45,7 +45,7 @@ public class PendingFriendsFirebaseAdapter extends FirebaseRecyclerAdapter<Strin
                 .getReference(FirebaseTools.DATABASE_KEYS.USERS)
                 .child(model);
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
