@@ -13,30 +13,17 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cookbook_CARD_title"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-
-        android:layout_marginEnd="5dp"
-        app:cardCornerRadius="50dp">
-
         <TextView
+            android:id="@+id/cookbook_TXT_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
+            android:layout_marginTop="20dp"
+
 
             android:text="@string/your_cookbook"
             android:textSize="40sp"
             android:textStyle="bold" />
-    </androidx.cardview.widget.CardView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/cookbook_BTN_pending"
@@ -45,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:layout_below="@+id/cookbook_CARD_title"
+        android:layout_below="@+id/cookbook_TXT_title"
         android:layout_margin="10dp"
         android:layout_marginTop="5dp"
         android:backgroundTint="@color/teal"
