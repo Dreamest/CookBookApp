@@ -5,7 +5,7 @@
     android:id="@+id/friendslist_LAY_master"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.FriendsListActivity">
+    tools:context=".old_and_unused.OldFriendsListActivity">
 
     <ImageView
         android:id="@+id/friendslist_IMG_background"

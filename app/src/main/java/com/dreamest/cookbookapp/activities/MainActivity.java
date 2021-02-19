@@ -1,235 +1,222 @@
 package com.dreamest.cookbookapp.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
-import com.dreamest.cookbookapp.adapters.RecipeFirebaseAdapter;
-import com.dreamest.cookbookapp.logic.Recipe;
-import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
-import com.dreamest.cookbookapp.utility.FirebaseTools;
-import com.dreamest.cookbookapp.utility.MySharedPreferences;
-import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
-import com.dreamest.cookbookapp.utility.UtilityPack;
-import com.google.android.material.button.MaterialButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.dreamest.cookbookapp.fragments.CookbookFragment;
+import com.dreamest.cookbookapp.fragments.FriendslistFragment;
+import com.dreamest.cookbookapp.fragments.ProfileFragment;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements GestureDetector.OnGestureListener {
+    private CookbookFragment cookbookFragment;
+    private ProfileFragment profileFragment;
+    private FriendslistFragment friendslistFragment;
+    private ImageView test_IMG_background;
+    private ImageButton main_BTN_profile;
+    private ImageButton main_BTN_cookbook;
+    private ImageButton main_BTN_friendslist;
 
-    private RecyclerView main_LST_recipes;
-    private ImageButton main_BTN_add;
-    private ImageView main_IMG_background;
-    private MaterialButton main_BTN_pending;
-    private TextView main_TXT_no_recipes;
+    private enum WINDOW_STATE {
+        PROFILE,
+        COOKBOOK,
+        FRIENDSLIST
+    }
+
+    ;
+    private float x1, x2, y1, y2;
+    private static final int MIN_DISTANCE = 400;
+    private GestureDetector gestureDetector;
+
+    private WINDOW_STATE windowState = WINDOW_STATE.COOKBOOK;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         findViews();
         initViews();
-        bindAdapter();
-        observePendingRecipes();
-        observeCurrentRecipes();
-    }
-
-
-    private void observeCurrentRecipes() {
-
-        FirebaseAdapterManager.getFirebaseAdapterManager().getRecipeFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                main_TXT_no_recipes.setVisibility(View.GONE);
-                super.onItemRangeInserted(positionStart, itemCount);
-            }
-
-            @Override
-            public void onItemRangeRemoved(int positionStart, int itemCount) {
-                int recipeListSize = FirebaseAdapterManager.getFirebaseAdapterManager().getRecipeFirebaseAdapter().getItemCount();
-                if (recipeListSize == 0) {
-                    main_TXT_no_recipes.setVisibility(View.VISIBLE);
-                }
-                super.onItemRangeRemoved(positionStart, itemCount);
-            }
-        });
-    }
-
-    private void handleCurrentRecipesEntry() {
-        int recipeListSize = FirebaseAdapterManager.getFirebaseAdapterManager().getRecipeFirebaseAdapter().getItemCount();
-        if (recipeListSize == 0) {
-            main_TXT_no_recipes.setVisibility(View.VISIBLE);
-        } else {
-            main_TXT_no_recipes.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) { //specifically upon returning from profileActivity
-            preformLogout();
-            return;
-        }
-        handleCurrentRecipesEntry();
-        handlePendingRecipesEntry();
-    }
-
-
-    private void preformLogout() {
-        Intent myIntent = new Intent(this, LoginActivity.class);
-        startActivity(myIntent);
-        finish();
-    }
-
-    private void bindAdapter() {
-        main_LST_recipes.setLayoutManager(new LinearLayoutManager(this));
-
-        FirebaseAdapterManager.getFirebaseAdapterManager().getRecipeFirebaseAdapter().setClickListener(new RecipeFirebaseAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                openRecipeActivity(position);
-            }
-        });
-        main_LST_recipes.setAdapter(FirebaseAdapterManager.getFirebaseAdapterManager().getRecipeFirebaseAdapter());
-
-    }
-
-    private void observePendingRecipes() {
-
-        FirebaseAdapterManager.getFirebaseAdapterManager().getPendingRecipeFirebaseAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                int pendingSize = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingRecipeFirebaseAdapter().getItemCount();
-                String message = getString(R.string.you_have) + " " + pendingSize + " " + getString(R.string.pending_recipes);
-                main_BTN_pending.setText(message);
-                main_BTN_pending.setVisibility(View.VISIBLE);
-
-                super.onItemRangeInserted(positionStart, itemCount);
-            }
-
-            @Override
-            public void onItemRangeRemoved(int positionStart, int itemCount) {
-                int pendingSize = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingRecipeFirebaseAdapter().getItemCount();
-                if (pendingSize == 0) {
-                    main_BTN_pending.setVisibility(View.GONE);
-                } else {
-                    String message = getString(R.string.you_have) + " " + pendingSize + " " + getString(R.string.pending_recipes);
-                    main_BTN_pending.setText(message);
-                    main_BTN_pending.setVisibility(View.VISIBLE);
-                }
-                super.onItemRangeRemoved(positionStart, itemCount);
-            }
-        });
-    }
-
-    private void handlePendingRecipesEntry() {
-        int pendingSize = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingRecipeFirebaseAdapter().getItemCount();
-        if(pendingSize > 0) {
-            String message = getString(R.string.you_have) + " " + pendingSize + " " + getString(R.string.pending_recipes);
-            main_BTN_pending.setText(message);
-            main_BTN_pending.setVisibility(View.VISIBLE);
-        } else {
-            main_BTN_pending.setVisibility(View.GONE);
-        }
+        changeToFragment(windowState, 0, 0);
+        gestureDetector = new GestureDetector(this, this);
     }
 
     private void initViews() {
+        cookbookFragment = new CookbookFragment();
+        profileFragment = new ProfileFragment();
+        friendslistFragment= new FriendslistFragment();
+
         Glide
                 .with(this)
                 .load(R.drawable.background_simple_waves)
-                .fitCenter()
-                .into(main_IMG_background);
+                .into(test_IMG_background);
 
-        main_BTN_add.setOnClickListener(new View.OnClickListener() {
+        main_BTN_friendslist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addNewRecipe();
+                if(windowState == WINDOW_STATE.FRIENDSLIST) {
+                    return;
+                }
+                int in = R.anim.enter_left_to_right;
+                int out = R.anim.exit_left_to_right;
+                windowState = WINDOW_STATE.FRIENDSLIST;
+                changeToFragment(windowState, in, out);
             }
         });
 
-        main_LST_recipes.setOnTouchListener(new OnSwipeTouchListener(this) {
-            public void onSwipeRight() {
-                toFriendsList();
-            }
-
-            public void onSwipeLeft() {
-                toProfile();
-            }
-
-        });
-
-        main_BTN_pending.setOnClickListener(new View.OnClickListener() {
+        main_BTN_cookbook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openPendingRecipes();
+                int in, out;
+                if(windowState == WINDOW_STATE.COOKBOOK) {
+                    return;
+                } else if(windowState == WINDOW_STATE.PROFILE) {
+                    in = R.anim.enter_left_to_right;
+                    out = R.anim.exit_left_to_right;
+                } else { //friendslist
+                    in = R.anim.enter_right_to_left;
+                    out = R.anim.exit_right_to_left;
+
+                }
+                windowState = WINDOW_STATE.COOKBOOK;
+                changeToFragment(windowState, in, out);
             }
         });
-    }
 
-    private void openPendingRecipes() {
-        Intent myIntent = new Intent(this, PendingRecipesActivity.class);
-        startActivity(myIntent);
-    }
+        main_BTN_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(windowState == WINDOW_STATE.PROFILE) {
+                    return;
+                }
+                int in = R.anim.enter_right_to_left;
+                int out = R.anim.exit_right_to_left;
+                windowState = WINDOW_STATE.PROFILE;
+                changeToFragment(windowState, in, out);
+            }
+        });
 
-    private void toProfile() {
-        Intent myIntent = new Intent(MainActivity.this, ProfileActivity.class);
-        startActivity(myIntent);
-
-    }
-
-    private void toFriendsList() {
-        Intent myIntent = new Intent(MainActivity.this, FriendsListActivity.class);
-        startActivity(myIntent);
-
-    }
-
-    private void addNewRecipe() {
-        MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, new Recipe());
-        Intent myIntent = new Intent(this, EditRecipeActivity.class);
-        startActivity(myIntent);
     }
 
     private void findViews() {
-        main_BTN_add = findViewById(R.id.main_BTN_add);
-        main_LST_recipes = findViewById(R.id.main_LST_recipes);
-        main_IMG_background = findViewById(R.id.main_IMG_background);
-        main_BTN_pending = findViewById(R.id.main_BTN_pending);
-        main_TXT_no_recipes = findViewById(R.id.main_TXT_no_recipes);
+        test_IMG_background = findViewById(R.id.main_IMG_background);
+        main_BTN_profile = findViewById(R.id.main_BTN_profile);
+        main_BTN_cookbook = findViewById(R.id.main_BTN_cookbook);
+        main_BTN_friendslist = findViewById(R.id.main_BTN_friendslist);
     }
 
-    private void openRecipeActivity(int position) {
-        DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference(FirebaseTools.DATABASE_KEYS.RECIPES)
-                .child(FirebaseAdapterManager.getFirebaseAdapterManager().getRecipeFirebaseAdapter().getItem(position));
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Recipe recipe = snapshot.getValue(Recipe.class);
-                MySharedPreferences.getMsp().putObject(MySharedPreferences.KEYS.RECIPE, recipe);
-                Intent myIntent = new Intent(MainActivity.this, RecipeActivity.class);
-                startActivity(myIntent);
-            }
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w(UtilityPack.LOGS.FIREBASE_LOG, "Failed to read value.", error.toException());
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return false;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        gestureDetector.onTouchEvent(ev);
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                x1 = ev.getX();
+                break;
             }
-        });
+            case MotionEvent.ACTION_UP: {
+                x2 = ev.getX();
+                float valueX = x2 - x1;
+                int in, out;
+                if (Math.abs(valueX) > MIN_DISTANCE) {
+                    if (x2 > x1) { //right
+                        in = R.anim.enter_left_to_right;
+                        out = R.anim.exit_left_to_right;
+                        if (windowState == WINDOW_STATE.COOKBOOK) {
+                            windowState = WINDOW_STATE.FRIENDSLIST;
+                        } else if (windowState == WINDOW_STATE.PROFILE) {
+                            windowState = WINDOW_STATE.COOKBOOK;
+                        }
+                    } else { //left
+                        in = R.anim.enter_right_to_left;
+                        out = R.anim.exit_right_to_left;
+                        if (windowState == WINDOW_STATE.COOKBOOK) {
+                            windowState = WINDOW_STATE.PROFILE;
+                        } else if (windowState == WINDOW_STATE.FRIENDSLIST) {
+                            windowState = WINDOW_STATE.COOKBOOK;
+                        }
+                    }
+                    changeToFragment(windowState, in, out);
+                }
+                break;
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    private void changeToFragment(WINDOW_STATE windowState, int enterAnimation, int exitAnimation) {
+        if(windowState == WINDOW_STATE.COOKBOOK) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(enterAnimation, exitAnimation)
+                    .replace(R.id.main_LAY_fragment_holder, cookbookFragment)
+                    .addToBackStack(null)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .commit();
+            drawButtons(main_BTN_cookbook);
+        } else if(windowState == WINDOW_STATE.FRIENDSLIST) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(enterAnimation, exitAnimation)
+                    .replace(R.id.main_LAY_fragment_holder, friendslistFragment)
+                    .addToBackStack(null)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .commit();
+            drawButtons(main_BTN_friendslist);
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(enterAnimation, exitAnimation)
+                    .replace(R.id.main_LAY_fragment_holder, profileFragment)
+                    .addToBackStack(null)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .commit();
+            drawButtons(main_BTN_profile);
+        }
+    }
+
+    private void drawButtons(ImageButton active) {
+        main_BTN_friendslist.setBackgroundResource(R.color.teal);
+        main_BTN_cookbook.setBackgroundResource(R.color.teal);
+        main_BTN_profile.setBackgroundResource(R.color.teal);
+
+        active.setBackgroundResource(R.color.teal_deep);
+
     }
 }

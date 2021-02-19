@@ -1,25 +1,32 @@
-package com.dreamest.cookbookapp.activities;
+package com.dreamest.cookbookapp.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.dreamest.cookbookapp.R;
-import com.dreamest.cookbookapp.adapters.FriendFirebaseAdapter;
+import com.dreamest.cookbookapp.activities.AddFriendActivity;
+import com.dreamest.cookbookapp.activities.ChatActivity;
+import com.dreamest.cookbookapp.activities.PendingFriendsActivity;
 import com.dreamest.cookbookapp.adapters.FirebaseAdapterManager;
+import com.dreamest.cookbookapp.adapters.FriendFirebaseAdapter;
 import com.dreamest.cookbookapp.utility.MySharedPreferences;
-import com.dreamest.cookbookapp.utility.OnSwipeTouchListener;
 import com.google.android.material.button.MaterialButton;
 
-public class FriendsListActivity extends BaseActivity {
+public class FriendslistFragment extends Fragment {
     private RecyclerView friendslist_LST_friends;
     private ImageButton friendslist_BTN_add_friend;
     private RelativeLayout friendslist_LAY_master;
@@ -28,22 +35,56 @@ public class FriendsListActivity extends BaseActivity {
     private ImageView friendslist_IMG_background;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friends_list);
+    }
 
-        findViews();
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_friends_list, container, false);
+        findViews(view);
         initViews();
         bindAdapter();
         observePendingFriends();
         observeCurrentFriends();
+        return view;
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         handleCurrentFriendsEntry();
         handlePendingRequestsEntry();
+    }
+
+    private void handlePendingRequestsEntry() {
+        int pendingSize = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingFriendsFirebaseAdapter().getItemCount();
+        if (pendingSize > 0) {
+            String message = getString(R.string.you_have) + " " + pendingSize + " " + getString(R.string.pending_friends);
+            friendslist_BTN_pending.setText(message);
+            friendslist_BTN_pending.setVisibility(View.VISIBLE);
+        } else {
+            friendslist_BTN_pending.setVisibility(View.GONE);
+        }
+    }
+
+    private void handleCurrentFriendsEntry() {
+        int friendslistSize = FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter().getItemCount();
+        if (friendslistSize == 0) {
+            friendslist_TXT_no_friends.setVisibility(View.VISIBLE);
+        } else {
+            friendslist_TXT_no_friends.setVisibility(View.GONE);
+        }
+    }
+
+    private void findViews(View view) {
+        friendslist_LST_friends = view.findViewById(R.id.friendslist_LST_friends);
+        friendslist_BTN_add_friend = view.findViewById(R.id.friendslist_BTN_add_friend);
+        friendslist_LAY_master = view.findViewById(R.id.friendslist_LAY_master);
+        friendslist_BTN_pending = view.findViewById(R.id.friendslist_BTN_pending);
+        friendslist_TXT_no_friends = view.findViewById(R.id.friendslist_TXT_no_friends);
+        friendslist_IMG_background = view.findViewById(R.id.friendslist_IMG_background);
     }
 
     private void observeCurrentFriends() {
@@ -65,17 +106,8 @@ public class FriendsListActivity extends BaseActivity {
         });
     }
 
-    private void handleCurrentFriendsEntry() {
-        int friendslistSize = FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter().getItemCount();
-        if (friendslistSize == 0) {
-            friendslist_TXT_no_friends.setVisibility(View.VISIBLE);
-        } else {
-            friendslist_TXT_no_friends.setVisibility(View.GONE);
-        }
-    }
-
     private void bindAdapter() {
-        friendslist_LST_friends.setLayoutManager(new LinearLayoutManager(this));
+        friendslist_LST_friends.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         FirebaseAdapterManager.getFirebaseAdapterManager().getFriendFirebaseAdapter().setClickListener(new FriendFirebaseAdapter.ItemClickListener() {
             @Override
@@ -114,73 +146,36 @@ public class FriendsListActivity extends BaseActivity {
         });
     }
 
-    private void handlePendingRequestsEntry() {
-        int pendingSize = FirebaseAdapterManager.getFirebaseAdapterManager().getPendingFriendsFirebaseAdapter().getItemCount();
-        if (pendingSize > 0) {
-            String message = getString(R.string.you_have) + " " + pendingSize + " " + getString(R.string.pending_friends);
-            friendslist_BTN_pending.setText(message);
-            friendslist_BTN_pending.setVisibility(View.VISIBLE);
-        } else {
-            friendslist_BTN_pending.setVisibility(View.GONE);
-        }
-    }
-
     private void startAddFriend() {
-        Intent myIntent = new Intent(FriendsListActivity.this, AddFriendActivity.class);
+        Intent myIntent = new Intent(getActivity(), AddFriendActivity.class);
         startActivity(myIntent);
     }
 
     private void initViews() {
-        Glide
-                .with(this)
-                .load(R.drawable.background_simple_waves)
-                .into(friendslist_IMG_background);
         friendslist_BTN_add_friend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startAddFriend();
             }
         });
-        friendslist_LST_friends.setOnTouchListener(new OnSwipeTouchListener(this) {
-            public void onSwipeLeft() {
-                finish();
-            }
-
-        });
-
-        friendslist_LAY_master.setOnTouchListener(new OnSwipeTouchListener(this) {
-            public void onSwipeLeft() {
-                finish();
-            }
-        });
 
         friendslist_BTN_pending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pendingFriends();
+                openPendingFriends();
             }
         });
     }
-
-    private void pendingFriends() {
-        Intent myIntent = new Intent(this, PendingFriendsActivity.class);
+    private void openPendingFriends() {
+        Intent myIntent = new Intent(getActivity(), PendingFriendsActivity.class);
         startActivity(myIntent);
     }
-
-
-    private void findViews() {
-        friendslist_LST_friends = findViewById(R.id.friendslist_LST_friends);
-        friendslist_BTN_add_friend = findViewById(R.id.friendslist_BTN_add_friend);
-        friendslist_LAY_master = findViewById(R.id.friendslist_LAY_master);
-        friendslist_BTN_pending = findViewById(R.id.friendslist_BTN_pending);
-        friendslist_TXT_no_friends = findViewById(R.id.friendslist_TXT_no_friends);
-        friendslist_IMG_background = findViewById(R.id.friendslist_IMG_background);
-    }
-
 
     private void openChatWith(String friendID) {
         MySharedPreferences.getMsp().putString(MySharedPreferences.KEYS.USER_ID, friendID);
-        Intent myIntent = new Intent(this, ChatActivity.class);
+        Intent myIntent = new Intent(getActivity(), ChatActivity.class);
         startActivity(myIntent);
     }
+
+
 }

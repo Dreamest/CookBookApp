@@ -1,5 +1,6 @@
 package com.dreamest.cookbookapp.utility;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -94,7 +95,7 @@ public class FirebaseTools {
      * @param path             path to image file
      * @param closeOnFinish    should the activity end on upload complete?
      */
-    public static void uploadImage(AppCompatActivity activity, StorageReference storageReference, String path, boolean closeOnFinish) {
+    public static void uploadImage(Activity activity, StorageReference storageReference, String path, boolean closeOnFinish) {
         Bitmap bitmap = BitmapFactory.decodeFile(path);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
