@@ -2,7 +2,7 @@
 
 A social network specializing in creating and sharing recipes among friends, built in Java for Android phones and using a remote server to retain data.
 
-<img src="https://github.com/Dreamest/CookBookApp/blob/master/Images/Login.gif" height="600" /> <img src="https://github.com/Dreamest/CookBookApp/blob/master/Images/Add%20recipe.gif" height="600" /> <img src="https://github.com/Dreamest/CookBookApp/blob/master/Images/Chat.gif" height="600" /> 
+<img src="https://github.com/Dreamest/CookBookApp/blob/master/Images/Login.gif" height="500" /> <img src="https://github.com/Dreamest/CookBookApp/blob/master/Images/Add%20recipe.gif" height="500" /> <img src="https://github.com/Dreamest/CookBookApp/blob/master/Images/Chat.gif" height="500" /> 
 
 The app uses Firebase server for the following
 - Authentication during the login phase.
